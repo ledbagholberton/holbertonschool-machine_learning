@@ -1,2 +1,4 @@
 # holbertonschool-machine_learning
-Machine Learning Res
+Machine Learning Repository
+Specialization Holberton School
+Jan 2020 / 
