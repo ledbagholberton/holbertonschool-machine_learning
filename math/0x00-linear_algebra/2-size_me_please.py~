@@ -1,6 +1,0 @@
-#!/usr/bin/python3
-import numpy as np
-def matrix_shape(matrix):
-    a = matrix.shape
-    print(a)
-    return(a)
