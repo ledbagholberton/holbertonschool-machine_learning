@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-import numpy as np
 def matrix_shape(matrix):
-    a = np.array(matrix)
-    b = list(a.shape)
-    return(b)
+    a = len(matrix)
+    b = len(matrix[0])
+    d = len(matrix[0][0])
+    c = [a, b, d]
+    return(c)
