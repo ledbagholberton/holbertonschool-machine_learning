@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-import numpy as np
+""" Function which concatenates arrays from scratch
+"""
+
 def cat_arrays(arr1, arr2):
-    a = np.array(arr1)
-    b = np.array(arr2)
-    c = [*a, *b]
+    """FUnction concatenate arrays w/o Numpy"""
+    c = [*arr1, *arr2]
     return c

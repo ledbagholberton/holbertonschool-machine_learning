@@ -1,4 +1,0 @@
-#!/usr/bin/env python3
-def np_shape(matrix):
-    a = np.shape(matrix)
-    return (a)
