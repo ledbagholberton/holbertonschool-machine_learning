@@ -10,4 +10,3 @@ def np_cat(mat1, mat2, axis=0):
     """ Function in charge to concatenate """
     c = np.concatenate((mat1, mat2), axis)
     return (c)
-
