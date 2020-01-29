@@ -5,5 +5,5 @@
 
 def matrix_transpose(matrix):
     """FUnction matrix_rtanspose"""
-    a = matrix
+    a = matrix.T
     return(a)

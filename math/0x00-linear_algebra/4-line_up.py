@@ -3,9 +3,6 @@
 """
 
 
-import numpy as np
-
-
 def add_arrays(arr1, arr2):
     """Function add_arrays"""
     if len(arr1) is not len(arr2):
