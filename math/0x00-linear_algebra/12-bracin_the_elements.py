@@ -4,9 +4,6 @@ sum, difference, multiplication and division
 """
 
 
-import numpy as np
-
-
 def np_elementwise(mat1, mat2):
     """ Function with basic operation in Numpy"""
     suma = mat1 + mat2
