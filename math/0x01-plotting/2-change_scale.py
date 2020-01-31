@@ -7,10 +7,9 @@ r = np.log(0.5)
 t = 5730
 y = np.exp((r / t) * x)
 
-colors = (1, 0, 1)
-
-plt.scatter(x, y, c=colors, marker='o')
+plt.plot(x, y)
 plt.xlabel('Time (years)')
 plt.ylabel('Fraction Remaining')
 plt.title('Exponential Decay of C-14')
+plt.yscale('log')
 plt.show()
