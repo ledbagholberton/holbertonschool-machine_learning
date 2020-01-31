@@ -43,19 +43,19 @@ plt.title('Exponential Decay of C-14')
 plt.yscale('log')
 
 plt.subplot(324)
-line1, = plt.plot(x3, y31, 'r--', label = 'C14')
-line2, = plt.plot(x3, y32, 'g', label = 'Ra-226')
+line1, = plt.plot(x3, y31, 'r--', label='C14')
+line2, = plt.plot(x3, y32, 'g', label='Ra-226')
 plt.xlabel('Time (years)')
 plt.ylabel('Fraction Remaining')
 plt.title('Exponential Decay of Radioactive Elements')
 plt.legend(handles=[line1, line2])
 
 plt.subplot(313)
-n, bins, patches = plt.hist(x = student_grades, bins = 10, range = (0, 100), histtype='barstacked', edgecolor='black')
+n, bins, patches = plt.hist(x=student_grades, bins=10, range=(0, 100),
+                            histtype='barstacked', edgecolor='black')
 plt.xlabel('Grades')
 plt.ylabel('Number of Students')
 plt.title('Project A')
 
 plt.tight_layout()
 plt.show()
-# your code here
