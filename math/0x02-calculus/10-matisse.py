@@ -13,6 +13,6 @@ def poly_derivative(poly):
                 b.append(i * poly[i])
             return (b)
         else:
-            return(None)    
+            return(None)
     except TypeError:
         return(None)
