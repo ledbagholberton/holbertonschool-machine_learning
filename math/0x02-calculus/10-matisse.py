@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
+
 def poly_derivative(poly):
     a = len(poly)
-    print("la longitud es", a)
     b = []
-    for i in range(a - 1):
-        print(b)
-        print(poly[i])
-        b.append((a - 1)* poly[a - 1])
-        a = a - 1
-    return (b)
+    try:
+        if type(poly) is list and a is not 0 and type(sum(poly)) is int:
+            for i in range(1, a):
+                b.append(i * poly[i])
+            return (b)
+        else:
+            return(None)    
+    except TypeError:
+        return(None)
