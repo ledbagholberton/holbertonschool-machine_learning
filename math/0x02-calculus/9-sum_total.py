@@ -6,6 +6,6 @@
 def summation_i_squared(n):
     """ FUnction summation """
     if n >= 0:
-        return (n*n*n/3 + n*n/2 + n/6)
+        return (int(n*n*n/3 + n*n/2 + n/6))
     else:
         return (None)
