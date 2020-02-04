@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-
+""" function poly derivative
+"""
 
 def poly_derivative(poly):
+    """function poly derivative """
     a = len(poly)
     b = []
     try:
