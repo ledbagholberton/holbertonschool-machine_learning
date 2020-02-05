@@ -6,9 +6,7 @@
 def poly_integral(poly, C=0):
     """function poly integral"""
     a = len(poly)
-    b = []
-    if C is not 0:
-        b = [C]
+    b = [C]
     if type(poly) is not list:
         return None
     elif type(C) is not (int or float):
