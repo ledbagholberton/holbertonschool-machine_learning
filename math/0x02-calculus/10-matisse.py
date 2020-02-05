@@ -17,6 +17,8 @@ def poly_derivative(poly):
         else:
             for i in range(1, a):
                 b.append(i * poly[i])
+            if len(set(b)) == 1:
+                return[0]
             return (b)
     except TypeError:
         return(None)
