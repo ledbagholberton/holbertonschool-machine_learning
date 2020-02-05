@@ -14,7 +14,6 @@ def poly_integral(poly, C=0):
     elif type(C) is not (int or float):
         return None
     elif not all(isinstance(m, (int, float)) for m in poly):
-        print("poly has an element not int or float")
         return None
     else:
         for i in range(0, a):
