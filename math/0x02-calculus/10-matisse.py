@@ -8,11 +8,15 @@ def poly_derivative(poly):
     a = len(poly)
     b = []
     try:
-        if type(poly) is list and a is not 0 and type(sum(poly)) is int or float:
+        if type(poly) is not list:
+            return None
+        elif a is 0:
+            return None
+        elif type(sum(poly)) is not (int or float):
+            return None
+        else:
             for i in range(1, a):
                 b.append(i * poly[i])
             return (b)
-        else:
-            return(None)
     except TypeError:
         return(None)
