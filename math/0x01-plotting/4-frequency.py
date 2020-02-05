@@ -11,4 +11,6 @@ n, bins, patches = plt.hist(x=student_grades, bins=10, range=(0, 100),
 plt.xlabel('Grades')
 plt.ylabel('Number of Students')
 plt.title('Project A')
+plt.ylim(0, 30)
+plt.xlim(0, 100)
 plt.show()

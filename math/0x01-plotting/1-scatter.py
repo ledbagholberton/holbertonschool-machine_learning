@@ -9,7 +9,7 @@ x, y = np.random.multivariate_normal(mean, cov, 2000).T
 y += 180
 colors = (1, 0, 1)
 
-plt.scatter(x, y, c=colors, marker='o')
+plt.scatter(x, y, c="magenta", marker='o', s=5)
 plt.xlabel('Height (in)')
 plt.ylabel('Weight (lbs)')
 plt.title("Men's Height vs Weight")
