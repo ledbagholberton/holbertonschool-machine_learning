@@ -8,7 +8,7 @@ def poly_derivative(poly):
     a = len(poly)
     b = []
     try:
-        if type(poly) is list and a is not 0 and type(sum(poly)) is int:
+        if type(poly) is list and a is not 0 and type(sum(poly)) is int or float:
             for i in range(1, a):
                 b.append(i * poly[i])
             return (b)
