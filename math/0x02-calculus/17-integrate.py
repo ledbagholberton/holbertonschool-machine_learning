@@ -24,3 +24,4 @@ def poly_integral(poly, C=0):
             return (b)
     except TypeError:
         return(None)
+        
