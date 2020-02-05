@@ -10,18 +10,16 @@ def poly_integral(poly, C=0):
     if C is not 0:
         b = [C]
     if type(poly) is not list:
-        print("poly C is not list")
         return None
     elif type(C) is not (int or float):
-        print("C is not int or float")
         return None
-    elif a is 0:
-        print("len poly is 0")
-        return None
-    elif type(sum(poly)) is not (int or float):
+    elif not all(isinstance(m, (int, float)) for m in poly):
         print("poly has an element not int or float")
         return None
     else:
         for i in range(0, a):
+            x = poly[i] / (i + 1)
+            if x.is_integer():
+                x = int(x)
             b.append(poly[i] / (i + 1))
         return (b)
