@@ -9,6 +9,8 @@ def poly_derivative(poly):
     b = []
     if type(poly) is not list:
         return None
+    elif a == 1 and poly[0] == 0:
+        return ([0])
     elif a is 0:
         return None
     elif not all(isinstance(m, (int, float)) for m in poly):
