@@ -9,14 +9,14 @@ class Exponential:
         """ Settings for class Expontential"""
         self.lambtha = float(lambtha)
         if data is None:
-            if lambtha < 0:
+            if lambtha <= 0:
                 raise ValueError("lambtha must be a positive value")
         else:
             if type(data) is not list:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.lambtha = float(sum(data)/len(data))
+            self.lambtha = sum(data)/len(data)
 
     def pmf(self, k):
         """Method pmf fr Poisson dist"""
