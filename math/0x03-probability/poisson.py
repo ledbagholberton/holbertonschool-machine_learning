@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """ Poisson class
 """
-import numpy as np
 
 
 class Poisson:
