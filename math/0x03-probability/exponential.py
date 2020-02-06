@@ -20,8 +20,6 @@ class Exponential:
 
     def pdf(self, x):
         """Method pmf for Exponential dist"""
-        if type(x) is not int:
-            x = int(x)
         if x <= 0:
             return (0)
         else:
@@ -30,8 +28,6 @@ class Exponential:
 
     def cdf(self, x):
         """Method CDF for Exponential Dist"""
-        if type(x) is not int:
-            x = int(x)
         if x <= 0:
             return (0)
         else:
