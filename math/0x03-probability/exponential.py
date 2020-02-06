@@ -22,7 +22,7 @@ class Exponential:
         """Method pmf for Exponential dist"""
         if type(x) is not int:
             x = int(x)
-        if x < 0:
+        if x <= 0:
             return (0)
         else:
             a = self.lambtha * 2.7182818285 ** (-1 * self.lambtha * x)
@@ -32,7 +32,7 @@ class Exponential:
         """Method CDF for Exponential Dist"""
         if type(x) is not int:
             x = int(x)
-        if x < 0:
+        if x <= 0:
             return (0)
         else:
             a = 1 - 2.7182818285 ** (-1 * self.lambtha * x)
