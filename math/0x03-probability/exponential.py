@@ -20,7 +20,7 @@ class Exponential:
 
     def pdf(self, x):
         """Method pmf for Exponential dist"""
-        if x <= 0:
+        if x < 0:
             return (0)
         else:
             a = self.lambtha * 2.7182818285 ** (-1 * self.lambtha * x)
@@ -28,7 +28,7 @@ class Exponential:
 
     def cdf(self, x):
         """Method CDF for Exponential Dist"""
-        if x <= 0:
+        if x < 0:
             return (0)
         else:
             a = 1 - 2.7182818285 ** (-1 * self.lambtha * x)
