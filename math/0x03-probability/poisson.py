@@ -4,6 +4,7 @@
 
 
 class Poisson:
+    """ Class Poisson """
     def __init__(self, data=None, lambtha=1.):
         """ Settings for class Poisson"""
         self.lambtha = float(lambtha)
