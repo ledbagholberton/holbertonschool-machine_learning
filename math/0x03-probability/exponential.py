@@ -16,38 +16,24 @@ class Exponential:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.lambtha = sum(data)/len(data)
+            self.lambtha = 1 / (sum(data)/len(data))
 
-    def pmf(self, k):
-        """Method pmf fr Poisson dist"""
-        if type(k) is not int:
-            k = int(k)
-        if k < 0:
+    def pdf(self, x):
+        """Method pmf for Exponential dist"""
+        if type(x) is not int:
+            x = int(x)
+        if x < 0:
             return (0)
         else:
-            k_fact = 1
-            a = 2.7182818285 ** (-1 * self.lambtha)
-            b = self.lambtha ** k
-            k_temp = k
-            while k_temp > 0:
-                k_fact = k_temp * k_fact
-                k_temp = k_temp - 1
-            return (a * b / k_fact)
+            a = self.lambtha * 2.7182818285 ** (-1 * self.lambtha * x)
+            return (a)
 
-    def cdf(self, k):
-        """Method CDF for Poisson Dist"""
-        if type(k) is not int:
-            k = int(k)
-        if k < 0:
+    def cdf(self, x):
+        """Method CDF for Exponential Dist"""
+        if type(x) is not int:
+            x = int(x)
+        if x < 0:
             return (0)
         else:
-            a = 2.7182818285 ** (-1 * self.lambtha)
-            suma = 0
-            for i in range(0, k + 1, 1):
-                num = self.lambtha ** i
-                den = 1
-                for j in range(1, i + 1, 1):
-                    den = den * j
-                d = num / den
-                suma = suma + d
-            return (a * suma)
+            a = 1 - 2.7182818285 ** (-1 * self.lambtha * x)
+            return (a)
