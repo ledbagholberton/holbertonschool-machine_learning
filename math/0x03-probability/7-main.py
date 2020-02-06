@@ -13,3 +13,4 @@ n2 = Normal(mean=70, stddev=10)
 print()
 print('Z(90):', n2.z_score(90))
 print('X(2):', n2.x_value(2))
+
