@@ -35,7 +35,6 @@ class Binomial:
         if type(k) is not int:
             k = int(k)
         if k < 0 or k > self.n:
-            print("k out of range", k)
             return 0
         n_fact = 1
         for i in range(1, self.n + 1, 1):
@@ -53,7 +52,6 @@ class Binomial:
         if type(k) is not int:
             k = int(k)
         if k < 0 or k > self.n:
-            print("k out of range", k, "n es:", self.n)
             return 0
         suma = 0
         for i in range(0, k + 1, 1):
