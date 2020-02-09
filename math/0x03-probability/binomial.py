@@ -22,7 +22,7 @@ class Binomial:
             a = 0
             for i in range(0, len(data), 1):
                 a = data[i] + a
-            mean = a / len(data)
+            mean = float(a / len(data))
             suma = 0
             for i in range(0, len(data), 1):
                 a = (data[i] - mean)**2
