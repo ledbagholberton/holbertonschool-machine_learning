@@ -19,16 +19,23 @@ class Binomial:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            suma = 0
-            n_temp = self.n
+            #Mean of dataset
+            a = 0
             for i in range(0, len(data), 1):
-                a = data[i] / 50
+                a = data[i] + a 
+            mean = a / len(data)
+            #Variance
+            suma = 0
+            for i in range(0, len(data), 1):
+                a = (data[i] - mean)**2
                 suma = suma + a
-            self.p = suma / len(data)
-            suma = 0
-            for i in range(0, len(data), 1):
-                suma = data[i] + suma
-            self.n = int(round(suma / len(data)/self.p, 0))
+            variance = suma / (len(data) - 1)
+            #Calculating p
+            self.p = 1 - (variance / mean)
+            #calculating n
+            self.n = round(mean / self.p)
+            #recalculating p
+            self.p = mean / self.n
 
     def pmf(self, k):
         """Method to calculate the PMF for a Binomial distribution """
