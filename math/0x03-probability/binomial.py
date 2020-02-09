@@ -19,22 +19,17 @@ class Binomial:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            #Mean of dataset
             a = 0
             for i in range(0, len(data), 1):
-                a = data[i] + a 
+                a = data[i] + a
             mean = a / len(data)
-            #Variance
             suma = 0
             for i in range(0, len(data), 1):
                 a = (data[i] - mean)**2
                 suma = suma + a
             variance = suma / (len(data) - 1)
-            #Calculating p
             self.p = 1 - (variance / mean)
-            #calculating n
             self.n = round(mean / self.p)
-            #recalculating p
             self.p = mean / self.n
 
     def pmf(self, k):
