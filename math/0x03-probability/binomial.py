@@ -30,7 +30,7 @@ class Binomial:
             variance = suma / (len(data) - 1)
             self.p = 1 - (variance / mean)
             self.n = int(round(mean / self.p))
-            self.p = mean / self.n
+            self.p = float(mean / self.n)
 
     def pmf(self, k):
         """Method to calculate the PMF for a Binomial distribution """
