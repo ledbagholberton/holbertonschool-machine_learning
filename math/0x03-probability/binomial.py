@@ -29,7 +29,7 @@ class Binomial:
                 suma = suma + a
             variance = suma / (len(data) - 1)
             self.p = 1 - (variance / mean)
-            self.n = round(mean / self.p)
+            self.n = int(round(mean / self.p))
             self.p = mean / self.n
 
     def pmf(self, k):
