@@ -3,10 +3,7 @@
 """
 
 
-import numpy as np
-
-
 def np_shape(matrix):
     """FUnction np_shape using Numpy"""
-    a = np.shape(matrix)
+    a = matrix.shape
     return (a)

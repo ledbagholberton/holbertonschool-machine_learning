@@ -3,9 +3,6 @@
 """
 
 
-import numpy as np
-
-
 def add_matrices2D(mat1, mat2):
     """Function add_matrices2D"""
     if len(mat1) != len(mat2):
