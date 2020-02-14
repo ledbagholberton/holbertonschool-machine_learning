@@ -29,3 +29,13 @@ class Neuron:
     @property
     def A(self):
         return self.__A
+
+    def sigmoid(self, Z):
+        sigm = 1 / (1 + np.exp(-Z))
+        return sigm
+
+    def forward_prop(self, X):
+        A = np.matmul(self.W, X) + self.b
+        H = self.sigmoid(A)
+        self.__A = H
+        return (self.__A)
