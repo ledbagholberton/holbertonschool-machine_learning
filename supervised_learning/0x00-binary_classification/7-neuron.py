@@ -4,6 +4,7 @@ with pivate instances attributes
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Neuron:
@@ -67,7 +68,7 @@ class Neuron:
         self.__W = self.__W - (alpha * dW.T)
         return()
 
-    def train(self, X, Y, iterations=5000, alpha=0.05):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
         if type(iterations) is not int:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
@@ -76,8 +77,42 @@ class Neuron:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
+        if verbose is True or graph is True:
+            if type(step) is not int:
+                raise TypeError("step must be an integer")
+            if step <= 0 or step > iterations:
+                raise ValueError("step must be positive and <= iterations")
+        arr_cost = []
+        arr_pos = []        
         PRED, cost = self.evaluate(X, Y)
-        for i in range(iterations):
+        iters = 0
+        pos = 0
+        arr_pos.append(0)
+        arr_cost.append(cost)
+        if verbose is True:
+            print("Cost after {} iterations: {}".format(0, cost))
+        for i in range(1, iterations):
             self.gradient_descent(X, Y, self.__A, alpha)
             PRED, cost = self.evaluate(X, Y)
+            iters = iters + 1
+            if iters == step:
+                iters = 0
+                pos = pos + 1
+                arr_pos.append(i)
+                arr_cost.append(cost)
+                if verbose is True:
+                    print("Cost after {} iterations: {}".format(i, cost))
+        PRED, cost = self.evaluate(X, Y)
+        pos = pos + 1
+        arr_pos.append(iterations)
+        arr_cost.append(cost)
+        if verbose is True:
+            print("Cost after {} iterations: {}".format(iterations, cost))
+        if graph is True:
+            plt.xlim(0, iterations)
+            plt.xlabel('iteration')
+            plt.ylabel('cost')
+            plt.title("Training cost")
+            plt.plot(arr_pos, arr_cost, 'bo')
+            plt.show()
         return(PRED, cost)

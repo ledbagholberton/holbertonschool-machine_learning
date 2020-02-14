@@ -64,5 +64,5 @@ class Neuron:
         self.__b = self.__b - alpha * db
         ZT = Z.T
         dW = np.matmul(X, ZT) / m
-        W = self.__W - (alpha * dW)
+        self.__W = self.__W - (alpha * dW.T)
         return()
