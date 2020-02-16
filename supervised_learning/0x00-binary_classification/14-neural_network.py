@@ -83,7 +83,6 @@ class NeuralNetwork:
         dW2 = np.matmul(self.__A1, dZT2) / m2
         m1 = Y.shape[1]
         dg1 = (self.__A1 * (1 - self.__A1))
-        print("dg1 shape", dg1.shape)
         dZ1 = np.matmul(self.__W2.T, dZ2) * dg1
         db1 = np.sum(dZ1, axis=1, keepdims=True) / m1
         self.__b1 = self.__b1 - alpha * db1
@@ -107,4 +106,8 @@ class NeuralNetwork:
         for i in range(iterations):
             self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
             PRED, cost = self.evaluate(X, Y)
+        print("X shape: {} Y Shape: {} A1 Shape: {} A2 Shape: {} W1 Shape: {} W2 Shape: {} b1 Shape: {} b2 shape: {}".format(X.shape,
+                                    Y.shape, self.__A1.shape, self.__A2.shape,
+                                    self.__W1.shape, self.__W2.shape, self.__b1.shape,
+                                    self.__b2.shape))
         return(PRED, cost)

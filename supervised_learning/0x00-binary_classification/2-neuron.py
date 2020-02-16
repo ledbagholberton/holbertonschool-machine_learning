@@ -31,10 +31,12 @@ class Neuron:
         return self.__A
 
     def sigmoid(self, Z):
+        """function sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
         return sigm
 
     def forward_prop(self, X):
+        """function forward_prop"""
         A = np.matmul(self.W, X) + self.b
         H = self.sigmoid(A)
         self.__A = H
