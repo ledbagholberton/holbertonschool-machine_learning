@@ -16,6 +16,8 @@ class DeepNeuralNetwork:
             raise ValueError("nx must be a positive integer")
         if type(layers) is not list:
             raise TypeError("layers must be a list of positive integers")
+        self.nx = nx
+        self.layers = layers
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
@@ -28,14 +30,14 @@ class DeepNeuralNetwork:
             self.__weights['W'+str(l)] = temp
             self.__weights['b'+str(l)] = np.zeros((ly[l], 1))
 
-        @property
-        def L(self):
-            return self.__L
+    @property
+    def L(self):
+        return self.__L
 
-        @property
-        def cache(self):
-            return self.__cache
+    @property
+    def cache(self):
+        return self.__cache
 
-        @property
-        def weights(self):
-            return self.__weights
+    @property
+    def weights(self):
+        return self.__weights
