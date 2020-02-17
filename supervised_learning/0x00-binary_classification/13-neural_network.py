@@ -89,10 +89,10 @@ class NeuralNetwork:
         dg1 = (self.__A1 * (1 - self.__A1))
         dZ1 = np.matmul(self.__W2.T, dZ2) * dg1
         db1 = np.sum(dZ1, axis=1, keepdims=True) / m1
-        self.__b1 = self.__b1 - alpha * db1
         dZT1 = dZ1.T
         dW1 = np.matmul(X, dZT1) / m1
         self.__W1 = self.__W1 - (alpha * dW1.T)
+        self.__b1 = self.__b1 - alpha * db1
         self.__b2 = self.__b2 - alpha * db2
         self.__W2 = self.__W2 - (alpha * dW2.T)
         return()
