@@ -31,21 +31,25 @@ class Neuron:
         return self.__A
 
     def sigmoid(self, Z):
+        """function sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
         return sigm
 
     def forward_prop(self, X):
+        """function forward_prop"""
         recta = np.matmul(self.W, X) + self.b
         H = self.sigmoid(recta)
         self.__A = H
         return (self.__A)
 
     def log_reg(self, y_r, y_p):
+        """function log_reg"""
         num_lreg = -1 * (y_r * np.log(y_p) + (1 - y_r) *
                          np.log(1.0000001 - y_p))
         return (num_lreg)
 
     def cost(self, Y, A):
+        """function cost"""
         m = Y.shape[1]
         num_lreg = -1 * (Y * np.log(A) + (1 - Y) *
                          np.log(1.0000001 - A))
@@ -53,6 +57,7 @@ class Neuron:
         return (cost)
 
     def evaluate(self, X, Y):
+        """function evaluate"""
         self.forward_prop(X)
         PRED = np.where(self.__A >= 0.5, 1, 0)
         return (PRED, self.cost(Y, self.__A))
