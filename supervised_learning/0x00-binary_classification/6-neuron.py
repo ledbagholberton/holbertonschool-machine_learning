@@ -72,3 +72,19 @@ class Neuron:
         dW = np.matmul(X, ZT) / m
         self.__W = self.__W - (alpha * dW.T)
         return()
+
+    def train(self, X, Y, iterations=5000, alpha=0.05):
+        """function train"""
+        if type(iterations) is not int:
+            raise TypeError("iterations must be an integer")
+        if iterations <= 0:
+            raise ValueError("iterations must be a positive integer")
+        if type(alpha) is not float:
+            raise TypeError("alpha must be a float")
+        if alpha <= 0:
+            raise ValueError("alpha must be positive")
+        #PRED, cost = self.evaluate(X, Y)
+        for i in range(1, iterations):
+            self.forward_prop(X)
+            self.gradient_descent(X, Y, self.__A, alpha)
+        return(self.evaluate(X, Y))
