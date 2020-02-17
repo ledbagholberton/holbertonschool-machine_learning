@@ -37,7 +37,7 @@ class NeuralNetwork:
     @property
     def A1(self):
         return self.__A1
-    
+
     @property
     def W2(self):
         return self.__W2
@@ -51,10 +51,12 @@ class NeuralNetwork:
         return self.__A2
 
     def sigmoid(self, Z):
+        "FUnction sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
         return sigm
 
     def forward_prop(self, X):
+        """Function forward propagation"""
         A1 = np.matmul(self.__W1, X) + self.__b1
         H1 = self.sigmoid(A1)
         self.__A1 = H1
@@ -64,6 +66,7 @@ class NeuralNetwork:
         return (self.__A1, self.__A2)
 
     def cost(self, Y, A):
+        """Function cost"""
         m = Y.shape[1]
         num_lreg = -1 * (Y * np.log(A) + (1 - Y) *
                          np.log(1.0000001 - A))
@@ -71,8 +74,7 @@ class NeuralNetwork:
         return (cost)
 
     def evaluate(self, X, Y):
+        """Function evaluate"""
         self.forward_prop(X)
         PRED = np.where(self.__A2 >= 0.5, 1, 0)
         return (PRED, self.cost(Y, self.__A2))
-
-    

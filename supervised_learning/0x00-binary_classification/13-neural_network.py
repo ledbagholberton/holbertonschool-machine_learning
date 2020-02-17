@@ -51,10 +51,12 @@ class NeuralNetwork:
         return self.__A2
 
     def sigmoid(self, Z):
+        """Function Sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
         return sigm
 
     def forward_prop(self, X):
+        """Function Forward Propagation"""
         A1 = np.matmul(self.__W1, X) + self.__b1
         H1 = self.sigmoid(A1)
         self.__A1 = H1
@@ -64,6 +66,7 @@ class NeuralNetwork:
         return (self.__A1, self.__A2)
 
     def cost(self, Y, A):
+        """Function Cost"""
         m = Y.shape[1]
         num_lreg = -1 * (Y * np.log(A) + (1 - Y) *
                          np.log(1.0000001 - A))
@@ -71,11 +74,13 @@ class NeuralNetwork:
         return (cost)
 
     def evaluate(self, X, Y):
+        """Function evauate"""
         self.forward_prop(X)
         PRED = np.where(self.__A2 >= 0.5, 1, 0)
         return (PRED, self.cost(Y, self.__A2))
 
     def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
+        """Function gradient descent"""
         m2 = A1.shape[1]
         dZ2 = A2 - Y
         db2 = np.sum(dZ2, axis=1, keepdims=True) / m2

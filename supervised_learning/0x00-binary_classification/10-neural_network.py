@@ -37,7 +37,7 @@ class NeuralNetwork:
     @property
     def A1(self):
         return self.__A1
-    
+
     @property
     def W2(self):
         return self.__W2
@@ -55,6 +55,7 @@ class NeuralNetwork:
         return sigm
 
     def forward_prop(self, X):
+        """Function forward propagation """
         A1 = np.matmul(self.__W1, X) + self.__b1
         H1 = self.sigmoid(A1)
         self.__A1 = H1
@@ -62,4 +63,3 @@ class NeuralNetwork:
         H2 = self.sigmoid(A2)
         self.__A2 = H2
         return (self.__A1, self.__A2)
-
