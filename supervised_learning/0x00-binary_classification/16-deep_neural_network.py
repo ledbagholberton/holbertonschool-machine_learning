@@ -4,7 +4,6 @@ with private instances attributes
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class DeepNeuralNetwork:
@@ -21,28 +20,11 @@ class DeepNeuralNetwork:
             raise ValueError("layers must be a list of positive integers")
         self.L = len(layers)
         self.cache = {}
-        self.weights = he_et_al(nx, layers)
-
-
-def he_et_al(nx, ly):
-    """
-    Arguments:
-    layers: list containing the numbers of Layers and the number of nodes on
-    each layer.
-    Initialization of each weight is based on method from He.
-    Returns:
-    weights -- python dict containing your parameters "W1","b1".. "WL", "bL":
-                W1 -- weight matrix of shape (layers_dims[1], layers_dims[0])
-                b1 -- bias vector of shape (layers_dims[1], 1)
-                ...
-                WL -- weight matrix of shape (layers_dims[L], layers_dims[L-1])
-                bL -- bias vector of shape (layers_dims[L], 1)
-    """
-
-    wg = {}
-    myL = len(ly) + 1
-    ly.insert(0, nx)
-    for l in range(1, myL):
-        wg['W' + str(l)] = np.random.randn(ly[l], ly[l-1])*(np.sqrt(2/ly[l-1]))
-        wg['b' + str(l)] = np.zeros((ly[l], 1))
-    return wg
+        self.weights = {}
+        myL = self.L + 1
+        ly = layers.copy()
+        ly.insert(0, nx)
+        for l in range(1, myL):
+            temp = np.random.randn(ly[l], ly[l-1]) * (np.sqrt(2/ly[l-1]))
+            self.weights['W'+str(l)] = temp
+            self.weights['b'+str(l)] = np.zeros((ly[l], 1))
