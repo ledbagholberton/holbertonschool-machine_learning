@@ -121,6 +121,6 @@ class Neuron:
             plt.xlabel('iteration')
             plt.ylabel('cost')
             plt.title("Training cost")
-            plt.plot(arr_pos, arr_cost, 'bo')
+            plt.plot(arr_pos, arr_cost)
             plt.show()
         return(PRED, cost)
