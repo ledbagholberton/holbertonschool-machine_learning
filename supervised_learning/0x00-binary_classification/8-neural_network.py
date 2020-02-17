@@ -4,7 +4,6 @@ with pivate instances attributes
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class NeuralNetwork:
