@@ -58,7 +58,7 @@ class DeepNeuralNetwork:
                          + self.__weights['b' + str(i)])
                 H_tmp = self.sigmoid(A_tmp)
                 self.__cache['A' + str(i)] = H_tmp
-        return (self.__cache['A3'], self.__cache)
+        return (self.__cache['A'+str(self.__L)], self.__cache)
 
     def cost(self, Y, A):
         """Function cost"""

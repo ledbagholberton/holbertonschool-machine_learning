@@ -74,3 +74,30 @@ class DeepNeuralNetwork:
         A = self.__cache['A' + str(self.__L)]
         PRED = np.where(A >= 0.5, 1, 0)
         return (PRED, self.cost(Y, A))
+
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """Function gradient descent"""
+        dW = {}
+        db = {}
+        dZ = {}
+        m = {}
+        dZ['dZ'+str(self.__L)] = 
+        for i in range(self.__L, 1, -1):
+
+
+        m2 = A1.shape[1]
+        dZ2 = A2 - Y
+        db2 = np.sum(dZ2, axis=1, keepdims=True) / m2
+        dZT2 = dZ2.T
+        dW2 = np.matmul(self.__A1, dZT2) / m2
+        m1 = Y.shape[1]
+        dg1 = (self.__A1 * (1 - self.__A1))
+        dZ1 = np.matmul(self.__W2.T, dZ2) * dg1
+        db1 = np.sum(dZ1, axis=1, keepdims=True) / m1
+        dZT1 = dZ1.T
+        dW1 = np.matmul(X, dZT1) / m1
+        self.__W1 = self.__W1 - (alpha * dW1.T)
+        self.__b1 = self.__b1 - alpha * db1
+        self.__b2 = self.__b2 - alpha * db2
+        self.__W2 = self.__W2 - (alpha * dW2.T)
+        return()
