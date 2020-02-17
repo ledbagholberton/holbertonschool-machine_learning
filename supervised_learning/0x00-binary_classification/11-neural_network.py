@@ -55,7 +55,7 @@ class NeuralNetwork:
         return sigm
 
     def forward_prop(self, X):
-        """FUnction forward propagation"""
+        """Function forward propagation"""
         A1 = np.matmul(self.__W1, X) + self.__b1
         H1 = self.sigmoid(A1)
         self.__A1 = H1
