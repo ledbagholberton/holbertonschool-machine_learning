@@ -50,6 +50,7 @@ class NeuralNetwork:
         return self.__A2
 
     def sigmoid(self, Z):
+        """Function sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
         return sigm
 
