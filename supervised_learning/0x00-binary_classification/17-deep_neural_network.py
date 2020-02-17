@@ -19,10 +19,9 @@ class DeepNeuralNetwork:
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
-        myL = self.__L + 1
         ly = layers.copy()
         ly.insert(0, nx)
-        for l in range(1, myL):
+        for l in range(1, self.__L + 1):
             if type(ly[l-1]) is not int or ly[(l-1)] < 0:
                 raise TypeError("layers must be a list of positive integers")
             temp = np.random.randn(ly[l], ly[l-1]) * (np.sqrt(2/ly[l-1]))
