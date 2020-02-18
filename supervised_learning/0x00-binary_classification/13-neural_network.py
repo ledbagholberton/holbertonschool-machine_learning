@@ -93,6 +93,6 @@ class NeuralNetwork:
         dW1 = np.matmul(X, dZT1) / m1
         self.__W1 = self.__W1 - (alpha * dW1.T)
         self.__b1 = self.__b1 - alpha * db1
-        self.__b2 = self.__b2 - alpha * db2
         self.__W2 = self.__W2 - (alpha * dW2.T)
+        self.__b2 = self.__b2 - alpha * db2
         return()
