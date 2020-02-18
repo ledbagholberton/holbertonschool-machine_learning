@@ -81,24 +81,36 @@ class DeepNeuralNetwork:
         dWT = {}
         db = {}
         dZ = {}
-        m = Y.shape[1]
+        m = {}
         wg = self.__weights.copy()
-        posi = str(self.__L)
-        dZ['dZ'+posi] = self.__cache['A' + posi] - Y
-        db['db'+posi] = np.sum(dZ['dZ'+posi], axis=1, keepdims=True)/m
-        dW['dW'+posi] = np.matmul(self.__cache['A'+str(self.__L - 1)], dZ['dZ'+posi].T)/ m
-        dWT['dWT'+posi] = dW['dW'+posi].T
-        self.__weights['W'+posi] = wg['W'+posi] - alpha*dWT['dWT'+posi]
-        self.__weights['b'+posi] = wg['b'+posi] - alpha*db['db'+posi]
+        m['m'+str(self.__L)] = self.__cache['A' + str(self.__L)].shape[1]
+        dZ['dZ'+str(self.__L)] = self.__cache['A' + str(self.__L)] - Y
+        db['db'+str(self.__L)] = np.sum(dZ['dZ'+str(self.__L)])/m['m'+str(self.__L)]
         for i in range(self.__L - 1, 0, -1):
-            posl = str(i-1)
-            posm = str(i+1)
-            pos = str(i)
-            g_temp = self.__cache['A'+pos] * (1 - self.__cache['A'+pos])
-            dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm]) * g_temp
-            db['db'+pos] = np.sum(dZ['dZ'+pos], axis=1, keepdims=True)/m
-            dW['dW'+pos] = np.matmul(self.__cache['A'+posl], dZ['dZ'+pos].T) / m
-            dWT['dWT'+pos] = dW['dW'+pos].T
-            self.__weights['W'+pos] = wg['W'+pos] - alpha*dWT['dWT'+pos]
-            self.__weights['b'+pos] = wg['b'+pos] - alpha*db['db'+pos]
+            m['m'+str(i)] = self.__cache['A' + str(i + 1)].shape[1]
+            mm = m['m'+str(i)]
+            print("******", mm, "y i es", i)
+            g_temp = self.__cache['A'+str(i)] * (1 - self.__cache['A'+str(i)])
+            dZ['dZ'+str(i)] = np.matmul(wg['W'+str(i+1)].T, dZ['dZ'+str(i+1)]) - g_temp
+            db['db'+str(i)] = np.sum(dZ['dZ'+str(i)])/mm
+            dW['dW'+str(i)] = np.matmul(self.__cache['A'+str(i-1)], dZ['dZ'+str(i)].T) / mm
+            dWT['dWT'+str(i)] = dW['dW'+str(i)].T
+            self.__weights['W'+str(i)] = wg['W'+str(i)] - alpha*dWT['dWT'+str(i)]
+            self.__weights['b'+str(i)] = wg['b'+str(i)] - alpha*db['db'+str(i)]
         return()
+
+    def train(self, X, Y, iterations=5000, alpha=0.05):
+        """Function train"""
+        if type(iterations) is not int:
+            raise TypeError("iterations must be an integer")
+        if iterations <= 0:
+            raise ValueError("iterations must be a positive integer")
+        if type(alpha) is not float:
+            raise TypeError("alpha must be a float")
+        if alpha <= 0:
+            raise ValueError("alpha must be positive")
+        PRED, cost = self.evaluate(X, Y)
+        for i in range(iterations):
+            self.gradient_descent(X, Y, self.__cache, alpha)
+            PRED, cost = self.evaluate(X, Y)
+        return(PRED, cost)
