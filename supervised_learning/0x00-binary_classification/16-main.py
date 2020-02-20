@@ -9,7 +9,7 @@ X_3D, Y = lib_train['X'], lib_train['Y']
 X = X_3D.reshape((X_3D.shape[0], -1)).T
 
 np.random.seed(0)
-deep = Deep(X.shape[0], [3, 5, -1])
+deep = Deep(X.shape[0], [3, 5, 1])
 print(deep.cache)
 print(deep.weights)
 print(deep.L)
