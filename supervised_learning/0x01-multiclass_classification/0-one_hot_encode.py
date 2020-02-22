@@ -5,9 +5,8 @@ import numpy as np
 def one_hot_encode(Y, classes):
     """Function one-hot encode"""
     print(len(Y))
-    matrix = np.zeros((classes, len(Y))
-    
+    matrix = np.zeros((classes, len(Y)))
     for i in range(len(Y)):
-        pos = Y[i]
-        print pos
+        a = Y[i]
+        matrix[a][i] = 1
     return (matrix)
