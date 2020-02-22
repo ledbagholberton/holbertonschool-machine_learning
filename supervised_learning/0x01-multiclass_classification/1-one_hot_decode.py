@@ -2,6 +2,7 @@
 """ Function One-hot decode"""
 import numpy as np
 
+
 def one_hot_decode(one_hot):
     """Function one-hot decode"""
     row = one_hot.shape[0]

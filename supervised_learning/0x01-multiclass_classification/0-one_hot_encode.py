@@ -2,6 +2,7 @@
 """ Function One-hot encode"""
 import numpy as np
 
+
 def one_hot_encode(Y, classes):
     """Function one-hot encode"""
     print(len(Y))
