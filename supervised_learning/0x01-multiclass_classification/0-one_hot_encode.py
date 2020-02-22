@@ -8,7 +8,7 @@ def one_hot_encode(Y, classes):
     matrix = np.zeros((classes, len(Y)))
     if len(Y) < 1:
         return (None)
-    if  classes <= 0:
+    if classes < 1:
         return (None)
     for i in range(len(Y)):
         a = Y[i]
