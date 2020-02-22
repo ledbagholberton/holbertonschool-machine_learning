@@ -10,6 +10,5 @@ def one_hot_encode(Y, classes):
         return (None)
     for i in range(len(Y)):
         a = Y[i]
-        if a
         matrix[a][i] = 1
     return (matrix)
