@@ -17,7 +17,7 @@ deep.save('2-output')
 del deep
 
 saved = Deep.load('2-output.pkl')
-print("Este es el type de saved", type(saved))
+print("Este es el type de saved", type(saved))  
 A_saved, cost_saved = saved.evaluate(X_train, Y_train)
 
 print(np.array_equal(A, A_saved) and cost == cost_saved)

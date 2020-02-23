@@ -19,7 +19,7 @@ Y_valid_one_hot = one_hot_encode(Y_valid, 10)
 
 deep = Deep.load('3-saved.pkl')
 print(type(deep))
-A_one_hot, cost = deep.train(X_train, Y_train_one_hot, iterations=100, step=10, graph=False)
+A_one_hot, cost = deep.train(X_train, Y_train_one_hot, iterations=20, step=10, graph=False)
 A = one_hot_decode(A_one_hot)
 accuracy = np.sum(Y_train == A) / Y_train.shape[0] * 100
 print("Train cost:", cost)
