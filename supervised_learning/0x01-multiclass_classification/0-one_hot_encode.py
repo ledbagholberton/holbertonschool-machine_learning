@@ -10,7 +10,7 @@ def one_hot_encode(Y, classes):
         return (None)
     if type(Y) is not np.ndarray:
         return (None)
-    if len(Y) < 1:
+    if len(Y) == 0:
         return (None)
     if np.amax(Y) > classes:
         return (None)

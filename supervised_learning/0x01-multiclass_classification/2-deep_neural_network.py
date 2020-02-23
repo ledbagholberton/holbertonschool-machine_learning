@@ -163,11 +163,8 @@ class DeepNeuralNetwork:
         """FUnction save a pickle """
         if filename[-4:] != '.pkl':
             filename = filename + '.pkl'
-        try:
-            with open(filename, "wb") as pickle_out:
-                pickle.dump(self, pickle_out)
-        except:
-            return (None)
+        with open(filename, "wb") as pickle_out:
+            pickle.dump(self, pickle_out)
 
     @staticmethod
     def load(filename):
