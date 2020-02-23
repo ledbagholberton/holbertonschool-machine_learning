@@ -8,6 +8,8 @@ def one_hot_encode(Y, classes):
     matrix = np.zeros((classes, len(Y)))
     if classes < 1 or type(classes) is not int:
         return (None)
+    if type(Y) is not np.ndarray:
+        return (None)
     if len(Y) < 1:
         return (None)
     if np.amax(Y) > classes:
