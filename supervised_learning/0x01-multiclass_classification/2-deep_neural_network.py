@@ -160,7 +160,8 @@ class DeepNeuralNetwork:
         return(PRED, cost)
 
     def save(self, filename):
-        if filename.find('.pkl') == -1:
+        """FUnction save a pickle """
+        if filename[-4:] != '.pkl':
             filename = filename + '.pkl'
         try:
             with open(filename, "wb") as pickle_out:
@@ -170,9 +171,10 @@ class DeepNeuralNetwork:
 
     @staticmethod
     def load(filename):
+        """Function load a file"""
         try:
             with open(filename, "rb") as pickle_in:
                 example_dict = pickle.load(pickle_in)
-                return(example_dict)
+            return(example_dict)
         except FileNotFoundError:
             return (None)
