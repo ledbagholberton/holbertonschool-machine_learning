@@ -57,7 +57,7 @@ class DeepNeuralNetwork:
                 self.__cache['A0'] = X
             else:
                 A_tmp_0 = np.dot(self.__weights['W' + str(i)],
-                                    self.__cache['A' + str(i-1)])
+                                 self.__cache['A' + str(i-1)])
                 A_tmp = A_tmp_0 + self.weights['b' + str(i)]
                 H_tmp = self.sigmoid(A_tmp)
                 self.__cache['A' + str(i)] = H_tmp
@@ -90,7 +90,7 @@ class DeepNeuralNetwork:
         dZ['dZ'+posi] = self.__cache['A' + posi] - Y
         db['db'+posi] = np.sum(dZ['dZ'+posi], axis=1, keepdims=True)/m
         dW['dW'+posi] = np.dot(self.__cache['A'+str(self.__L - 1)],
-                                  dZ['dZ'+posi].T) / m
+                               dZ['dZ'+posi].T) / m
         dWT['dWT'+posi] = dW['dW'+posi].T
         self.__weights['W'+posi] = wg['W'+posi] - alpha*dWT['dWT'+posi]
         self.__weights['b'+posi] = wg['b'+posi] - alpha*db['db'+posi]
@@ -102,7 +102,7 @@ class DeepNeuralNetwork:
             dZ['dZ'+pos] = np.dot(wg['W'+posm].T, dZ['dZ'+posm]) * g_temp
             db['db'+pos] = np.sum(dZ['dZ'+pos], axis=1, keepdims=True)/m
             dW['dW'+pos] = np.dot(self.__cache['A'+posl],
-                                     dZ['dZ'+pos].T) / m
+                                  dZ['dZ'+pos].T) / m
             dWT['dWT'+pos] = dW['dW'+pos].T
             self.__weights['W'+pos] = wg['W'+pos] - alpha*dWT['dWT'+pos]
             self.__weights['b'+pos] = wg['b'+pos] - alpha*db['db'+pos]
