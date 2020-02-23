@@ -12,11 +12,12 @@ X_train = X_train_3D.reshape((X_train_3D.shape[0], -1)).T
 
 np.random.seed(0)
 deep = Deep(X_train.shape[0], [3, 1])
-A, cost = deep.train(X_train, Y_train, iterations=200, graph=False)
+A, cost = deep.train(X_train, Y_train, iterations=100, graph=False)
 deep.save('2-output')
 del deep
 
 saved = Deep.load('2-output.pkl')
+print("Esto es saved", saved)
 A_saved, cost_saved = saved.evaluate(X_train, Y_train)
 
 print(np.array_equal(A, A_saved) and cost == cost_saved)

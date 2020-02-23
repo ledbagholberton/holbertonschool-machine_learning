@@ -163,18 +163,16 @@ class DeepNeuralNetwork:
         if filename.find('.pkl') == -1:
             filename = filename + '.pkl'
         try:
-            pickle_out = open(filename, "wb")
-            pickle.dump(self, pickle_out)
-            pickle_out.close()
+            with open(filename, "wb") as pickle_out:
+                pickle.dump(self, pickle_out)
         except:
             return (None)
 
     @staticmethod
     def load(filename):
         try:
-            pickle_in = open("filename", "rb")
-        except:
+            with open(filename, "rb") as pickle_in:
+                example_dict = pickle.load(pickle_in)
+                return(example_dict)
+        except FileNotFoundError:
             return (None)
-        example_dict = pickle.load(pickle_in)
-        pickle_in.close()
-        return(example_dict)
