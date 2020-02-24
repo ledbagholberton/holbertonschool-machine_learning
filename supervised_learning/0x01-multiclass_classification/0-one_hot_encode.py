@@ -12,7 +12,7 @@ def one_hot_encode(Y, classes):
         return (None)
     if len(Y) == 0:
         return (None)
-    if np.amax(Y) > classes:
+    if np.amax(Y) >= classes:
         return (None)
     if np.amin(Y) > 0:
         return (None)
