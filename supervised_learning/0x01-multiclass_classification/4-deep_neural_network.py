@@ -48,6 +48,12 @@ class DeepNeuralNetwork:
     def weights(self):
         return self.__weights
 
+    @property
+    def activation(self):
+        """activation variable used to indicate
+        the activation type"""
+        return self.__activation
+
     def sigmoid(self, Z):
         """Function sigmoid"""
         sigm = 1 / (1 + np.exp(-Z))
