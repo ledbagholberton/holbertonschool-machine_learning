@@ -2,8 +2,6 @@
 """ Deep Neural Network class: defines a deep neural network class
 with private instances attributes
 """
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
@@ -35,14 +33,17 @@ class DeepNeuralNetwork:
 
     @property
     def L(self):
+        """Variable L with quantity of layers"""
         return self.__L
 
     @property
     def cache(self):
+        """Variable cache Dict to store all A"""
         return self.__cache
 
     @property
     def weights(self):
+        """Variable weights Dict to store all weights and bias"""
         return self.__weights
 
     def sigmoid(self, Z):
