@@ -129,7 +129,7 @@ class DeepNeuralNetwork:
             posm = str(i+1)
             pos = str(i)
             if self.__activation == 'tanh':
-                g_temp = 1 - self.__cache['A'+pos]*self.__cache['A'+pos]
+                g_temp = 1 - self.__cache['A'+pos]**2
             else:
                 g_temp = self.__cache['A'+pos] * (1 - self.__cache['A'+pos])
             dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm]) * g_temp
