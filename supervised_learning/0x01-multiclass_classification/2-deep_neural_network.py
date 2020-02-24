@@ -172,6 +172,8 @@ class DeepNeuralNetwork:
         try:
             with open(filename, "rb") as pickle_in:
                 example_dict = pickle.load(pickle_in)
-            return(example_dict)
+                if type(example_dict) is not DeepNeuralNetwork:
+                    return (None)
+                return(example_dict)
         except FileNotFoundError:
             return (None)
