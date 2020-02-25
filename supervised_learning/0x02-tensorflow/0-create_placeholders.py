@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-
+"""FUnction create placeholders """
 import tensorflow as tf
+
 
 def create_placeholders(nx, classes):
     """Function that creates placeholders"""
