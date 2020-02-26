@@ -83,7 +83,7 @@ class Neuron:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
-        for i in range(iterations):
+        for i in range(iterations + 1):
             PRED, cost = self.evaluate(X, Y)
             self.gradient_descent(X, Y, self.__A, alpha)
         PRED, cost = self.evaluate(X, Y)

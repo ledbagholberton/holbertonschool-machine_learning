@@ -116,7 +116,7 @@ class DeepNeuralNetwork:
         if alpha <= 0:
             raise ValueError("alpha must be positive")
         PRED, cost = self.evaluate(X, Y)
-        for i in range(iterations):
+        for i in range(iterations + 1):
             self.gradient_descent(Y, self.__cache, alpha)
             PRED, cost = self.evaluate(X, Y)
         return(PRED, cost)
