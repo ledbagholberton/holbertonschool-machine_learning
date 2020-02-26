@@ -134,7 +134,7 @@ class DeepNeuralNetwork:
         arr_cost.append(cost)
         if verbose is True:
             print("Cost after {} iterations: {}".format(0, cost))
-        for i in range(1, iterations):
+        for i in range(1, iterations + 1):
             self.gradient_descent(Y, self.__cache, alpha)
             PRED, cost = self.evaluate(X, Y)
             iters = iters + 1
