@@ -3,12 +3,14 @@
 This function that builds, trains, and saves a neural network classifier
 """
 
+
 import tensorflow as tf
 calculate_accuracy = __import__('3-calculate_accuracy').calculate_accuracy
 calculate_loss = __import__('4-calculate_loss').calculate_loss
 create_placeholders = __import__('0-create_placeholders').create_placeholders
 create_train_op = __import__('5-create_train_op').create_train_op
 forward_prop = __import__('2-forward_prop').forward_prop
+
 
 def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
           iterations, save_path="/tmp/model.ckpt"):
@@ -17,8 +19,8 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
     Y_train is a numpy.ndarray containing the training labels
     X_valid is a numpy.ndarray containing the validation input data
     Y_valid is a numpy.ndarray containing the validation labels
-    layer_sizes is a list containing the number of nodes in each layer of the network
-    activations is a list containing the activation functions for each layer of the network
+    layer_sizes is a list containing number nodes in each layer of the network
+    activations is a list containing activation functions for each layer
     alpha is the learning rate
     iterations is the number of iterations to train over
     save_path designates where to save the model
@@ -42,8 +44,8 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
             loss_t = session.run(loss, feed_dict={X_train, Y_train})
             loss_v = session.run(loss, feed_dict={X_valid, Y_valid})
             session.run(train_op, feed_dict={X_train, Y_train})
-            counter =+ 1
-            if (i == 0) or (counter == 100) or (i == iterations - 1): 
+            counter = counter + 1
+            if (i == 0) or (counter == 100) or (i == iterations - 1):
                 print("After {i} iterations:")
                 print("Training Cost: {}".format(loss_t))
                 print("Training Accuracy: {}".format(acc_t))
