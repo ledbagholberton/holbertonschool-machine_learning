@@ -37,16 +37,17 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
     loss = calculate_loss(y, y_pred)
     tf.add_to_collection("loss", loss)
     train_op = create_train_op(loss, alpha)
+    tf.add_to_collection("train_op", train_op)
     saver = tf.train.Saver()
     init = tf.global_variables_initializer()
     with tf.Session() as session:
         session.run(init)
         counter = 0
         for i in range(iterations):
-            acc_t = session.run(accuracy, feed_dict={x:X_train, y:Y_train})
-            loss_t = session.run(loss, feed_dict={x:X_train, y:Y_train})
-            acc_v = session.run(accuracy, feed_dict={x:X_valid, y:Y_valid})
-            loss_v = session.run(loss, feed_dict={x:X_valid, y:Y_valid})
+            acc_t = session.run(accuracy, feed_dict={x: X_train, y: Y_train})
+            loss_t = session.run(loss, feed_dict={x: X_train, y: Y_train})
+            acc_v = session.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
+            loss_v = session.run(loss, feed_dict={x: X_valid, y: Y_valid})
             counter = counter + 1
             if (i == 0) or (counter == 100) or (i == iterations - 1):
                 print("After {} iterations:".format(i))
@@ -55,6 +56,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
                 print("Validation Cost: {}".format(loss_v))
                 print("Validation Accuracy: {}".format(acc_v))
                 counter = 0
-            session.run(train_op, feed_dict={x:X_train, y:Y_train})
+            session.run(train_op, feed_dict={x: X_train, y: Y_train})
         save_path = saver.save(session, save_path)
     return(save_path)
