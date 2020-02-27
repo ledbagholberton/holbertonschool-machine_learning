@@ -15,21 +15,15 @@ def evaluate(X, Y, save_path):
     Returns: the network’s prediction, accuracy, and loss, respectively
     """
     with tf.Session() as session:
-        session.run(init)
-        counter = 0
-        for i in range(iterations):
-            acc_t = session.run(accuracy, feed_dict={x: X_train, y: Y_train})
-            loss_t = session.run(loss, feed_dict={x: X_train, y: Y_train})
-            acc_v = session.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
-            loss_v = session.run(loss, feed_dict={x: X_valid, y: Y_valid})
-            counter = counter + 1
-            if (i == 0) or (counter == 100) or (i == iterations - 1):
-                print("After {} iterations:".format(i))
-                print("Training Cost: {}".format(loss_t))
-                print("Training Accuracy: {}".format(acc_t))
-                print("Validation Cost: {}".format(loss_v))
-                print("Validation Accuracy: {}".format(acc_v))
-                counter = 0
-            session.run(train_op, feed_dict={x: X_train, y: Y_train})
-        save_path = saver.save(session, save_path)
-    return(save_path)
+        saver = tf.train.import_meta_graph(save_path+'.meta')
+        saver.restore(session, tf.train.latest_checkpoint('./'))
+        x = tf.get_collection('x')[0]
+        y = tf.get_collection('y')[0]
+        y_pred = tf.get_collection('y_pred')[0]
+        accuracy = tf.get_collection('accuracy')[0]
+        loss = tf.get_collection('loss')[0]
+        feed_dict = {x: X, y: Y}
+        y_pred = session.run(y_pred, feed_dict)
+        acc = session.run(accuracy, feed_dict)
+        loss = session.run(loss, feed_dict)
+    return(y_pred, acc, loss)
