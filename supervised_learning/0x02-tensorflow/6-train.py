@@ -51,10 +51,10 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
             counter = counter + 1
             if (i == 0) or (counter == 100) or (i == iterations):
                 print("After {} iterations:".format(i))
-                print("Training Cost: {}".format(loss_t))
-                print("Training Accuracy: {}".format(acc_t))
-                print("Validation Cost: {}".format(loss_v))
-                print("Validation Accuracy: {}".format(acc_v))
+                print("\tTraining Cost: {}".format(loss_t))
+                print("\tTraining Accuracy: {}".format(acc_t))
+                print("\tValidation Cost: {}".format(loss_v))
+                print("\tValidation Accuracy: {}".format(acc_v))
                 counter = 0
             session.run(train_op, feed_dict={x: X_train, y: Y_train})
         save_path = saver.save(session, save_path)
