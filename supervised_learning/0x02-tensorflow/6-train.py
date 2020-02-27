@@ -43,13 +43,13 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
     with tf.Session() as session:
         session.run(init)
         counter = 0
-        for i in range(iterations):
+        for i in range(iterations + 1):
             acc_t = session.run(accuracy, feed_dict={x: X_train, y: Y_train})
             loss_t = session.run(loss, feed_dict={x: X_train, y: Y_train})
             acc_v = session.run(accuracy, feed_dict={x: X_valid, y: Y_valid})
             loss_v = session.run(loss, feed_dict={x: X_valid, y: Y_valid})
             counter = counter + 1
-            if (i == 0) or (counter == 100) or (i == iterations - 1):
+            if (i == 0) or (counter == 100) or (i == iterations):
                 print("After {} iterations:".format(i))
                 print("Training Cost: {}".format(loss_t))
                 print("Training Accuracy: {}".format(acc_t))
