@@ -56,6 +56,7 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations, alpha,
                 print("\tValidation Cost: {}".format(loss_v))
                 print("\tValidation Accuracy: {}".format(acc_v))
                 counter = 0
-            session.run(train_op, feed_dict={x: X_train, y: Y_train})
+            if i < iterations:
+                session.run(train_op, feed_dict={x: X_train, y: Y_train})
         save_path = saver.save(session, save_path)
     return(save_path)
