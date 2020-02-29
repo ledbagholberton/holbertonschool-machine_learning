@@ -16,14 +16,13 @@ def evaluate(X, Y, save_path):
     """
     with tf.Session() as session:
         saver = tf.train.import_meta_graph(save_path+'.meta')
-        saver.restore(session, tf.train.latest_checkpoint('./'))
+        saver.restore(session, save_path)
         x = tf.get_collection('x')[0]
         y = tf.get_collection('y')[0]
         y_pred = tf.get_collection('y_pred')[0]
         accuracy = tf.get_collection('accuracy')[0]
         loss = tf.get_collection('loss')[0]
-        feed_dict = {x: X, y: Y}
-        y_pred = session.run(y_pred, feed_dict)
-        acc = session.run(accuracy, feed_dict)
-        loss = session.run(loss, feed_dict)
+        y_pred = session.run(y_pred, feed_dict={x: X, y: Y})
+        acc = session.run(accuracy, feed_dict={x: X, y: Y})
+        loss = session.run(loss, feed_dict={x: X, y: Y})
     return(y_pred, acc, loss)
