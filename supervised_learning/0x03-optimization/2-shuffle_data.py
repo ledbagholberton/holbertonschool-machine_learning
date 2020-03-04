@@ -14,6 +14,6 @@ import numpy as np
 
 def shuffle_data(X, Y):
     """Function shuffle"""
-    xper = np.random.permutation(X)
-    yper = np.random.permutation(Y)
-    return (xper, yper)
+    assert len(X) == len(Y)
+    p = np.random.permutation(len(X))
+    return (X[p], Y[p])
