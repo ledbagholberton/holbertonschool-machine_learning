@@ -14,6 +14,5 @@ import numpy as np
 
 def normalize(X, m, s):
     """Function Normalization"""
-    eps = 0.000000001
-    norm = (X - m) / (np.sqrt(np.power(s, 2) + eps))
+    norm = (X - m) / (s)
     return (norm)
