@@ -21,8 +21,5 @@ import numpy as np
 
 def batch_norm(Z, gamma, beta, epsilon):
     """Function Batch Normalization"""
-    m = len(Z)
-    mean = np.mean(Z)
-    std = np.std(Z)
-    Z_norm = (Z - mean) / ((std + epsilon)**0.5)
+    Z_norm = (Z - np.mean(Z)) / ((np.std(Z) + epsilon)**0.5)
     return(gamma * Z_norm + beta)
