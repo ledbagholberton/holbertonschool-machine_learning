@@ -16,7 +16,7 @@ import numpy as np
 def create_batch_norm_layer(prev, n, activation):
     """Function Batch Normalization"""
     my_layer = tf.layers.Dense(units=n, activation=activation)
-    mean, variance = tf.nn.moments(prev, axes=[0])
+    mean, variance = tf.nn.moments(my_layer(prev), axes=[0])
     BN2 = tf.nn.batch_normalization(my_layer(prev), mean=mean,
                                     variance=variance,
                                     variance_epsilon=0.00001,
