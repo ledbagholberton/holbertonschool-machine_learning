@@ -21,7 +21,7 @@ import numpy as np
 
 def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     """Function Update Variables Adam"""
-    β1 = beta1
+    """β1 = beta1
     β2 = beta2
     α = alpha
     ε = epsilon
@@ -33,9 +33,7 @@ def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     Sd_ok = Sd / (1 - β2 ** t)
 
     w = var - α * (Vd_ok / ((Sd_ok ** (0.5)) + ε))
-    return (w, Vd, Sd)
-
-"""
+    return (w, Vd, Sd)"""
     new_prom = (beta1 * v) + ((1 - beta1) * grad)
     new_s = (beta2 * s) + ((1 - beta2) * grad * grad)
     bias_correction1 = 1 - beta1 ** t
@@ -44,4 +42,3 @@ def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     new_s_corr = new_s / bias_correction2
     new_var = var - alpha * (new_prom_corr / ((new_s_corr ** (0.5)) + epsilon))
     return (new_var, new_s_corr, new_prom_corr)
-"""
