@@ -48,8 +48,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
         Y_shuffled = Y_train
         X_batch = np.zeros((32, X_train.shape[1]))
         Y_batch = np.zeros((32, Y_train.shape[1]))
-        for j in range(epochs + 1):
-            print("After {} epochs:".format(j))
+        for epochs in range(epochs + 1):
+            print("After {} epochs:".format(epochs))
             print("\tTraining Cost: {}".format(train_cost))
             print("\tTraining Accuracy: {}".format(train_accuracy))
             print("\tValidation Cost: {}".format(valid_cost))
@@ -62,12 +62,12 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                 setBatch = {x: X_batch, y: Y_batch}
                 step_accuracy = session.run(accuracy, feed_dict=setBatch)
                 step_cost = session.run(loss, feed_dict=setBatch)
+                counter = counter + 1
                 if (counter == 100):
-                    print("\tStep {}:".format(step_number))
+                    print("\tStep {}:".format(step_number + 1))
                     print("\t\tCost: {}".format(step_cost))
                     print("\t\tAccuracy: {}".format(step_accuracy))
                     counter = 0
-                counter = counter + 1
                 session.run(train_op, feed_dict=setBatch)
             resto = m % 32
             step_number += 1
