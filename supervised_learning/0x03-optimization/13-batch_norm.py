@@ -15,7 +15,6 @@ Returns: the normalized Z matrix
 """
 
 
-import tensorflow as tf
 import numpy as np
 
 
