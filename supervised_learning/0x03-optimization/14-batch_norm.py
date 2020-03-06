@@ -8,14 +8,21 @@ of the layer
 Returns: a tensor of the activated output for the layer
 """
 import tensorflow as tf
+import numpy as np
 
 
 def create_batch_norm_layer(prev, n, activation):
     """Function Batch Normalization"""
-    my_layer = tf.layers.Dense(units=n, activation=activation)
+    initial = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    my_layer = tf.layers.Dense(units=n, activation=activation,
+                               kernel_initializer=initial)
+    beta = tf.Variable(tf.constant(0.0, shape=[n]),
+                       name='beta', trainable=True)
+    gamma = tf.Variable(tf.constant(1.0, shape=[n]),
+                        name='gamma', trainable=True)
     mean, variance = tf.nn.moments(my_layer(prev), axes=[0])
     BN2 = tf.nn.batch_normalization(my_layer(prev), mean=mean,
                                     variance=variance,
                                     variance_epsilon=1e-8,
-                                    offset=None, scale=None)
+                                    offset=beta, scale=gamma)
     return(BN2)

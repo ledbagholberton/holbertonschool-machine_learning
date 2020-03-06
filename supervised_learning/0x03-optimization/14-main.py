@@ -9,6 +9,7 @@ if __name__ == '__main__':
     X_3D = lib['X_train']
     X = X_3D.reshape((X_3D.shape[0], -1))
 
+    tf.set_random_seed(0)
     x = tf.placeholder(tf.float32, shape=[None, 784])
     a = create_batch_norm_layer(x, 256, tf.nn.tanh)
     init = tf.global_variables_initializer()
