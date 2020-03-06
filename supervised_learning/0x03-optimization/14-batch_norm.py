@@ -7,10 +7,7 @@ activation is the activation function that should be used on the output
 of the layer
 Returns: a tensor of the activated output for the layer
 """
-
-
 import tensorflow as tf
-import numpy as np
 
 
 def create_batch_norm_layer(prev, n, activation):
@@ -19,6 +16,6 @@ def create_batch_norm_layer(prev, n, activation):
     mean, variance = tf.nn.moments(my_layer(prev), axes=[0])
     BN2 = tf.nn.batch_normalization(my_layer(prev), mean=mean,
                                     variance=variance,
-                                    variance_epsilon=0.00001,
+                                    variance_epsilon=1e-8,
                                     offset=None, scale=None)
     return(BN2)
