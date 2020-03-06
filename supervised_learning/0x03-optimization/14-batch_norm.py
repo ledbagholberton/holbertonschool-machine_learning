@@ -20,7 +20,7 @@ def create_batch_norm_layer(prev, n, activation):
     initial = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
     my_layer = tf.layers.Dense(units=n, activation=activation,
                                kernel_initializer=initial)
-    mean, variance = tf.nn.moments(my_layer(prev), axes=[0])
+    mean, variance = tf.nn.moments(my_layer(prev))
     BN2 = tf.nn.batch_normalization(my_layer(prev), mean=mean,
                                     variance=variance,
                                     variance_epsilon=1e-8,
