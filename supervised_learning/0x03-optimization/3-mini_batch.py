@@ -73,6 +73,8 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
             step_number += 1
             X_resto = np.zeros((resto, X_train.shape[1]))
             Y_resto = np.zeros((resto, Y_train.shape[1]))
+            print(X_resto)
+            print(Y_resto)
             for a in range(resto):
                 X_resto[a] = X_shuffled[step_number * 32 + a]
                 Y_resto[a] = Y_shuffled[step_number * 32 + a]
