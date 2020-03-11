@@ -32,7 +32,7 @@ def softmax(Z):
 def dropout_forward_prop(X, weights, L, keep_prob):
     """FUnction Dropout Forward Prop"""
     cache = {}
-    for i in range(L + 1):
+    for i in range(L):
         if i == 0:
             cache['A0'] = X
         else:
