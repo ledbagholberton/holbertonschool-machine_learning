@@ -33,17 +33,13 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     dW['dW'+posi] = np.matmul(cache['A'+str(L - 1)],
                               dZ['dZ'+posi].T) / m
     dWT['dWT'+posi] = dW['dW'+posi].T
-    weights['W'+posi] = (1+lambtha)*wg['W'+posi] - alpha*dWT['dWT'+posi]
-    weights['b'+posi] = (1+lambtha)*wg['b'+posi] - alpha*db['db'+posi]
+    weights['W'+posi] = (1+lambtha/m)*wg['W'+posi] - alpha*dWT['dWT'+posi]
+    weights['b'+posi] = (1+lambtha/m)*wg['b'+posi] - alpha*db['db'+posi]
     for i in range(L - 1, 0, -1):
         posl = str(i-1)
         posm = str(i+1)
         pos = str(i)
-        if activation[i] == 'tanh':
-            g_temp = 1 - cache['A'+pos]**2
-        else:
-            g_temp = cache['A'+pos] * (1 - cache['A'+pos])
-        dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm]) * g_temp
+        dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm])
         db['db'+pos] = np.sum(dZ['dZ'+pos], axis=1, keepdims=True)/m
         dW['dW'+pos] = np.matmul(cache['A'+posl],
                                  dZ['dZ'+pos].T) / m
