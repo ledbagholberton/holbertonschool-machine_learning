@@ -39,53 +39,37 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
         train_op = tf.get_collection('train_op')[0]
         setTrain = {x: X_train, y: Y_train}
         setValid = {x: X_valid, y: Y_valid}
-        train_cost = session.run(loss, feed_dict=setTrain)
-        train_accuracy = session.run(accuracy, feed_dict=setTrain)
-        valid_cost = session.run(loss, feed_dict=setValid)
-        valid_accuracy = session.run(accuracy, feed_dict=setValid)
         m = X_train.shape[0]
-        X_shuffled = X_train
-        Y_shuffled = Y_train
-        X_batch = np.zeros((32, X_train.shape[1]))
-        Y_batch = np.zeros((32, Y_train.shape[1]))
-        for epochs in range(epochs + 1):
-            print("After {} epochs:".format(epochs))
+        for epoch in range(epochs):
+            train_cost = session.run(loss, feed_dict=setTrain)
+            train_accuracy = session.run(accuracy, feed_dict=setTrain)
+            valid_cost = session.run(loss, feed_dict=setValid)
+            valid_accuracy = session.run(accuracy, feed_dict=setValid)
+            print("After {} epochs:".format(epoch))
             print("\tTraining Cost: {}".format(train_cost))
             print("\tTraining Accuracy: {}".format(train_accuracy))
             print("\tValidation Cost: {}".format(valid_cost))
             print("\tValidation Accuracy: {}".format(valid_accuracy))
-            counter = 0
-            for step_number in range(0, int(m/32)):
-                for a in range(32):
-                    X_batch[a] = X_shuffled[step_number * 32 + a]
-                    Y_batch[a] = Y_shuffled[step_number * 32 + a]
+            X, Y = shuffle_data(X_train, Y_train)
+            resto = m % batch_size  
+            for st in range(0, int(m/batch_size) + 1):
+                X_batch = X[st * batch_size: (st+1) * batch_size - 1]
+                Y_batch = Y[st * batch_size: (st+1) * batch_size - 1]
+                if resto != 0 and st > int(m/batch_size):
+                    X_batch = X[st * batch_size:]
+                    Y_batch = Y[st * batch_size:]
                 setBatch = {x: X_batch, y: Y_batch}
-                step_accuracy = session.run(accuracy, feed_dict=setBatch)
-                step_cost = session.run(loss, feed_dict=setBatch)
-                counter = counter + 1
-                if (counter == 100):
-                    print("\tStep {}:".format(step_number + 1))
+                session.run(train_op, feed_dict=setBatch)
+                if st%100 == 0 and st != 0:
+                    step_accuracy = session.run(accuracy, feed_dict=setBatch)
+                    step_cost = session.run(loss, feed_dict=setBatch)
+                    print("\tStep {}:".format(st))
                     print("\t\tCost: {}".format(step_cost))
                     print("\t\tAccuracy: {}".format(step_accuracy))
-                    counter = 0
-                session.run(train_op, feed_dict=setBatch)
-            resto = m % 32
-            step_number += 1
-            X_resto = np.zeros((resto, X_train.shape[1]))
-            Y_resto = np.zeros((resto, Y_train.shape[1]))
-            print(X_resto)
-            print(Y_resto)
-            for a in range(resto):
-                X_resto[a] = X_shuffled[step_number * 32 + a]
-                Y_resto[a] = Y_shuffled[step_number * 32 + a]
-            setResto = {x: X_resto, y: Y_resto}
-            step_accuracy = session.run(accuracy, feed_dict=setResto)
-            step_cost = session.run(loss, feed_dict=setResto)
-            session.run(train_op, feed_dict=setResto)
-            X_shuffled, Y_shuffled = shuffle_data(X_train, Y_train)
-            train_accuracy = step_accuracy
-            train_cost = step_cost
-            valid_accuracy = session.run(accuracy, feed_dict=setValid)
-            valid_cost = session.run(loss, feed_dict=setValid)
+        print("After {} epochs:".format(epoch + 1))
+        print("\tTraining Cost: {}".format(train_cost))
+        print("\tTraining Accuracy: {}".format(train_accuracy))
+        print("\tValidation Cost: {}".format(valid_cost))
+        print("\tValidation Accuracy: {}".format(valid_accuracy))
         save_path = saver.save(session, save_path)
     return(save_path)
