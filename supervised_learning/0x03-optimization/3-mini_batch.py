@@ -16,11 +16,6 @@ Returns: the path where the model was saved
 
 import numpy as np
 import tensorflow as tf
-calculate_accuracy = __import__('3-all').calculate_accuracy
-calculate_loss = __import__('3-all').calculate_loss
-create_placeholders = __import__('3-all').create_placeholders
-create_train_op = __import__('3-all').create_train_op
-forward_prop = __import__('3-all').forward_prop
 shuffle_data = __import__('2-shuffle_data').shuffle_data
 
 
@@ -51,7 +46,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
             print("\tValidation Cost: {}".format(valid_cost))
             print("\tValidation Accuracy: {}".format(valid_accuracy))
             X, Y = shuffle_data(X_train, Y_train)
-            resto = m % batch_size  
+            resto = m % batch_size
             for st in range(0, int(m/batch_size) + 1):
                 X_batch = X[st * batch_size: (st+1) * batch_size - 1]
                 Y_batch = Y[st * batch_size: (st+1) * batch_size - 1]
@@ -60,7 +55,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                     Y_batch = Y[st * batch_size:]
                 setBatch = {x: X_batch, y: Y_batch}
                 session.run(train_op, feed_dict=setBatch)
-                if st%100 == 0 and st != 0:
+                if st % 100 == 0 and st != 0:
                     step_accuracy = session.run(accuracy, feed_dict=setBatch)
                     step_cost = session.run(loss, feed_dict=setBatch)
                     print("\tStep {}:".format(st))
