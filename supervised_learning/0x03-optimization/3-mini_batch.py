@@ -14,7 +14,6 @@ save_path is the path to where the model should be saved
 Returns: the path where the model was saved
 """
 
-import numpy as np
 import tensorflow as tf
 shuffle_data = __import__('2-shuffle_data').shuffle_data
 
