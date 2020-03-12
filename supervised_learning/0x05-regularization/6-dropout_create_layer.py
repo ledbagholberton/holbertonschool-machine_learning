@@ -8,7 +8,6 @@ activation is the activation function that should be used on the layer
 keep_prob is the probability that a node will be kept
 Returns: the output of the new layer
 """
-import numpy as np
 import tensorflow as tf
 
 
