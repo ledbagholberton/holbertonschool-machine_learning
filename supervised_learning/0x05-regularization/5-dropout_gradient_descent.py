@@ -1,15 +1,20 @@
 """
-Function  that conducts forward propagation using Dropout:
-X is a numpy.ndarray of shape (nx, m) containing the input data for the network
-nx is the number of input features
+updates the weights of a neural network with Dropout regularization
+using gradient descent:
+
+Y is a one-hot numpy.ndarray of shape (classes, m) that contains the correct
+labels for the data:
+classes is the number of classes
 m is the number of data points
 weights is a dictionary of the weights and biases of the neural network
-L the number of layers in the network
+cache is a dictionary of the outputs and dropout masks of each layer of
+the neural network
+alpha is the learning rate
 keep_prob is the probability that a node will be kept
-All layers except the last should use the tanh activation function
-The last layer should use the softmax activation function
-Returns: a dictionary containing the outputs of each layer and the dropout mask
-used on each layer (see example for format)
+L is the number of layers of the network
+All layers use the tanh activation function except the last, which uses the softmax
+activation function
+The weights of the network should be updated in place
 """
 import tensorflow as tf
 import numpy as np
@@ -29,8 +34,8 @@ def softmax(Z):
     return softmax
 
 
-def dropout_forward_prop(X, weights, L, keep_prob):
-    """FUnction Dropout Forward Prop"""
+def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
+    """FUnction Dropout Gradient Descent"""
     cache = {}
     for i in range(L):
         if i == 0:

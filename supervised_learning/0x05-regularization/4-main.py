@@ -10,7 +10,7 @@ def one_hot(Y, classes):
     one_hot = np.zeros((classes, m))
     one_hot[Y, np.arange(m)] = 1
     return one_hot
-
+    
 if __name__ == '__main__':
     lib= np.load('../data/MNIST.npz')
     X_train_3D = lib['X_train']
