@@ -31,18 +31,21 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     db['db'+posi] = np.sum(dZ['dZ'+posi], axis=1, keepdims=True)/m
     dW['dW'+posi] = np.matmul(cache['A'+str(L - 1)],
                               dZ['dZ'+posi].T) / m
+    dW['dW'+posi] = dW['dW'+posi] + (lambtha / m) * wg['W'+posi].T
     dWT['dWT'+posi] = dW['dW'+posi].T
-    weights['W'+posi] = (1+(lambtha/m))*wg['W'+posi] - alpha*dWT['dWT'+posi]
-    weights['b'+posi] = (1+(lambtha/m))*wg['b'+posi] - alpha*db['db'+posi]
+    weights['W'+posi] = wg['W'+posi] - alpha*dWT['dWT'+posi]
+    weights['b'+posi] = wg['b'+posi] - alpha*db['db'+posi]
     for i in range(L - 1, 0, -1):
         posl = str(i-1)
         posm = str(i+1)
         pos = str(i)
-        dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm])
+        g_temp = 1 - cache['A'+pos]**2
+        dZ['dZ'+pos] = np.matmul(wg['W'+posm].T, dZ['dZ'+posm]) * g_temp
         db['db'+pos] = np.sum(dZ['dZ'+pos], axis=1, keepdims=True)/m
         dW['dW'+pos] = np.matmul(cache['A'+posl],
                                  dZ['dZ'+pos].T) / m
+        dW['dW'+posi] = dW['dW'+posi] + (lambtha / m) * wg['W'+posi].T
         dWT['dWT'+pos] = dW['dW'+pos].T
-        weights['W'+pos] = (1+(lambtha/m))*wg['W'+pos] - alpha*dWT['dWT'+pos]
-        weights['b'+pos] = (1+(lambtha/m))*wg['b'+pos] - alpha*db['db'+pos]
-    return(weights)
+        weights['W'+pos] = wg['W'+pos] - alpha*dWT['dWT'+pos]
+        weights['b'+pos] = wg['b'+pos] - alpha*db['db'+pos]
+    return()
