@@ -24,7 +24,4 @@ def train_model(network, data, labels, batch_size,
                                   batch_size=batch_size, shuffle=shuffle,
                                   verbose=verbose,
                                   validation_data=validation_data)
-    if validation_data is None:
-        return (None)
-    else:
-        return (trained_network)
+    return (trained_network)
