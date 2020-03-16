@@ -33,5 +33,6 @@ def train_model(network, data, labels, batch_size, epochs,
     trained_network = network.fit(data, labels, nb_epoch=epochs,
                                   batch_size=batch_size, shuffle=shuffle,
                                   verbose=verbose,
-                                  validation_data=validation_data)
+                                  validation_data=validation_data,
+                                  callbacks=callbacks)
     return (trained_network)
