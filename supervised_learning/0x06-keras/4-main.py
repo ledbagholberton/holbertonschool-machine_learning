@@ -2,7 +2,7 @@
 
 import numpy as np
 import tensorflow as tf
-build_model = __import__('0-sequential').build_model
+build_model = __import__('1-input').build_model
 optimize_model = __import__('2-optimize').optimize_model
 one_hot = __import__('3-one_hot').one_hot
 train_model = __import__('4-train').train_model
