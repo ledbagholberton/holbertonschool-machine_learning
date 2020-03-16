@@ -17,13 +17,11 @@ import tensorflow.keras as K
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """ Function build_model """
     inputs = K.Input(shape=(nx,))
-    layer = K.layers.Dense(layers[0], activation=activations[0],
-                           kernel_regularizer=K.regularizers.l2(lambtha))(inputs)
-    model = (layer)(inputs)
+    k_reg = K.regularizers.l2(lambtha)
+    model = K.layers.Dense(layers[0], activation=activations[0],
+                           kernel_regularizer=k_reg)(inputs)
     for i in range(1, len(layers)):
-        model.add(K.layers.Dropout(keep_prob))
-        layer = K.layers.Dense(layers[i],
-                               activation=activations[i],
-                               kernel_regularizer=K.regularizers.l2(lambtha))
-        model.add(layer)
-    return (model)
+        model = K.layers.Dropout(rate=keep_prob)(model)
+        model = K.layers.Dense(layers[i], activation=activations[i],
+                               kernel_regularizer=k_reg)(model)
+    return (K.Model(inputs=inputs, outputs=model))
