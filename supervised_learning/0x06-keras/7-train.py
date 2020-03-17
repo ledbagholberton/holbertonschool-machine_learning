@@ -35,14 +35,18 @@ def train_model(network, data, labels, batch_size, epochs,
                 patience=0, learning_rate_decay=False, alpha=0.1,
                 decay_rate=1, verbose=True, shuffle=False):
     """ Function train_model"""
+    def schedule(epochs):
+        """Function support callback Learning Rate"""
+        lr_cb = alpha / (1 + decay_rate * epochs)
+        return lr_cb
     callbacks = []
     if early_stopping is True and validation_data is not None:
         early_cb = K.callbacks.EarlyStopping(patience=patience,
                                              monitor='val_loss')
         callbacks.append(early_cb)
     if learning_rate_decay is True and validation_data is not None:
-        lr_cb = K.callbacks.LearningRateScheduler(schedule(alpha, decay_rate,
-                                                  epochs), 1)
+        lr_cb = K.callbacks.LearningRateScheduler(schedule,
+                                                  verbose=1)
         callbacks.append(lr_cb)
     trained_network = network.fit(data, labels, nb_epoch=epochs,
                                   batch_size=batch_size, shuffle=shuffle,
@@ -50,8 +54,3 @@ def train_model(network, data, labels, batch_size, epochs,
                                   validation_data=validation_data,
                                   callbacks=callbacks)
     return (trained_network)
-
-
-def schedule(alpha, decay_rate, epochs):
-    """Function support callback Learning Rate"""
-    return (alpha / (1 + decay_rate * epochs))
