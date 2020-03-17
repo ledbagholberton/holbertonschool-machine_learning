@@ -31,5 +31,5 @@ if __name__ == '__main__':
     batch_size = 64
     epochs = 1000
     train_model(network, X_train, Y_train_oh, batch_size, epochs,
-                validation_data=(X_valid, Y_valid_oh), early_stopping=True,
+                validation_data=(X_valid, Y_valid_oh), early_stopping=False,
                 patience=3, learning_rate_decay=True, alpha=alpha)
