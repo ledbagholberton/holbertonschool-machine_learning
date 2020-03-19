@@ -26,7 +26,6 @@ def convolve_grayscale_valid(images, kernel):
     cw = w - kw + 1
     new_conv = np.zeros((m, ch, cw))
     m_only = np.arange(0, m)
-    print(m_only)
     for row in range(ch):
         for col in range(cw):
             new_conv[m_only, row, col] = np.sum(np.multiply(
