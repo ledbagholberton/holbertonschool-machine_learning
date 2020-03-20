@@ -25,13 +25,13 @@ def convolve_grayscale_same(images, kernel):
     """Function convolution same"""
     m, h, w = images.shape
     kh, kw = kernel.shape
-    if kh%2 != 0:
+    if kh % 2 != 0:
         ph = int((kh-1)/2)
         ch = h + 2*ph - kh + 1
     else:
         ph = int(kh/2)
         ch = h + 2*ph - kh
-    if kw%2 != 0:
+    if kw % 2 != 0:
         pw = int((kw-1)/2)
         cw = w + 2*pw - kw + 1
     else:
