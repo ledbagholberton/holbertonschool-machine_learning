@@ -25,10 +25,19 @@ def convolve_grayscale_same(images, kernel):
     """Function convolution same"""
     m, h, w = images.shape
     kh, kw = kernel.shape
-    p = int((kh-1)/2)
-    ch = h + 2*p - kh + 1
-    cw = w + 2*p - kw + 1
-    new_images = np.pad(images, ((0, 0), (p, p), (p, p)), mode='constant',
+    if kh%2 != 0:
+        ph = int((kh-1)/2)
+        ch = h + 2*ph - kh + 1
+    else:
+        ph = int(kh/2)
+        ch = h + 2*ph - kh
+    if kw%2 != 0:
+        pw = int((kw-1)/2)
+        cw = w + 2*pw - kw + 1
+    else:
+        pw = int(kw/2)
+        cw = w + 2*pw - kw
+    new_images = np.pad(images, ((0, 0), (ph, ph), (pw, pw)), mode='constant',
                         constant_values=0)
     m, h, w = new_images.shape
     new_conv = np.zeros((m, ch, cw))
