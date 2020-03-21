@@ -38,32 +38,38 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         ph = padding[0]
         pw = padding[1]
     elif padding == 'same':
-        if kh%2 != 0:
+        if kh % 2 != 0:
             ph = int((kh-1)/2)
-            ch = h + 2*p - kh + 1
         else:
             ph = int(kh/2)
-            ch = h + 2*p - kh
-        if kh%2 != 0:
-            pw = int((kh-1)/2)
-            cw = w + 2*p - kw + 1
+        if kw % 2 != 0:
+            pw = int((kw-1)/2)
         else:
-            pw = int(kh/2)
-            cw = w + 2*p - kw
+            pw = int(kw/2)
     else:
         ph, pw = 0, 0
+    if kh % 2 != 0:
+        ch = int(np.floor(((h - kh + 2*ph) / sh) + 1))
+    else:
+        ch = int(np.floor(((h - kh + 2*ph) / sh)))
+    if kw % 2 != 0:
+        cw = int(np.floor(((w - kw + 2*pw) / sw) + 1))
+    else:
+        cw = int(np.floor(((w - kw + 2*pw) / sw)))
     new_images = np.pad(images, ((0, 0), (ph, ph), (pw, pw)), mode='constant',
                         constant_values=0)
     m, new_h, new_w = new_images.shape
-    ch = int(np.floor(((h - kh + 2*ph) / sh) + 1))
-    cw = int(np.floor(((w - kw + 2*pw) / sw) + 1))
     new_conv = np.zeros((m, ch, cw))
     m_only = np.arange(0, m)
     for row in range(ch):
         for col in range(cw):
+            a = row * sh
+            b = row * sh + kh
+            c = col * sw
+            d = col * sw + kw
             new_conv[m_only, row, col] = np.sum(np.multiply
                                                 (new_images[m_only,
-                                                            row*sh:row*sh + kh,
-                                                            col*sw:col*sw + kw],
+                                                            a: b,
+                                                            c: d],
                                                  kernel), axis=(1, 2))
     return(new_conv)
