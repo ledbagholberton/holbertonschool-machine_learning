@@ -38,17 +38,17 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         ph = padding[0]
         pw = padding[1]
     elif padding == 'same':
-        ph, pw = int((kh-1)/2), int((kw-1)/2)
+        ph = int(((h - 1)*sh + kh - h)/2) + 1
+        pw = int(((w - 1)*sw + kw - w)/2) + 1
     else:
         ph, pw = 0, 0
     new_images = np.pad(images, ((0, 0), (ph, ph), (pw, pw), (0, 0)),
                         mode='constant', constant_values=0)
     m, new_h, new_w, c = new_images.shape
-    ch = int(np.floor(((h - kh + 2*ph) / sh) + 1))
-    cw = int(np.floor(((w - kw + 2*pw) / sw) + 1))
+    ch = np.floor(((h - kh + 2*ph)/sh)+1).astype(int)
+    cw = np.floor(((w - kw + 2*pw)/sw)+1).astype(int)
     new_conv = np.zeros((m, ch, cw))
     m_only = np.arange(0, m)
-    ch_only = np.arange(0, c)
     for row in range(ch):
         for col in range(cw):
             new_conv[m_only, row, col] = np.sum(np.multiply
