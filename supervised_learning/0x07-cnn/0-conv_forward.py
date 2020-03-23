@@ -33,8 +33,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """ Function Convolution Forward"""
     convolve_A = convolve(A_prev, W, padding, stride)
     convolve_B = np.sum(convolve_A + b)
-    convolve_B = activation(convolve_A)
-    return(convolve_B)
+    convolve_C = activation(convolve_A)
+    return(convolve_C)
 
 
 def convolve(X, W, padding, stride):
