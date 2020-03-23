@@ -29,31 +29,11 @@ Returns: the output of the convolutional layer
 import numpy as np
 
 
-def sigmoid(Z):
-    """Function sigmoid"""
-    sigm = 1 / (1 + np.exp(-Z))
-    return sigm
-
-
-def tanh(Z):
-    """Function tanh"""
-    tanh = np.tanh(Z)
-    return tanh
-
-
-def softmax(Z):
-    """Function softmax"""
-    t = np.exp(Z)
-    sum = np.sum(t, axis=0, keepdims=True)
-    softmax = t / sum
-    return softmax
-
-
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """ Function Convolution Forward"""
     convolve_A = convolve(A_prev, W, padding, stride)
-    convolve_B = convolve_A + b
-    convolve_C = activation(convolve_B)
+    convolve_B = np.sum(convolve_A + b)
+    convolve_B = activation(convolve_A)
     return(convolve_B)
 
 
@@ -70,7 +50,6 @@ def convolve(X, W, padding, stride):
         ph, pw = 0, 0
     new_X = np.pad(X, ((0, 0), (ph, ph), (pw, pw), (0, 0)),
                    mode='constant', constant_values=0)
-    m, new_h, new_w, c = new_X.shape
     ch = int(np.floor(((h - kh + 2*ph) / sh) + 1))
     cw = int(np.floor(((w - kw + 2*pw) / sw) + 1))
     new_conv = np.zeros((m, ch, cw, nc))
