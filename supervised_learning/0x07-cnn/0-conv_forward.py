@@ -54,7 +54,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     convolve_A = convolve(A_prev, W, padding, stride)
     convolve_B = convolve_A + b
     convolve_C = activation(convolve_B)
-    return(convolve_C)
+    return(convolve_B)
 
 
 def convolve(X, W, padding, stride):
