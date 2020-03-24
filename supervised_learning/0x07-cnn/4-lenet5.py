@@ -36,11 +36,20 @@ import tensorflow as tf
 def lenet5(x, y):
     """Function lenet5"""
     heetal = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-    conv1 = tf.layers.conv2(x, 6, 5, padding='same', activation='Relu', kernel_initializer=heetal)
-    pool1 = tf.layers.MaxPooling2D((2,2), (2,2))(conv1)
-    conv2 = tf.layers.conv2(pool1, 16, 5, padding='valid', activation='Relu', kernel_initializer=heetal)
-    pool2 = tf.layers.MaxPooling2D((2,2), (2,2))(conv2)
-    fc1 = tf.layers.Dense(units=120, activation='relu', kernel_initializer=heetal)(pool2)
+    conv1 = tf.layers.Conv2D(filters=6,
+                                kernel_size=5,
+                                padding="same",
+                                kernel_initializer=heetal,
+                                activation='relu')(x)
+    pool1 = tf.layers.MaxPooling2D(pool_size=2, strides=2)(conv1)
+    conv2 =  tf.layers.Conv2D(filters=16,
+                                kernel_size=5,
+                                padding="valid",
+                                kernel_initializer=heetal,
+                                activation='relu')(pool1)
+    pool2 = tf.layers.MaxPooling2D(pool_size=2, strides=2)(conv2)
+    flat1 = tf.layers.Flatten()(pool2)
+    fc1 = tf.layers.Dense(units=120, activation='relu', kernel_initializer=heetal)(flat1)
     fc2 = tf.layers.Dense(units=84, activation='relu', kernel_initializer=heetal)(fc1)
     fc3 = tf.layers.Dense(units=10, activation='softmax', kernel_initializer=heetal)(fc2)
     equality = tf.equal(tf.argmax(fc3, 1), tf.argmax(y, 1))
