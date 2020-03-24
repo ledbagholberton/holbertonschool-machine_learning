@@ -17,7 +17,7 @@ Fully connected layer with 120 nodes
 Fully connected layer with 84 nodes
 Fully connected softmax output layer with 10 nodes
 All layers requiring initialization should initialize their kernels with the
-he_normal initialization method: 
+he_normal initialization method:
 tf.contrib.layers.variance_scaling_initializer()
 All hidden layers requiring activation should use the relu activation function
 you may import tensorflow as tf
@@ -37,21 +37,24 @@ def lenet5(x, y):
     """Function lenet5"""
     heetal = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
     conv1 = tf.layers.Conv2D(filters=6,
-                                kernel_size=5,
-                                padding="same",
-                                kernel_initializer=heetal,
-                                activation='relu')(x)
+                             kernel_size=5,
+                             padding="same",
+                             kernel_initializer=heetal,
+                             activation='relu')(x)
     pool1 = tf.layers.MaxPooling2D(pool_size=2, strides=2)(conv1)
-    conv2 =  tf.layers.Conv2D(filters=16,
-                                kernel_size=5,
-                                padding="valid",
-                                kernel_initializer=heetal,
-                                activation='relu')(pool1)
+    conv2 = tf.layers.Conv2D(filters=16,
+                             kernel_size=5,
+                             padding="valid",
+                             kernel_initializer=heetal,
+                             activation='relu')(pool1)
     pool2 = tf.layers.MaxPooling2D(pool_size=2, strides=2)(conv2)
     flat1 = tf.layers.Flatten()(pool2)
-    fc1 = tf.layers.Dense(units=120, activation='relu', kernel_initializer=heetal)(flat1)
-    fc2 = tf.layers.Dense(units=84, activation='relu', kernel_initializer=heetal)(fc1)
-    fc3 = tf.layers.Dense(units=10, activation='softmax', kernel_initializer=heetal)(fc2)
+    fc1 = tf.layers.Dense(units=120, activation='relu',
+                          kernel_initializer=heetal)(flat1)
+    fc2 = tf.layers.Dense(units=84, activation='relu',
+                          kernel_initializer=heetal)(fc1)
+    fc3 = tf.layers.Dense(units=10, activation='softmax',
+                          kernel_initializer=heetal)(fc2)
     equality = tf.equal(tf.argmax(fc3, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
     loss = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=fc3)
