@@ -35,7 +35,7 @@ import tensorflow as tf
 
 def lenet5(x, y):
     """Function lenet5"""
-    heetal = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    heetal = tf.contrib.layers.variance_scaling_initializer()
     conv1 = tf.layers.Conv2D(filters=6,
                              kernel_size=5,
                              padding="same",
@@ -53,10 +53,11 @@ def lenet5(x, y):
                           kernel_initializer=heetal)(flat1)
     fc2 = tf.layers.Dense(units=84, activation='relu',
                           kernel_initializer=heetal)(fc1)
-    fc3 = tf.layers.Dense(units=10, activation='softmax',
+    fc3 = tf.layers.Dense(units=10,
                           kernel_initializer=heetal)(fc2)
+    fc = tf.nn.softmax(fc3)
     equality = tf.equal(tf.argmax(fc3, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
     loss = tf.losses.softmax_cross_entropy(onehot_labels=y, logits=fc3)
     train = tf.train.AdamOptimizer().minimize(loss)
-    return(fc3, train, loss, accuracy)
+    return(fc, train, loss, accuracy)
