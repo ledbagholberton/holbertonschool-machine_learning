@@ -63,7 +63,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     # Dimensions
 
     N, H, Wx, C = A_prev.shape
-    HH, WW, F, _ = W.shape
+    HH, WW, _, F = W.shape
     _, H_, W_, _ = dZ.shape
     # db - dZ (N, F, H', Wx')
     # On somme sur tous les éléments sauf les indices des filtres
@@ -76,12 +76,12 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     # Version sans vectorisation
     for n in range(N):       # On parcourt toutes les images
         for f in range(F):   # On parcourt tous les filtres
-            for i in range(H_): # indices du résultat
-                for j in range(W_):
-                    for k in range(HH): # indices du filtre
-                        for l in range(WW):
+            for i in range(HH): # indices du résultat
+                for j in range(WW):
+                    for k in range(H_): # indices du filtre
+                        for l in range(W_):
                             for c in range(C): # profondeur
-                                dw[i,j,f,c] += Ap[n, stride*i+k, stride*j+l, c] * dZ[n,k, l, f]
+                                dw[i,j,f,c] += Ap[n, stride*i+k, stride*j+l, f] * dZ[n,k, l, f]
 
     # dx = dy_0 * w'
     # Valide seulement pour un stride = 1
@@ -105,7 +105,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                     for k in range(HH): # indices du filtre
                         for l in range(WW):
                             for c in range(C): # profondeur
-                                dAp[n,i,j,c] += dZp[n,i+k, j+l,f] * w_[k, l,f,c]
+                                dAp[n,i,j,c] += dZp[n,i+k, j+l,c] * w_[k, l,f,c]
     #Remove padding for dA
     dA = dAp[:,pad:-pad,pad:-pad, :]
 
