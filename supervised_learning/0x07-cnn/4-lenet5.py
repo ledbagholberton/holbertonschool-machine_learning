@@ -29,7 +29,6 @@ a training operation that utilizes Adam optimization
 a tensor for the loss of the netowrk
 a tensor for the accuracy of the network
 """
-import numpy as np
 import tensorflow as tf
 
 
