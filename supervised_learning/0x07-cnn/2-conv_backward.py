@@ -35,29 +35,78 @@ import numpy as np
 
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """ Function Convolution Forward"""
-    m, h, w, c = A_prev.shape
-    kh = kernel_shape[0]
-    kw = kernel_shape[1]
-    sh = stride[0]
-    sw = stride[1]
-    ch = int(np.floor(((h - kh) / sh) + 1))
-    cw = int(np.floor(((w - kw) / sw) + 1))
-    new_conv = np.zeros((m, ch, cw, c))
-    m_only = np.arange(0, m)
-    for row in range(ch):
-        for col in range(cw):
-            a = row*sh
-            b = row*sh + kh
-            c = col*sw
-            d = col*sw + kw
-            if mode == 'max':
-                new_conv[m_only, row, col] = np.max(A_prev[m_only,
-                                                           a:b,
-                                                           c:d,
-                                                           ], axis=(1, 2))
-            else:
-                new_conv[m_only, row, col] = np.average(A_prev[m_only,
-                                                               a:b,
-                                                               c:d,
-                                                               ], axis=(1, 2))
-    return(new_conv)
+    """
+    A naive implementation of the backward pass for a convolutional layer.
+    Inputs:
+    - dZ: Upstream derivatives.
+    - cache: A tuple of (x, w, b, conv_param) as in conv_forward_naive
+    Returns a tuple of:
+    - dx: Gradient with respect to x
+    - dw: Gradient with respect to w
+    - db: Gradient with respect to b
+    """
+    
+    dx, dw, db = None, None, None
+
+    # Récupération des variables
+    pad = 0
+    if padding is 'same':
+        pad = W.shape[0]
+    
+    stride = 1
+   
+    # Initialisations
+    dA = np.zeros_like(A_prev)
+    dw = np.zeros_like(W)
+    db = np.zeros_like(b)
+    
+    # Dimensions
+
+    N, H, Wx, C = A_prev.shape
+    HH, WW, F, _ = W.shape
+    _, H_, W_, _ = dZ.shape
+    # db - dZ (N, F, H', Wx')
+    # On somme sur tous les éléments sauf les indices des filtres
+    db = np.sum(dZ, axis=(0, 1, 2))
+    
+    # dw = xp * dy
+    # 0-padding juste sur les deux dernières dimensions de x
+    Ap = np.pad(A_prev, ((0,), (pad,), (pad,), (0,)), 'constant')
+    
+    # Version sans vectorisation
+    for n in range(N):       # On parcourt toutes les images
+        for f in range(F):   # On parcourt tous les filtres
+            for i in range(H_): # indices du résultat
+                for j in range(W_):
+                    for k in range(HH): # indices du filtre
+                        for l in range(WW):
+                            for c in range(C): # profondeur
+                                dw[i,j,f,c] += Ap[n, stride*i+k, stride*j+l, c] * dZ[n,k, l, f]
+
+    # dx = dy_0 * w'
+    # Valide seulement pour un stride = 1
+    # 0-padding juste sur les deux dernières dimensions de dy = dZ (N, F, H', W')
+    dZp = np.pad(dZ, ((0,), (HH-1, ), (WW-1,), (0,)), 'constant')
+
+    # 0-padding juste sur les deux dernières dimensions de dx
+    dAp = np.pad(dA, ((0,), (pad,), (pad,), (0, )), 'constant')
+
+    # filtre inversé dimension (F, C, HH, WW)
+    w_ = np.zeros_like(W)
+    for i in range(HH):
+        for j in range(WW):
+            w_[i, j, :, :] = W[HH-i-1,WW-j-1, :, :]
+    
+    # Version sans vectorisation
+    for n in range(N):       # On parcourt toutes les images
+        for f in range(F):   # On parcourt tous les filtres
+            for i in range(H+2*pad): # indices de l'entrée participant au résultat
+                for j in range(Wx+2*pad):
+                    for k in range(HH): # indices du filtre
+                        for l in range(WW):
+                            for c in range(C): # profondeur
+                                dAp[n,i,j,c] += dZp[n,i+k, j+l,f] * w_[k, l,f,c]
+    #Remove padding for dA
+    dA = dAp[:,pad:-pad,pad:-pad, :]
+
+    return dA, dw, db

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Write a function def lenet5(X): that builds a modified version of
 the LeNet-5 architecture using keras:
