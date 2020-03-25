@@ -48,31 +48,26 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     
     dx, dw, db = None, None, None
 
-    # Récupération des variables
+    # Padding
     pad = 0
     if padding is 'same':
         pad = W.shape[0]
-    
+    #stride
     stride = 1
-   
-    # Initialisations
+    # Initializationes
     dA = np.zeros_like(A_prev)
     dw = np.zeros_like(W)
     db = np.zeros_like(b)
-    
-    # Dimensions
-
-    N, H, Wx, C = A_prev.shape
-    HH, WW, _, F = W.shape
-    _, H_, W_, _ = dZ.shape
-    # db - dZ (N, F, H', Wx')
-    # On somme sur tous les éléments sauf les indices des filtres
+    # Dimensiones
+    M, A_H, A_W, A_C = A_prev.shape
+    W_H, W_W, _, W_F = W.shape
+    _, dZ_H, dZ_W, _ = dZ.shape
+    # db - dZ (m, H', Wx', c)
+    # Suma sobre todos los elementos de dZ menos en filtros
     db = np.sum(dZ, axis=(0, 1, 2))
-    
     # dw = xp * dy
     # 0-padding juste sur les deux dernières dimensions de x
     Ap = np.pad(A_prev, ((0,), (pad,), (pad,), (0,)), 'constant')
-    
     # Version sans vectorisation
     for n in range(N):       # On parcourt toutes les images
         for f in range(F):   # On parcourt tous les filtres
@@ -81,7 +76,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                     for k in range(H_): # indices du filtre
                         for l in range(W_):
                             for c in range(C): # profondeur
-                                dw[i,j,f,c] += Ap[n, stride*i+k, stride*j+l, f] * dZ[n,k, l, f]
+                                dw[i,j,c,f] += Ap[n, stride*i+k, stride*j+l, f] * dZ[n,k, l, f]
 
     # dx = dy_0 * w'
     # Valide seulement pour un stride = 1
