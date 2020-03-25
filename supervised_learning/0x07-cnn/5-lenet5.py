@@ -29,15 +29,20 @@ def lenet5(x):
     """Function lenet5"""
     model = K.Sequential()
     model.add(K.layers.Conv2D(filters=6, kernel_size=(5, 5),
-                              padding='same', activation='relu'))
+                              padding='same', activation='relu',
+                              kernel_initializer='he_normal'))
     model.add(K.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(K.layers.Conv2D(filters=16, kernel_size=(5, 5),
-                              padding='valid', activation='relu'))
+                              padding='valid', activation='relu',
+                              kernel_initializer='he_normal'))
     model.add(K.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
     model.add(K.layers.Flatten())
-    model.add(K.layers.Dense(units=120, activation='relu'))
-    model.add(K.layers.Dense(units=84, activation='relu'))
-    model.add(K.layers.Dense(units=10, activation='softmax'))
+    model.add(K.layers.Dense(units=120, activation='relu',
+                             kernel_initializer='he_normal'))
+    model.add(K.layers.Dense(units=84, activation='relu',
+                             kernel_initializer='he_normal'))
+    model.add(K.layers.Dense(units=10, activation='softmax',
+                             kernel_initializer='he_normal'))
     model.compile(loss='categorical_crossentropy',
                   optimizer=K.optimizers.Adam(),
                   metrics=['accuracy'])
