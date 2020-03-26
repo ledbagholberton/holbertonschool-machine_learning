@@ -45,14 +45,14 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     - dw: Gradient with respect to w
     - db: Gradient with respect to b
     """
-    
+
     dx, dw, db = None, None, None
 
     # Padding
     pad = 0
     if padding is 'same':
         pad = W.shape[0]
-    #stride
+    # stride
     stride = 1
     # Initializationes
     dA = np.zeros_like(A_prev)
@@ -69,39 +69,43 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     # 0-padding juste sur les deux dernières dimensions de x
     Ap = np.pad(A_prev, ((0,), (pad,), (pad,), (0,)), 'constant')
     # Version sans vectorisation
-    for n in range(N):       # On parcourt toutes les images
-        for f in range(F):   # On parcourt tous les filtres
-            for i in range(HH): # indices du résultat
-                for j in range(WW):
-                    for k in range(H_): # indices du filtre
-                        for l in range(W_):
-                            for c in range(C): # profondeur
-                                dw[i,j,c,f] += Ap[n, stride*i+k, stride*j+l, f] * dZ[n,k, l, f]
-
+    for n in range(M):       # On parcourt toutes les images
+        for f in range(W_F):   # On parcourt tous les filtres
+            for i in range(W_H):  # indices du résultat
+                for j in range(W_W):
+                    for k in range(dZ_H):  # indices du filtre
+                        for l in range(dZ_W):
+                            for c in range(A_C):  # profondeur
+                                dw[i, j, c, f] += (Ap[n, stride*i+k,
+                                                   stride*j+l, c] *
+                                                   dZ[n, k, l, f])
     # dx = dy_0 * w'
     # Valide seulement pour un stride = 1
-    # 0-padding juste sur les deux dernières dimensions de dy = dZ (N, F, H', W')
-    dZp = np.pad(dZ, ((0,), (HH-1, ), (WW-1,), (0,)), 'constant')
+    # 0-padding juste sur les deux dernières dimensions
+    # de dy = dZ (N, F, H', W')
+    dZp = np.pad(dZ, ((0,), (W_H-1, ), (W_W-1,), (0,)), 'constant')
 
     # 0-padding juste sur les deux dernières dimensions de dx
     dAp = np.pad(dA, ((0,), (pad,), (pad,), (0, )), 'constant')
 
     # filtre inversé dimension (F, C, HH, WW)
     w_ = np.zeros_like(W)
-    for i in range(HH):
-        for j in range(WW):
-            w_[i, j, :, :] = W[HH-i-1,WW-j-1, :, :]
-    
+    for i in range(W_H):
+        for j in range(W_W):
+            w_[i, j, :, :] = W[W_H-i-1, W_W-j-1, :, :]
+
     # Version sans vectorisation
-    for n in range(N):       # On parcourt toutes les images
-        for f in range(F):   # On parcourt tous les filtres
-            for i in range(H+2*pad): # indices de l'entrée participant au résultat
-                for j in range(Wx+2*pad):
-                    for k in range(HH): # indices du filtre
-                        for l in range(WW):
-                            for c in range(C): # profondeur
-                                dAp[n,i,j,c] += dZp[n,i+k, j+l,c] * w_[k, l,f,c]
-    #Remove padding for dA
-    dA = dAp[:,pad:-pad,pad:-pad, :]
+    for n in range(M):       # On parcourt toutes les images
+        for f in range(W_F):   # On parcourt tous les filtres
+            for i in range(A_H+2*pad):  # indices de l'entrée participant
+                for j in range(A_W+2*pad):
+                    for k in range(W_H):  # indices du filtre
+                        for l in range(W_W):
+                            for c in range(A_C):  # profondeur
+                                dAp[n, i, j, c] += (dZp[n, i +
+                                                    k, j+l, f] *
+                                                    w_[k, l, c, f])
+    # Remove padding for dA
+    dA = dAp[:, pad:-pad, pad:-pad, :]
 
     return dA, dw, db
