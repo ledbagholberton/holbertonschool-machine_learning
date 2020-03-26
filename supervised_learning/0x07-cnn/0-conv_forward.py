@@ -57,6 +57,9 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                                                              c:d, ],
                                                        W[:, :, :, n_k]),
                                                       axis=(1, 2, 3))
-    convolve_B = np.add(new_conv, b)
-    convolve_C = activation(convolve_B)
-    return(convolve_C)
+                new_conv[m_o, row, col, n_k] = (activation(new_conv[m_o,
+                                                                    row,
+                                                                    col,
+                                                                    n_k]
+                                                + b[0, 0, 0, n_k]))
+    return(new_conv)
