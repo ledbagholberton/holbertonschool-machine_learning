@@ -35,16 +35,18 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     kh, kw, kc, nc = W.shape
     sh = stride[0]
     sw = stride[1]
-    p = 0
+    ph, pw = 0
     if padding == 'same':
-        p = int(np.ceil((((h - 1)*sh + kh - h)/2) + 1))
-    new_X = np.pad(A_prev, ((0, 0), (p, p), (p, p), (0, 0)),
+        ph = int(np.ceil((((h - 1)*sh + kh - h)/2) + 1))
+        pw = int(np.ceil((((w - 1)*sw + kw - w)/2) + 1))
+    new_X = np.pad(A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)),
                    mode='constant', constant_values=0)
-    ch = int(np.floor(((h - kh + 2*p) / sh) + 1))
-    new_conv = np.zeros((m, ch, ch, nc))
+    ch = int((((h - kh + 2*ph) / sh) + 1))
+    cw = int((((w - kw + 2*pw) / sw) + 1))
+    new_conv = np.zeros((m, ch, cw, nc))
     m_o = np.arange(0, m)
     for row in range(ch):
-        for col in range(ch):
+        for col in range(cw):
             for n_k in range(nc):
                 a = row*sh
                 ab = row*sh + kh
