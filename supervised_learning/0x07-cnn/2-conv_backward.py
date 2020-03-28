@@ -35,77 +35,43 @@ import numpy as np
 
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """ Function Convolution Forward"""
-    """
-    A naive implementation of the backward pass for a convolutional layer.
-    Inputs:
-    - dZ: Upstream derivatives.
-    - cache: A tuple of (x, w, b, conv_param) as in conv_forward_naive
-    Returns a tuple of:
-    - dx: Gradient with respect to x
-    - dw: Gradient with respect to w
-    - db: Gradient with respect to b
-    """
-
-    dx, dw, db = None, None, None
-
-    # Padding
-    pad = 0
-    if padding is 'same':
-        pad = W.shape[0]
-    # stride
-    stride = 1
-    # Initializationes
-    dA = np.zeros_like(A_prev)
-    dw = np.zeros_like(W)
+    m, h_new, w_new, c_new = dZ.shape
+    kh, kw, c_prev, c_new = W.shape
+    m, h_prev, w_prev, c_prev = A_prev.shape
+    sh = stride[0]
+    sw = stride[1]
+    ph, pw = 0, 0
+    if padding == 'same':
+        ph = int(((h_new - 1)*sh + kh - h_new)/2) + 1
+        pw = int(((w_new - 1)*sw + kw - w_new)/2) + 1
+    dW = np.zeros_like(W)
     db = np.zeros_like(b)
-    # Dimensiones
-    M, A_H, A_W, A_C = A_prev.shape
-    W_H, W_W, _, W_F = W.shape
-    _, dZ_H, dZ_W, _ = dZ.shape
-    # db - dZ (m, H', Wx', c)
-    # Suma sobre todos los elementos de dZ menos en filtros
-    db = np.sum(dZ, axis=(0, 1, 2))
-    # dw = xp * dy
-    # 0-padding juste sur les deux dernières dimensions de x
-    Ap = np.pad(A_prev, ((0,), (pad,), (pad,), (0,)), 'constant')
-    # Version sans vectorisation
-    for n in range(M):       # On parcourt toutes les images
-        for f in range(W_F):   # On parcourt tous les filtres
-            for i in range(W_H):  # indices du résultat
-                for j in range(W_W):
-                    for k in range(dZ_H):  # indices du filtre
-                        for l in range(dZ_W):
-                            for c in range(A_C):  # profondeur
-                                dw[i, j, c, f] += (Ap[n, stride*i+k,
-                                                   stride*j+l, c] *
-                                                   dZ[n, k, l, f])
-    # dx = dy_0 * w'
-    # Valide seulement pour un stride = 1
-    # 0-padding juste sur les deux dernières dimensions
-    # de dy = dZ (N, F, H', W')
-    dZp = np.pad(dZ, ((0,), (W_H-1, ), (W_W-1,), (0,)), 'constant')
-
-    # 0-padding juste sur les deux dernières dimensions de dx
-    dAp = np.pad(dA, ((0,), (pad,), (pad,), (0, )), 'constant')
-
-    # filtre inversé dimension (F, C, HH, WW)
-    w_ = np.zeros_like(W)
-    for i in range(W_H):
-        for j in range(W_W):
-            w_[i, j, :, :] = W[W_H-i-1, W_W-j-1, :, :]
-
-    # Version sans vectorisation
-    for n in range(M):       # On parcourt toutes les images
-        for f in range(W_F):   # On parcourt tous les filtres
-            for i in range(A_H+2*pad):  # indices de l'entrée participant
-                for j in range(A_W+2*pad):
-                    for k in range(W_H):  # indices du filtre
-                        for l in range(W_W):
-                            for c in range(A_C):  # profondeur
-                                dAp[n, i, j, c] += (dZp[n, i +
-                                                    k, j+l, f] *
-                                                    w_[k, l, c, f])
-    # Remove padding for dA
-    dA = dAp[:, pad:-pad, pad:-pad, :]
-
-    return dA, dw, db
+    for row in range(kh):
+        for col in range(kw):
+            dW[row, col, :, :] = np.sum(np.multiply(A_prev[:,
+                                                           row:row+h_new,
+                                                           col:col+w_new,
+                                                           :],
+                                                    dZ[:, :, :, :]),
+                                        axis=(0, 1, 2))
+    db = np.sum(A_prev + b, axis=(1, 2, 3))
+    dX = np.zeros_like(A_prev)
+    dx_1 = np.pad(dX, ((0, 0), (2*ph, 2*ph), (2*pw, 2*pw), (0, 0)),
+                  mode='constant', constant_values=0)
+    ch = int(np.floor(((h_new - kh + 2*ph) / sh) + 1))
+    cw = int(np.floor(((w_new - kw + 2*pw) / sw) + 1))
+    m_o = np.arange(0, m)
+    for row in range(ch):
+        for col in range(cw):
+            for n_k in range(c_prev):
+                a = row*sh
+                b = row*sh + kh
+                c = col*sw
+                d = col*sw + kw
+                dx_1[m_o, row, col, n_k] = np.sum(np.multiply
+                                                  (dZ[m_o,
+                                                      a:b,
+                                                      c:d, ],
+                                                   W[:, :, :, n_k]),
+                                                  axis=(1, 2, 3))
+    return(dx_1, dW, db)
