@@ -39,8 +39,7 @@ def inception_network():
                                 padding='same')(inc4e)
     inc5a = inception_block(mp4, [256, 160, 320, 32, 128, 128])
     inc5b = inception_block(inc5a, [384, 192, 384, 48, 128, 128])
-    avg1 = K.layers.AveragePooling2D((7, 7), strides=(1, 1),
-                                     padding='same')(inc5b)
+    avg1 = K.layers.AveragePooling2D((7, 7), strides=(1, 1))(inc5b)
     drop1 = K.layers.Dropout(0.4)(avg1)
     dense_1 = K.layers.Dense(1000, activation='softmax')(drop1)
     model = K.models.Model(inputs=X, outputs=dense_1)
