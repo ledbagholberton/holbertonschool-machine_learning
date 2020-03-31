@@ -16,14 +16,15 @@ inception_block = __import__('0-inception_block').inception_block
 def inception_network():
     """Function Inception Block"""
     X = K.Input(shape=(224, 224, 3))
+    init = K.initializers.he_normal(seed=None)
     conv1 = K.layers.Conv2D(64, (7, 7),  padding='same', strides=(2, 2),
-                            activation='relu')(X)
+                            kernel_initializer=init, activation='relu')(X)
     mp1 = K.layers.MaxPooling2D((3, 3), strides=(2, 2),
                                 padding='same')(conv1)
     conv2 = K.layers.Conv2D(64, (1, 1),  padding='same',
-                            activation='relu')(mp1)
+                            kernel_initializer=init, activation='relu')(mp1)
     conv2_1 = K.layers.Conv2D(192, (3, 3),  padding='same',
-                              activation='relu')(conv2)
+                              kernel_initializer=init, activation='relu')(conv2)
     mp2 = K.layers.MaxPooling2D((3, 3), strides=(2, 2),
                                 padding='same')(conv2_1)
     inc3a = inception_block(mp2, [64, 96, 128, 16, 32, 32])
