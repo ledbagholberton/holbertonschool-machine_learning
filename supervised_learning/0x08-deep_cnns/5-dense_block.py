@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Function dense block
 Write a function  that builds a dense block as described in Densely
 Connected Convolutional Networks:

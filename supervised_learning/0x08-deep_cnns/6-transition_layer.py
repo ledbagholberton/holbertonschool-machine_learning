@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Function transition layer
 Write a function that builds a transition layer as described
 in Densely Connected Convolutional Networks:
