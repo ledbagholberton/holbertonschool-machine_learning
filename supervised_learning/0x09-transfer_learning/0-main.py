@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Main"""
 
 import tensorflow.keras as K
 preprocess_data = __import__('0-transfer').preprocess_data
