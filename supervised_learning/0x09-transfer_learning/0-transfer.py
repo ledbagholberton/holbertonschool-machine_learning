@@ -22,12 +22,13 @@ Y_p is a numpy.ndarray containing the preprocessed Y
 """
 import tensorflow.keras as K
 import numpy as np
+import h5py
 
 
 if __name__ == '__main__':
     (X, Y), _ = K.datasets.cifar10.load_data()
-    X_train = K.applications.densenet.preprocess_input(X)
-    y_train = K.utils.to_categorical(Y)
+    X_train = K.applications.densenet.preprocess_input(X/255)
+    y_train = K.utils.to_categorical(Y/10)
     model = K.applications.densenet.DenseNet121(
         weights='imagenet', 
         include_top=False,
