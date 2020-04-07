@@ -66,5 +66,5 @@ def preprocess_data(X, Y):
     """Function preprocess data """
     import tensorflow.keras as K
 
-    return(K.applications.densenet.preprocess_input(X/255).astyped('float'),
-           K.utils.to_categorical(Y/10).astyped('float'))
+    return(K.applications.densenet.preprocess_input((X/255).astyped('float')),
+           K.utils.to_categorical((Y/10).astyped('float')))
