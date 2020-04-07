@@ -27,8 +27,8 @@ import h5py
 
 if __name__ == '__main__':
     (X, Y), _ = K.datasets.cifar10.load_data()
-    X_train = K.applications.densenet.preprocess_input(X/255)
-    y_train = K.utils.to_categorical(Y/10)
+    X_train = K.applications.densenet.preprocess_input(X/255).astype('float')
+    y_train = K.utils.to_categorical(Y/10).astype('float')
     model = K.applications.densenet.DenseNet121(
         weights='imagenet', 
         include_top=False,
