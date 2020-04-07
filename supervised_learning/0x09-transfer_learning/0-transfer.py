@@ -31,7 +31,7 @@ if __name__ == '__main__':
     y_train = K.utils.to_categorical(Y/10).astype('float')
     model = K.applications.densenet.DenseNet121(
         weights='imagenet', 
-        include_top=False,
+        include_top=True,
         input_shape=(32,32,3),
         classes=10
     )
@@ -66,4 +66,5 @@ def preprocess_data(X, Y):
     """Function preprocess data """
     import tensorflow.keras as K
 
-    return(K.applications.densenet.preprocess_input(X), K.utils.to_categorical(Y))
+    return(K.applications.densenet.preprocess_input(X/255).astyped('float'),
+           K.utils.to_categorical(Y/10).astyped('float'))
