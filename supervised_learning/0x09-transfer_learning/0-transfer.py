@@ -27,22 +27,29 @@ import h5py
 
 if __name__ == '__main__':
     (X, Y), _ = K.datasets.cifar10.load_data()
-    X_train = K.applications.densenet.preprocess_input(X/255).astype('float')
-    y_train = K.utils.to_categorical(Y/10).astype('float')
+    X_train = K.applications.densenet.preprocess_input(X)
+    y_train = K.utils.to_categorical(Y, 10)
     model = K.applications.densenet.DenseNet121(
         weights='imagenet', 
-        include_top=True,
+        include_top=False,
         input_shape=(32,32,3),
-        classes=10
+        classes=1000
     )
-    model.summary()
+    for layer in model.layers:
+        layer.trainable = False
+    out_0 = model.layers[-1].output
+    out_1 = K.layers.Flatten()(out_0)
+    out_2 = K.layers.Activation('relu')(out_1)
+    drop2 = K.layers.Dropout(rate=0.5)(out_2)
+    dense = K.layers.Dense(10, activation='softmax')(drop2)
+    model = K.models.Model(inputs=model.inputs, outputs=dense)
+
     model.compile(
         loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy']
     )
-    model.summary()
-    """ checkpoint = callbacks.ModelCheckpoint(
+    """checkpoint = K.callbacks.ModelCheckpoint(
         'model.h5', 
         monitor='val_acc', 
         verbose=0, 
@@ -50,22 +57,21 @@ if __name__ == '__main__':
         save_weights_only=False,
         mode='auto'
     )"""
+    model.summary()
     # Train the model
     hist = model.fit(
         x=X_train,
         y=y_train,
-        validation_split=0.1,
-        batch_size=64,
-        epochs=50,
-        callbacks=None,
-        verbose=1
+        batch_size=1,
+        epochs=1,
+        verbose=0
     )
-    hist.save_weights('cifar10', save_format='h5')
+    model.save('cifar10.h5')
 
 def preprocess_data(X, Y):
     """Function preprocess data """
     import tensorflow.keras as K
 
-    x_p = X / 255.0
-    y_p = K.utils.to_categorical(Y, 10)
+    x_p = K.applications.densenet.preprocess_input(X)
+    y_p = K.utils.to_categorical(Y)
     return (x_p, y_p)
