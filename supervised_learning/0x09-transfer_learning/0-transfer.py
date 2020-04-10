@@ -26,7 +26,7 @@ import numpy as np
 
 if __name__ == '__main__':
     (X, Y), _ = K.datasets.cifar10.load_data()
-    X_train = K.applications.densenet.preprocess_input(X)
+    X_train = K.applications.preprocess_input(X)
     y_train = K.utils.to_categorical(Y, 10)
     expand_x_train = np.fliplr(X_train)
     X_train = np.concatenate([X_train, expand_x_train])
@@ -82,6 +82,6 @@ def preprocess_data(X, Y):
     """Function preprocess data """
     import tensorflow.keras as K
 
-    x_p = K.applications.densenet.preprocess_input(X)
+    x_p = K.applications.preprocess_input(X)
     y_p = K.utils.to_categorical(Y, 10)
     return (x_p, y_p)
