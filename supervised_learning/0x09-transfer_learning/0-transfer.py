@@ -40,7 +40,7 @@ if __name__ == '__main__':
     """for layer in model.layers[:300]:
         layer.trainable = False
     for layer in model.layers[300:]:
-        layer.trainable = True"""
+        layer.trainable = True """
     out_0 = model.layers[-1].output
     drop_1 = K.layers.Dropout(0.4)(out_0)
     out_1 = K.layers.Flatten()(drop_1)
