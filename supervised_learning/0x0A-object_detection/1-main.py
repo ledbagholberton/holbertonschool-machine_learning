@@ -13,6 +13,12 @@ if __name__ == '__main__':
     output2 = np.random.randn(26, 26, 3, 85)
     output3 = np.random.randn(52, 52, 3, 85)
     boxes, box_confidences, box_class_probs = yolo.process_outputs([output1, output2, output3], np.array([500, 700]))
+    for i in boxes:
+        print('Boxes:', i.shape)
+    for i in box_confidences:
+        print('Box confidences:', i.shape)
+    for i in box_class_probs:
+        print('Box class probabilities:', i.shape)
     print('Boxes:', boxes)
     print('Box confidences:', box_confidences)
     print('Box class probabilities:', box_class_probs)
