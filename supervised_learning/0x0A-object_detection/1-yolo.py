@@ -54,13 +54,12 @@ class Yolo:
         box_class_probs = []
         net_h = image_size[0]
         net_w = image_size[1]
-        obj_tresh = 0.5
-        nb_box = 3
-        nb_class = 80
-        input_w = self.model.input.shape[2].value
-        input_h = self.model.input.shape[1].value
+        input_w = self.model.input.shape[1].value
+        input_h = self.model.input.shape[2].value
         for ii in range(len(outputs)):
             netout = outputs[ii]
+            nb_box = netout.shape[-2]
+            nb_class = netout.shape[-1] - 5
             anchors = self.anchors[ii]
             grid_h, grid_w = netout.shape[:2]
             netout[..., :2] = self.sigmoid(netout[..., :2])
