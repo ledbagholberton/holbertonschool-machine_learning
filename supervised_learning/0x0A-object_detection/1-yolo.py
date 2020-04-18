@@ -44,6 +44,7 @@ class Yolo:
         self.anchors = anchors
 
     def sigmoid(self, x):
+        """Simoid function """
         return (1/(1 + np.exp(-x)))
 
     def process_outputs(self, outputs, image_size):
