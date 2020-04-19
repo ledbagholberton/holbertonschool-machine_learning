@@ -86,7 +86,7 @@ class Yolo:
             np_bx_clss = netout[..., 5:]
             box_class_probs.append(np_bx_clss)
         return (boxes, box_confidence, box_class_probs)
-        
+
     def process_outputs(self, outputs, image_size):
         """Function process output"""
         boxes = []
@@ -251,3 +251,35 @@ class Yolo:
             image = cv2.imread(img, 1)
             images.append(image)
         return (images, image_paths)
+
+    def preprocess_images(self, images):
+        """ Function preprocess images
+        images: a list of images as numpy.ndarrays
+        Resize the images with inter-cubic interpolation
+        Rescale all images to have pixel values in the range [0, 1]
+        Returns a tuple of (pimages, image_shapes):
+        pimages: a numpy.ndarray of shape (ni, input_h, input_w, 3) containing
+        all of the preprocessed images
+        ni: the number of images that were preprocessed
+        input_h: the input height for the Darknet model
+        Note: this can vary by model
+        input_w: the input width for the Darknet model
+        Note: this can vary by model
+        3: number of color channels
+        image_shapes: a numpy.ndarray of shape (ni, 2) containing the original
+        height and width of the images
+        2 => (image_height, image_width)"""
+        n_images = []
+        shape = []
+        ni = 0
+        for img in images:
+            image_height = self.model.input.shape[2].value
+            image_width = self.model.input.shape[1].value
+            image = cv2.resize(img, (image_height, image_width),
+                               interpolation=cv2.INTER_CUBIC)
+            image = image.astype(float) / 255
+            n_images.append(image)
+        pimages = np.stack(n_images, axis=0)
+        shape = [img.shape[:2] for img in images]
+        image_shapes = np.stack(shape, axis=0)
+        return (pimages, image_shapes)
