@@ -54,8 +54,8 @@ class Yolo:
         box_class_probs = []
         net_h = image_size[0]
         net_w = image_size[1]
-        input_w = self.model.input.shape[2].value
-        input_h = self.model.input.shape[1].value
+        input_h = self.model.input.shape[2].value
+        input_w = self.model.input.shape[1].value
         for ii in range(len(outputs)):
             netout = outputs[ii]
             nb_box = netout.shape[-2]
@@ -68,7 +68,7 @@ class Yolo:
             for j in range(grid_h):
                 for i in range(grid_w):
                     for b in range(nb_box):
-                        x, y, w, h = netout[i][j][b][:4]
+                        x, y, w, h = netout[j][i][b][:4]
                         x = (x + i)
                         new_x = x / grid_w
                         y = (y + j)
