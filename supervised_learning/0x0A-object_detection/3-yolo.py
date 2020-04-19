@@ -50,34 +50,33 @@ class Yolo:
         box_class_probs = []
         net_h = image_size[0]
         net_w = image_size[1]
-        obj_tresh = 0.5
-        nb_box = 3
-        nb_class = 80
         input_w = self.model.input.shape[1].value
         input_h = self.model.input.shape[2].value
         for ii in range(len(outputs)):
             netout = outputs[ii]
+            nb_box = netout.shape[-2]
+            nb_class = netout.shape[-1] - 5
             anchors = self.anchors[ii]
             grid_h, grid_w = netout.shape[:2]
             netout[..., :2] = self.sigmoid(netout[..., :2])
             netout[..., 4:] = self.sigmoid(netout[..., 4:])
             np_bx = netout[..., :4]
-            for i in range(grid_w):
-                for j in range(grid_h):
+            for j in range(grid_h):
+                for i in range(grid_w):
                     for b in range(nb_box):
                         x, y, w, h = netout[i][j][b][:4]
                         x = (x + i)
-                        new_x = x * (net_w / grid_w)
+                        new_x = x / grid_w
                         y = (y + j)
-                        new_y = y * (net_h / grid_h)
+                        new_y = y / grid_h
                         w = (anchors[b][0] * np.exp(w))
-                        new_w = w * (net_w / input_w)
+                        new_w = w / input_w
                         h = (anchors[b][1] * np.exp(h))
-                        new_h = h * (net_h / input_h)
-                        x1 = (new_x - new_w/2)
-                        y1 = (new_y - new_h/2)
-                        x2 = (new_x + new_w/2)
-                        y2 = (new_y + new_h/2)
+                        new_h = h / input_h
+                        x1 = (new_x - new_w/2) * net_w
+                        y1 = (new_y - new_h/2) * net_h
+                        x2 = (new_x + new_w/2) * net_w
+                        y2 = (new_y + new_h/2) * net_h
                         np_bx[i, j, b, 0:4] = x1, y1, x2, y2
             boxes.append(np_bx)
             np_bx_conf = netout[..., 4:5]

@@ -81,7 +81,7 @@ class Yolo:
                         y1 = (new_y - new_h/2) * net_h
                         x2 = (new_x + new_w/2) * net_w
                         y2 = (new_y + new_h/2) * net_h
-                        np_bx[i, j, b, 0:4] = x1, y1, x2, y2
+                        np_bx[j, i, b, 0:4] = x1, y1, x2, y2
             boxes.append(np_bx)
             np_bx_conf = netout[..., 4:5]
             box_confidence.append(np_bx_conf)
