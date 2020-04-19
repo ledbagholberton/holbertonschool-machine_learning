@@ -275,7 +275,7 @@ class Yolo:
         for img in images:
             image_height = self.model.input.shape[2].value
             image_width = self.model.input.shape[1].value
-            image = cv2.resize(img, (image_width, image_height),
+            image = cv2.resize(img, (image_height, image_width),
                                interpolation=cv2.INTER_CUBIC)
             image = image.astype(float) / 255
             n_images.append(image)
