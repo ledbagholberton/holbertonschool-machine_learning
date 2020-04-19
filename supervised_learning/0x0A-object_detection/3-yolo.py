@@ -131,14 +131,41 @@ class Yolo:
         predicted_box_scores: a numpy.ndarray of shape (?) containing the box
         scores for box_predictions ordered by class and box score, respectively
         """
-        x1 = filtered_boxes[..., 0]
-        y1 = filtered_boxes[..., 1]
-        x2 = filtered_boxes[..., 2]
-        y2 = filtered_boxes[..., 3]
+        n_boxes, n_classes, n_score = [], [], []
+        # itero en un conjunto ordenado por clases
+        for c in set(box_classes):
+            # encuentro los indices en donde esta el iterador clase
+            indx = np.where(box_classes == c)
+            # hallo los subconjuntos que tienen cada clase para cada uno de
+            # arrays de entrada a la funcion.
+            b = filtered_boxes[indx]
+            c = box_classes[indx]
+            s = box_scores[indx]
+            # llamo a la funcion auxiliar nms_boxes que encuentra los nms para
+            # cada clase
+            keep = self.nms_boxes(b, s)
+            # retorna el index de mejor caja luego de aplicar NonMaxSupression
+            # aplico los index en los arrays dados
+            n_boxes.append(b[keep])
+            n_classes.append(c[keep])
+            n_score.append(s[keep])
+        box_predictions = np.concatenate(n_boxes)
+        predicted_box_classes = np.concatenate(n_classes)
+        predicted_box_scores = np.concatenate(n_score)
+        return (box_predictions,
+                predicted_box_classes,
+                predicted_box_scores)
+
+    def nms_boxes(self, b, s):
+        """Functio auxiliar keep"""
+        x1 = b[..., 0]
+        y1 = b[..., 1]
+        x2 = b[..., 2]
+        y2 = b[..., 3]
         anchor_area = (x2 - x1) * (y2 - y1)
         # ordeno los box_scores que traen todos los max scores por cada caja
         # en la ultima dimension
-        order = box_scores.argsort()[::-1]
+        order = s.argsort()[::-1]
 
         my_list = []
         # ciclo de depuracion del array ordenado mientras halla elementos
@@ -151,18 +178,18 @@ class Yolo:
             yy2 = np.maximum(y2[i], y2[order[1:]])
             xx1 = np.minimum(x1[i], x1[order[1:]])
             yy1 = np.minimum(y1[i], y1[order[1:]])
-
+            # halla el maximo ancho y alto
             w1 = np.maximum(0.0, xx2 - xx1 + 1)
             h1 = np.maximum(0.0, yy2 - yy1 + 1)
+            # halla el area maxima
             inter = w1 * h1
-
+            # encuentra el IoU
             ovr = inter / (anchor_area[i] + anchor_area[order[1:]] - inter)
+            # halla los indices en donde el ovr sea mayor que el requerido
             inds = np.where(ovr <= self.nms_t)[0]
+            # depura la lista ordenada por scores
             order = order[inds + 1]
-
+        # convierte a un arreglo la lista donde estan los que
+        # no fueron suprimidos
         keep = np.array(my_list)
-        box_predictions = filtered_boxes[keep]
-        predicted_box_classes = box_classes[keep]
-        predicted_box_scores = box_scores[keep]
-
-        return (box_predictions, predicted_box_classes, predicted_box_scores)
+        return (keep)
