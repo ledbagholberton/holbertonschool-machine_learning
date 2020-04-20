@@ -161,7 +161,7 @@ class Yolo:
         y1 = b[..., 1]
         x2 = b[..., 2]
         y2 = b[..., 3]
-        anchor_area = (x2 - x1) * (y2 - y1)
+        anchor_area = (x2 - x1 + 1) * (y2 - y1 + 1)
         # ordeno los box_scores que traen todos los max scores por cada caja
         # en la ultima dimension
         order = s.argsort()[::-1]
@@ -172,11 +172,11 @@ class Yolo:
             # tomo el mayor
             i = order[0]
             my_list.append(i)
-            # encuentro los valores maximo entre la posicion 0 y el resto
-            xx2 = np.maximum(x1[i], x1[order[1:]])
-            yy2 = np.maximum(y2[i], y2[order[1:]])
-            xx1 = np.minimum(x1[i], x1[order[1:]])
-            yy1 = np.minimum(y1[i], y1[order[1:]])
+            # encuentro los valores de la interseccion
+            xx2 = np.minimum(x2[i], x2[order[1:]])
+            yy2 = np.minimum(y2[i], y2[order[1:]])
+            xx1 = np.maximum(x1[i], x1[order[1:]])
+            yy1 = np.maximum(y1[i], y1[order[1:]])
             # halla el maximo ancho y alto
             w1 = np.maximum(0.0, xx2 - xx1 + 1)
             h1 = np.maximum(0.0, yy2 - yy1 + 1)

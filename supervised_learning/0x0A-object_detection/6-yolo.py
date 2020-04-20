@@ -283,3 +283,70 @@ class Yolo:
         shape = [img.shape[:2] for img in images]
         image_shapes = np.stack(shape, axis=0)
         return (pimages, image_shapes)
+
+    def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
+        """ Function show_boxes
+        image: a numpy.ndarray containing an unprocessed image
+        boxes: a numpy.ndarray containing the boundary boxes for the image
+        box_classes: a numpy.ndarray containing the class indices for each box
+        box_scores: a numpy.ndarray containing the box scores for each box
+        file_name: the file path where the original image is stored
+        *****
+        Displays the image with all boundary boxes, class names, and box scores
+        Boxes should be drawn as with a blue line of thickness 2
+        Class names and box scores should be drawn above each box in red
+        Box scores should be rounded to 2 decimal places
+        Text should be written 5 pixels above the top left corner of the box
+        Text should be written in FONT_HERSHEY_SIMPLEX
+        Font scale should be 0.5
+        Line thickness should be 1
+        You should use LINE_AA as the line type
+        The window name should be the same as file_name
+        If the s key is pressed:
+        The image should be saved in the directory detections, located
+        in the current directory
+        If detections does not exist, create it
+        The saved image should have the file name file_name
+        The image window should be closed
+        If any key besides s is pressed, the image window should be
+        closed without saving"""
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        bottomLeftCornerOfText = (10, 500)
+        fontScale = 0.5
+        fontColor = (255, 0, 0)
+        thickness = 2
+
+        image=cv2.putText(image, 'Hello World!',
+                    bottomLeftCornerOfText,
+                    font,
+                    fontScale,
+                    fontColor,
+                    thickness)
+        color = (255, 0, 0)
+        nb_boxes, nb_coor = boxes.shape
+        for i in range(nb_boxes):
+            x1 = boxes[i][0]
+            y1 = boxes[i][1]
+            x2 = boxes[i][2]
+            y2 = boxes[i][3]
+            pt1 = (x1, y1)
+            pt2 = (x2, y2)
+            image=cv2.rectangle(image, pt1, pt2, color, thickness=2)
+
+        # Display the image
+        cv2.imshow(file_name, image)
+
+        # Save image
+        #cv2.imwrite("out.jpg", img)
+
+        tecla = cv2.waitKey(0)
+        if tecla == 's':
+        cv2.destroyAllWindows()
+
+        """
+        cv.ShowImage(file_name, image)
+                cv.PutText(img, text, org, font, color) 
+        cv2.putText(img, text, org, fontFace, fontScale, color[, thickness[,
+        lineType[, bottomLeftOrigin]]])
+        """
+
