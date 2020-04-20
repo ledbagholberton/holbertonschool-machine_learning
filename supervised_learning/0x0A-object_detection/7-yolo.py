@@ -335,3 +335,33 @@ class Yolo:
             cv2.imwrite(file_name, image)
             os.chdir('../')
         cv2.destroyAllWindows()
+
+    def predict(self, folder_path):
+        """Function predict
+        folder_path: a string representing the path to the folder holding all
+        the images to predict
+        All image windows should be named after the corresponding image filenam
+        without its full path(see examples below)
+        Displays all images using the show_boxes method
+        Returns: a tuple of (predictions, image_paths):
+        predictions:
+        a list of tuples for each image of (boxes, box_classes, box_scores)
+        image_paths:
+        list of image paths corresponding to each prediction in predictions"""
+        images, image_paths = Yolo.load_images(folder_path)
+        pimages, image_shapes = self.preprocess_images(images)
+        outputs = self.model.predict(pimages)
+        nb_images = pimages.shape[0]
+        output_i = []
+        my_pred = []
+        for iter in range(nb_images):
+            for out in outputs:
+                output_i.append(out[iter])
+            box1, cnf1, cls1 = (self.process_outputs(output_i,
+                                image_shapes[iter]))
+            box2, cls2, sco2 = (self.filter_boxes(box1, cnf1, cls1))
+            box3, cls3, sco3 = (self.non_max_suppression(box2, cls2, sco2))
+            my_pred.append((box3, cls3, sco3))
+            file_name = image_paths[iter].split('/')[-1]
+            self.show_boxes(images[iter], box3, cls3, sco3, file_name)
+        return(my_pred, image_paths)

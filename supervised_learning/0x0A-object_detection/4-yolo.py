@@ -86,7 +86,7 @@ class Yolo:
             np_bx_clss = netout[..., 5:]
             box_class_probs.append(np_bx_clss)
         return (boxes, box_confidence, box_class_probs)
-        
+
     def process_outputs(self, outputs, image_size):
         """Function process output"""
         boxes = []

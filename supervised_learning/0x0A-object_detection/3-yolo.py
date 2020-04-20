@@ -184,7 +184,7 @@ class Yolo:
             inter = w1 * h1
             # encuentra el IoU
             ovr = inter / (anchor_area[i] + anchor_area[order[1:]] - inter)
-            # halla los indices en donde el ovr sea mayor que el requerido
+            # halla los indices en donde el ovr sea menor que el requerido
             inds = np.where(ovr <= self.nms_t)[0]
             # depura la lista ordenada por scores
             order = order[inds + 1]
