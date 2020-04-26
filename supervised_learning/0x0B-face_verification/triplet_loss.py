@@ -20,8 +20,6 @@ class TripletLoss(K.layers.Layer):
         self.alpha = alpha
         super(TripletLoss, self).__init__(**kwargs)
 
-
-
     def triplet_loss(self, inputs):
         """Create the public instance method
         inputs is a list containing the anchor, positive and

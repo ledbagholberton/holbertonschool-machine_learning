@@ -21,18 +21,25 @@ import tensorflow as tf
 import numpy as np
 from triplet_loss import TripletLoss
 
-class TrainModel():
+class TrainModel():  
     """Class TrainModel"""
     def __init__(self, model_path, alpha):
         """Class TrainModel init"""
-        with CustomObjectScope({'tf': tf}):
+        with K.utils.CustomObjectScope({'tf': tf}):
             model = load_model(model_path)
             self.base_model = model.save(base_model.h5)
-        loss_layer = TripletLoss(alpha=alpha,name='triplet_loss')([A, P, N])
-        self.training_model = build_model(inputs=[A, P, N],outputs=loss_layer)
-        optimizer = Adam(lr = 0.00006)
-        self.training_model.compile(loss=None,optimizer=optimizer)
-        return(self.training_model)
+        self.alpha = alpha
+        A = K.Input(input_shape, name='A')
+        P = K.Input(input_shape, name='P')
+        N = K.Input(input_shape, name='N')
+        A_encoded = self.base_model(A)
+        P_encoded = self.base_model(P)
+        N_encoded = self.base_model(N)
+        in_encoded = [A_encoded, P_encoded, N_encoded]
+        loss_layer = TripletLoss(alpha=alpha,name='triplet_loss')(in_encoded)
+        self.training_model = build_model(inputs=encoded,outputs=loss_layer)
+        self.training_model.compile(loss=None,optimizer='Adam')
+        self.training_model.save()
 
     def train(self, triplets, epochs=5, batch_size=32,
                 validation_split=0.3, verbose=True):
@@ -43,12 +50,12 @@ class TrainModel():
         validation_split is the validation split for training
         verbose is a boolean that sets the verbosity mode
         Returns: the History output from the training"""
-        trained_network = network.fit(triplets,
-                                      nb_epoch=epochs,
-                                      batch_size=batch_size,
-                                      verbose=verbose,
-                                      validation_split=validation_split)
-        return(trained_network.History)
+        t_network = self.training_model.fit(triplets,
+                                            nb_epoch=epochs,
+                                            batch_size=batch_size,
+                                            verbose=verbose,
+                                            validation_split=validation_split)
+        return(t_network.History)
     
     def save(self, save_path):
         """Method train
@@ -60,25 +67,19 @@ class TrainModel():
     @staticmethod
     def f1_score(y_true, y_pred):
         """Method f1 score"""
-        #f1 = 2tp / (2tp + fp + fn)
-        f1 = True
-        return(f1)
+        # tp: true positives
+        tp = K.backend.sum(K.backend.round(K.backend.clip(y_true * y_pred, 0, 1)))
+        # p_p: possible positives 
+        p_p = K.backend.sum(K.backend.round(K.backend.clip(y_true, 0, 1)))
+        # prp: predicted positives
+        prp = K.backend.sum(K.backend.round(K.backend.clip(y_pred, 0, 1)))
+        precision = tp / (prp + K.backend.epsilon())
+        recall = tp / (p_p + K.backend.epsilon())
+        f1_val = 2*(precision * recall)/(precision + recall + K.backend.epsilon())
+        return(f1_val)
     
     @staticmethod
     def accuracy(y_true, y_pred):
         """Method accuracy"""
-        #acc = tp + tn / p + n
-        acc = True
+        acc = K.mean(K.equal(y_true, K.round(y_pred)))
         return(acc)
-
-    def best_tau(self, images, identities, thresholds):
-        """Calculation of best tau
-
-        images
-        identities
-        thresholds
-        Returns: (tau, f1, acc)
-        tau
-        f1
-        acc"""
-        return(True)
