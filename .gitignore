@@ -1,2 +1,9 @@
 *.json
 *.pyc
+*.h5
+*.gz
+*.jpg
+*.csv
+*.zip
+*tar.gz
+*.npz
