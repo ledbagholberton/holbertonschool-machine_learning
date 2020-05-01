@@ -16,6 +16,6 @@ if __name__ == '__main__':
     generated_image = tf.contrib.eager.Variable(nst.content_image)
     grads, J_total, J_content, J_style = nst.compute_grads(generated_image)
     print(J_total)
-        print(J_content)
-        print(J_style)
+    print(J_content)
+    print(J_style)
     print(grads)

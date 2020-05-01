@@ -104,6 +104,13 @@ class NST:
         saves the model in the instance attribute model"""
         vgg = tf.keras.applications.vgg19.VGG19(include_top=False,
                                                 weights='imagenet')
+        input = vgg.input
+        for layer in vgg.layers[1:]:
+            if isinstance(layer, tf.keras.layers.MaxPooling2D):
+                input = tf.keras.layers.\
+                        AveragePooling2D(name=layer.name)(input)
+            else:
+                input = layer(input)
         outputs = [vgg.get_layer(name).output
                    for name in self.style_layers]
         outputs = outputs + [vgg.get_layer(self.content_layer).output]

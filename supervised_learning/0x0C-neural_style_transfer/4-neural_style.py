@@ -106,6 +106,13 @@ class NST:
         saves the model in the instance attribute model"""
         vgg = tf.keras.applications.vgg19.VGG19(include_top=False,
                                                 weights='imagenet')
+        input = vgg.input
+        for layer in vgg.layers[1:]:
+            if isinstance(layer, tf.keras.layers.MaxPooling2D):
+                input = tf.keras.layers.\
+                        AveragePooling2D(name=layer.name)(input)
+            else:
+                input = layer(input)
         outputs = [vgg.get_layer(name).output
                    for name in self.style_layers]
         outputs = outputs + [vgg.get_layer(self.content_layer).output]
@@ -158,4 +165,35 @@ class NST:
         content_feature = model_outputs[-1:]
         return(gram_style_features, content_feature)
 
-    
+    def layer_style_cost(self, style_output, gram_target):
+        """Style cost
+        Calculates the style cost for a single layer
+        style_output - tf.Tensor of shape (1, h, w, c) containing the layer
+        style output of the generated image
+        gram_target - tf.Tensor of shape (1, c, c) the gram matrix of the
+        target style output for that layer
+        if style_output is not an instance of tf.Tensor or tf.Variable of
+        rank 4,
+        raise a TypeError with the message style_output must be a tensor of
+        rank 4
+        if gram_target is not an instance of tf.Tensor or tf.Variable with
+        shape (1, c, c), raise a TypeError with
+        the message gram_target must be a tensor of shape [1, {c}, {c}]
+        where {c} is the number of channels in style_output
+        Returns: the layer’s style cost"""
+        print("1")
+        """if (not isinstance(style_output, tf.Tensor) or
+                not isinstance(style_output, tf.Variable) or
+                len(style_output.shape) is not 4):
+            raise TypeError("style_output must be a tensor of rank 4")"""
+        channels = style_output.shape[-1]
+        c_gram_0 = gram_target.shape[0]
+        c_gram_1 = gram_target.shape[1]
+        """if (not isinstance(gram_target, (tf.Tensor, tf.Variable)) or
+                len(gram_target.shape) is not 3 or
+                c_gram_0 != c_gram_1 or
+                c_gram_0 != channels):
+            raise TypeError(
+                "gram_target must be a tensor of shape [1, {c}, {c}]")"""
+        gram_style = self.gram_matrix(style_output)
+        return tf.reduce_mean(tf.square(gram_style - gram_target))

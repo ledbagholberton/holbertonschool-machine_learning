@@ -17,5 +17,5 @@ if __name__ == '__main__':
     generated_image = tf.cast(generated_image, tf.float32)
     J_total, J_content, J_style = nst.total_cost(generated_image)
     print(J_total)
-        print(J_content)
-        print(J_style)
+    print(J_content)
+    print(J_style)
