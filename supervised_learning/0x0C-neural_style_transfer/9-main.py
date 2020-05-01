@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,7 +14,7 @@ if __name__ == '__main__':
 
     np.random.seed(0)
     nst = NST(style_image, content_image)
-    image, cost = nst.generate_image(iterations=100, step=10, lr=0.002)
+    image, cost = nst.generate_image(iterations=30, step=5, lr=0.002)
     print("Best cost:", cost)
     plt.imshow(image)
     plt.show()

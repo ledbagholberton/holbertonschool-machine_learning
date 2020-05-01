@@ -288,6 +288,18 @@ class NST:
         with tf.GradientTape() as tape: 
             J, J_content, J_style = self.total_cost(generated_image)
         return(tape.gradient(J, generated_image), J, J_content, J_style)
+
+    def deprocess_img(self, processed_img):
+        m, h, w, c = processed_img.shape
+        x = tf.squeeze(processed_img, 0)
+        x = x.numpy()
+        # perform the inverse of the preprocessing step
+        x[:, :, 0] += 103.939
+        x[:, :, 1] += 116.779
+        x[:, :, 2] += 123.68
+        x = x[:, :, ::-1]
+        x = np.clip(x, 0, 255).astype('uint8')
+        return x
         
     def generate_image(self, iterations=1000, step=None,
                        lr=0.01, beta1=0.9, beta2=0.99):
@@ -353,7 +365,7 @@ class NST:
         if beta2 < 0 or beta2 > 1:
             raise ValueError("beta2 must be in the range [0, 1]")
         generated_image = self.content_image
-        generated_image = tfe.Variable(generated_image, dtype=tf.float32)
+        generated_image = tf.contrib.eager.Variable(generated_image, dtype=tf.float32)
         # Create our optimizer
         opt = tf.train.AdamOptimizer(learning_rate=lr,
                                      beta1=beta1,
@@ -375,4 +387,6 @@ class NST:
             else:
                 break
             pasos -= 1
+        best_image = self.deprocess_img(best_image)
+        print(best_image.shape, best_image.size, type(best_image))
         return(best_image, best_cost)
