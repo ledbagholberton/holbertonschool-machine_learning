@@ -371,7 +371,8 @@ class NST:
                 best_cost = J
             elif J < best_cost:
                 best_cost = J
+                best_image = generated_image
             else:
                 break
             pasos -= 1
-        return(generated_image, best_cost)
+        return(best_image, best_cost)
