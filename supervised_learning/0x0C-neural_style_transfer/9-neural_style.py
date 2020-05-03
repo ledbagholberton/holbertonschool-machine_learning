@@ -56,9 +56,8 @@ class NST:
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
         self.beta = beta
-        self.model = self.load_model()
-        (self.gram_style_features,
-         self.content_feature) = self.generate_features()
+        self.load_model()
+        self.generate_features()
 
     @staticmethod
     def scale_image(image):
@@ -98,29 +97,22 @@ class NST:
         return image
 
     def load_model(self):
-        """ Method Load Model
-        creates the model used to calculate cost
-        the model should use the VGG19 Keras model as a base
-        the model’s input should be the same as the VGG19 input
-        the model’s output should be a list containing the outputs of the
-        VGG19 layers listed in style_layers followed by content _layer
-        saves the model in the instance attribute model"""
-        vgg = tf.keras.applications.vgg19.VGG19(include_top=False,
-                                                weights='imagenet')
-        input = vgg.input
-        for layer in vgg.layers[1:]:
-            if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                input = tf.keras.layers.\
-                        AveragePooling2D(name=layer.name)(input)
-            else:
-                input = layer(input)
-        outputs = [vgg.get_layer(name).output
-                   for name in self.style_layers]
-        outputs = outputs + [vgg.get_layer(self.content_layer).output]
-        global model
-        model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
-        model.trainable = False
-        return(model)
+        """ loads the model for neural style transfer """
+        vgg_pre = tf.keras.applications.vgg19.VGG19(include_top=False,
+                                                    weights='imagenet')
+
+        custom_objects = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
+        vgg_pre.save("base_model")
+        vgg = tf.keras.models.load_model("base_model",
+                                         custom_objects=custom_objects)
+        for layer in vgg.layers:
+            layer.trainable = False
+
+        style_outputs = [vgg.get_layer(name).output
+                         for name in self.style_layers]
+        content_output = vgg.get_layer(self.content_layer).output
+        model_outputs = style_outputs + [content_output]
+        self.model = tf.keras.models.Model(vgg.input, model_outputs)
 
     @staticmethod
     def gram_matrix(input_layer):
@@ -291,13 +283,13 @@ class NST:
 
     def deprocess_img(self, processed_img):
         m, h, w, c = processed_img.shape
-        x = tf.squeeze(processed_img, 0)
+        x = tf.squeeze(processed_img*255, 0)
         x = x.numpy()
         # perform the inverse of the preprocessing step
         x[:, :, 0] += 103.939
         x[:, :, 1] += 116.779
         x[:, :, 2] += 123.68
-        x = x[:, :, ::-1]
+        # x = x[:, :, ::-1]
         x = np.clip(x, 0, 255).astype('uint8')
         return x
         

@@ -55,9 +55,12 @@ class NST:
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
         self.beta = beta
-        self.model = self.load_model()
+        self.load_model()
+        self.generate_features()
+
+        """self.model = self.load_model()
         (self.gram_style_features,
-         self.content_feature) = self.generate_features()
+         self.content_feature) = self.generate_features()"""
 
     @staticmethod
     def scale_image(image):
@@ -75,10 +78,6 @@ class NST:
         The image should be resized using bicubic interpolation
         The image’s pixel values should be rescaled from the range
         [0, 255] to [0, 1]
-        Public class attributes:
-        style_layers = ['block1_conv1', 'block2_conv1',
-                        'block3_conv1', 'block4_conv1', 'block5_conv1']
-        content_layer = 'block5_conv2'
         Returns: the scaled image
         """
         if (not isinstance(image, np.ndarray)
@@ -86,24 +85,25 @@ class NST:
                 or image.shape[2] is not 3):
             m3 = 'image must be a numpy.ndarray with shape (h, w, 3)'
             raise TypeError(m3)
-        max_dim = 512
+        """max_dim = 512
         long = max(image.shape[0], image.shape[1])
         scale = max_dim/long
         new_h = round(image.shape[0] * scale)
-        new_w = round(image.shape[1] * scale)
-        image = np.expand_dims(image, axis=0)
-        image = tf.image.resize_bicubic(image, (new_h, new_w))
+        new_w = round(image.shape[1] * scale)"""
+        print("#########")
+        new_h = 512
+        new_w = 512
+        if image.shape[0] > image.shape[1]:
+            new_w = int(image.shape[1] * 512 / image.shape[0])
+        elif image.shape[0] < image.shape[1]:
+            new_h = int(image.shape[0] * 512 / image.shape[1])
+        image = tf.expand_dims(image, axis=0)
+        image = tf.image.resize_bicubic(image, (new_h, new_w),
+                                        align_corners=False)
         image = tf.clip_by_value(image / 255, 0, 1)
         return image
 
-    def load_model(self):
-        """ Method Load Model
-        creates the model used to calculate cost
-        the model should use the VGG19 Keras model as a base
-        the model’s input should be the same as the VGG19 input
-        the model’s output should be a list containing the outputs of the
-        VGG19 layers listed in style_layers followed by content _layer
-        saves the model in the instance attribute model"""
+        """def load_model(self):
         vgg = tf.keras.applications.vgg19.VGG19(include_top=False,
                                                 weights='imagenet')
         input = vgg.input
@@ -117,9 +117,26 @@ class NST:
                    for name in self.style_layers]
         outputs = outputs + [vgg.get_layer(self.content_layer).output]
         global model
-        model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
-        model.trainable = False
-        return(model)
+        self.model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
+        self.model.trainable = False"""
+
+    def load_model(self):
+        """ loads the model for neural style transfer """
+        vgg_pre = tf.keras.applications.vgg19.VGG19(include_top=False,
+                                                    weights='imagenet')
+
+        custom_objects = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
+        vgg_pre.save("base_model")
+        vgg = tf.keras.models.load_model("base_model",
+                                         custom_objects=custom_objects)
+        for layer in vgg.layers:
+            layer.trainable = False
+
+        style_outputs = [vgg.get_layer(name).output
+                         for name in self.style_layers]
+        content_output = vgg.get_layer(self.content_layer).output
+        model_outputs = style_outputs + [content_output]
+        self.model = tf.keras.models.Model(vgg.input, model_outputs)
 
     @staticmethod
     def gram_matrix(input_layer):
@@ -161,9 +178,9 @@ class NST:
         # aplico el modelo para cada imagen
         x = tf.keras.applications.vgg19.preprocess_input(style_image)
         y = tf.keras.applications.vgg19.preprocess_input(content_image)
-        model_outputs = model(x) + model(y)
+        model_outputs = self.model(x) + self.model(y)
         # Adiciono las salidas de los modelos, por que asi son dados
-        gram_style_features = [self.gram_matrix(layer) for layer in
-                               model_outputs[:num_style_layers]]
-        content_feature = model_outputs[-1:]
-        return(gram_style_features, content_feature)
+        self.gram_style_features = [self.gram_matrix(layer) for layer in
+                                    model_outputs[:num_style_layers]]
+        self.content_feature = model_outputs[-1:]
+        # return(gram_style_features, content_feature)

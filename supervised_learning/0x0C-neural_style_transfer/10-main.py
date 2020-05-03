@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     np.random.seed(0)
     nst = NST(style_image, content_image)
-    generated_image, cost = nst.generate_image(iterations=2000, step=100, lr=0.002)
+    generated_image, cost = nst.generate_image(iterations=100, step=10, lr=0.002)
     print("Best cost:", cost)
     plt.imshow(generated_image)
     plt.show()

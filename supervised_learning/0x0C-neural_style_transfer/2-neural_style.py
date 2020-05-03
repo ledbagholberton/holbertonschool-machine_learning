@@ -84,12 +84,18 @@ class NST:
                 or image.shape[2] is not 3):
             m3 = 'image must be a numpy.ndarray with shape (h, w, 3)'
             raise TypeError(m3)
-        max_dim = 512
+        """max_dim = 512
         long = max(image.shape[0], image.shape[1])
         scale = max_dim/long
         new_h = round(image.shape[0] * scale)
-        new_w = round(image.shape[1] * scale)
-        image = np.expand_dims(image, axis=0)
+        new_w = round(image.shape[1] * scale)"""
+        new_h = 512
+        new_w = 512
+        if image.shape[0] > image.shape[1]:
+            new_w = int(image.shape[1] * 512 / image.shape[0])
+        elif image.shape[0] < image.shape[1]:
+            new_h = int(image.shape[0] * 512 / image.shape[1])
+        image = tf.expand_dims(image, axis=0)
         image = tf.image.resize_bicubic(image, (new_h, new_w))
         image = tf.clip_by_value(image / 255, 0, 1)
         return image
