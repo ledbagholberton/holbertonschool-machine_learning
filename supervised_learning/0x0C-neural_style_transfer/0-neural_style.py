@@ -51,7 +51,6 @@ class NST:
             raise TypeError('alpha must be a non-negative number')
         if (beta < 0):
             raise TypeError('beta must be a non-negative number')
-       
         self.style_image = self.scale_image(style_image)
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
@@ -79,7 +78,6 @@ class NST:
         content_layer = 'block5_conv2'
         Returns: the scaled image
         """
-        
         if (not isinstance(image, np.ndarray)
                 or len(image.shape) is not 3
                 or image.shape[2] is not 3):

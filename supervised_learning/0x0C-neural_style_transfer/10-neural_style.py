@@ -160,10 +160,10 @@ class NST:
         y = tf.keras.applications.vgg19.preprocess_input(content_image*255)
         model_outputs = self.model(x) + self.model(y)
         # Adiciono las salidas de los modelos, por que asi son dados
-        gram_style_features = [self.gram_matrix(layer) for layer in
-                               model_outputs[:num_style_layers]]
-        content_feature = model_outputs[-1:]
-        return(gram_style_features, content_feature)
+        self.gram_style_features = [self.gram_matrix(layer) for layer in
+                                    model_outputs[:num_style_layers]]
+        self.content_feature = model_outputs[-1:]
+        # return(gram_style_features, content_feature)
 
     def layer_style_cost(self, style_output, gram_target):
         """Style cost
@@ -210,12 +210,12 @@ class NST:
         if len(style_outputs) is not len(self.style_layers):
             raise TypeError(
                 "style_outputs must be a list with a length of {l}")
-        gram_style_features, content_feature = self.generate_features()
+        # gram_style_features, content_feature = self.generate_features()
         weights = 1 / len(style_outputs)
         style_cost = 0
         for layer in range(len(style_outputs)):
             x = (self.layer_style_cost(style_outputs[layer],
-                                       gram_style_features[layer]))
+                                       self.gram_style_features[layer]))
             style_cost = style_cost + x * weights
         return(style_cost)
 
@@ -233,8 +233,8 @@ class NST:
                 content_output.shape is not self.content_feature.shape:
             raise TypeError("content_output must be a tensor of shape {}"
                             .format(self.content_feature.shape))"""
-        gram_style_features, content_feature = self.generate_features()              
-        return tf.reduce_mean(tf.square(content_output - content_feature))
+        # gram_style_features, content_feature = self.generate_features()
+        return tf.reduce_mean(tf.square(content_output - self.content_feature))
 
     def total_cost(self, generated_image):
         """Calculates the total cost for the generated image
@@ -254,9 +254,10 @@ class NST:
                             format(self.content_image.shape))"""
         """costo total = alpha * cost_content + beta * cost_style
         cost_content calculado con content_image & generated_image
-        cost_style calculado con style_image & generated_image en todas 
+        cost_style calculado con style_image & generated_image en todas
         las capas."""
-        generated_image = tf.keras.applications.vgg19.preprocess_input(generated_image*255)
+        a = generated_image*255
+        generated_image = tf.keras.applications.vgg19.preprocess_input(a)
         model_outputs = self.model(generated_image)
         content_output = model_outputs[-1]
         J_content = self.content_cost(content_output)
@@ -295,13 +296,13 @@ class NST:
         x = tf.squeeze(processed_img*255, 0)
         x = x.numpy()
         # perform the inverse of the preprocessing step
-        x[:, :, 0] += 103.939
-        x[:, :, 1] += 116.779
-        x[:, :, 2] += 123.68
+        # x[:, :, 0] += 103.939
+        # x[:, :, 1] += 116.779
+        # x[:, :, 2] += 123.68
         # x = x[:, :, ::-1]
         x = np.clip(x, 0, 255).astype('uint8')
         return x
-        
+
     def generate_image(self, iterations=1000, step=None,
                        lr=0.01, beta1=0.9, beta2=0.99):
         """ Generate image
@@ -367,7 +368,8 @@ class NST:
         if beta2 < 0 or beta2 > 1:
             raise ValueError("beta2 must be in the range [0, 1]")
         generated_image = self.content_image
-        generated_image = tf.contrib.eager.Variable(generated_image, dtype=tf.float32)
+        generated_image = tf.contrib.eager.Variable(generated_image,
+                                                    dtype=tf.float32)
         # Create our optimizer
         opt = tf.train.AdamOptimizer(learning_rate=lr,
                                      beta1=beta1,
@@ -375,11 +377,13 @@ class NST:
         best_cost = 0
         pasos = step
         for i in range(iterations):
-            grads, J, J_content, J_style, J_var = self.compute_grads(generated_image)
+            b = generated_image
+            grads, J, J_content, J_style, J_var = self.compute_grads(b)
             opt.apply_gradients([(grads, generated_image)])
             print("iteration:", i)
             if pasos is 0:
-                print("Cost at iteration {}: {}, content {}, style {}, var{}".format(i, J, J_content, J_style, J_var))
+                print("Cost at iteration {}: {}, content {}, style {}, var{}"
+                      .format(i, J, J_content, J_style, J_var))
                 pasos = step
             if best_cost is 0:
                 best_cost = J

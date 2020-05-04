@@ -55,7 +55,6 @@ class NST:
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
         self.beta = beta
-        self.model = self.load_model()
 
     @staticmethod
     def scale_image(image):
@@ -84,54 +83,41 @@ class NST:
                 or image.shape[2] is not 3):
             m3 = 'image must be a numpy.ndarray with shape (h, w, 3)'
             raise TypeError(m3)
-        """max_dim = 512
+        max_dim = 512
         long = max(image.shape[0], image.shape[1])
         scale = max_dim/long
         new_h = round(image.shape[0] * scale)
-        new_w = round(image.shape[1] * scale)"""
-        new_h = 512
-        new_w = 512
-        if image.shape[0] > image.shape[1]:
-            new_w = int(image.shape[1] * 512 / image.shape[0])
-        elif image.shape[0] < image.shape[1]:
-            new_h = int(image.shape[0] * 512 / image.shape[1])
-        image = tf.expand_dims(image, axis=0)
+        new_w = round(image.shape[1] * scale)
+        image = np.expand_dims(image, axis=0)
         image = tf.image.resize_bicubic(image, (new_h, new_w))
         image = tf.clip_by_value(image / 255, 0, 1)
         return image
 
     def load_model(self):
-        """ Method Load Model
-        creates the model used to calculate cost
-        the model should use the VGG19 Keras model as a base
-        the model’s input should be the same as the VGG19 input
-        the model’s output should be a list containing the outputs of the
-        VGG19 layers listed in style_layers followed by content _layer
-        saves the model in the instance attribute model"""
-        vgg = tf.keras.applications.vgg19.VGG19(include_top=False,
-                                                weights='imagenet')
-        input = vgg.input
-        for layer in vgg.layers[1:]:
-            if isinstance(layer, tf.keras.layers.MaxPooling2D):
-                input = tf.keras.layers.\
-                        AveragePooling2D(name=layer.name)(input)
-            else:
-                input = layer(input)
-        outputs = [vgg.get_layer(name).output
-                   for name in self.style_layers]
-        outputs = outputs + [vgg.get_layer(self.content_layer).output]
-        global model
-        model = tf.keras.models.Model(inputs=vgg.input, outputs=outputs)
-        model.trainable = False
-        return(model)
+        """ loads the model for neural style transfer """
+        vgg_pre = tf.keras.applications.vgg19.VGG19(include_top=False,
+                                                    weights='imagenet')
+
+        custom_objects = {'MaxPooling2D': tf.keras.layers.AveragePooling2D}
+        vgg_pre.save("base_model")
+        vgg = tf.keras.models.load_model("base_model",
+                                         custom_objects=custom_objects)
+        for layer in vgg.layers:
+            layer.trainable = False
+
+        style_outputs = [vgg.get_layer(name).output
+                         for name in self.style_layers]
+        content_output = vgg.get_layer(self.content_layer).output
+        model_outputs = style_outputs + [content_output]
+        self.model = tf.keras.models.Model(vgg.input, model_outputs)
 
     @staticmethod
     def gram_matrix(input_layer):
         """ Method gram matrix
-        input_layer - an instance of tf.Tensor or tf.Variable of shape (1, h, w, c)
+        input_layer-instance of tf.Tensor or tf.Variable of shape (1, h, w, c)
         containing the layer output whose gram matrix should be calculated
-        if input_layer is not an instance of tf.Tensor or tf.Variable of rank 4,
-        raise a TypeError with the message input_layer must be a tensor of rank 4
+        if input_layer is not an instance of tf.Tensor or tf.Variable rank 4,
+        raise a TypeError with the message input_layer must be a tensor rank 4
         Returns: a tf.Tensor of shape (1, c, c) containing the gram matrix of
         input_layer"""
         if (not isinstance(input_layer, tf.Tensor) or
