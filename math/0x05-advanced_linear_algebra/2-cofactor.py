@@ -17,7 +17,7 @@ def determinant(matrix):
             return(matrix[0][0])
         else:
             return(1)
-    elif len(matrix) is not len(matrix[0]):
+    elif not all([len(a) is len(matrix) for a in matrix]):
         raise ValueError("matrix must be a square matrix")
     elif len(matrix) is 2:
         return(matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0])
@@ -39,7 +39,7 @@ def minor(matrix):
     if (type(matrix) != list or len(matrix) == 0 or
        not all([type(m) == list for m in matrix])):
         raise TypeError("matrix must be a list of lists")
-    elif (len(matrix) is not len(matrix[0])) or len(matrix) is 0:
+    elif not all([len(a) is len(matrix) for a in matrix]):
         raise ValueError("matrix must be a square matrix")
     if (len(matrix) is 1):
         return [[1]]
