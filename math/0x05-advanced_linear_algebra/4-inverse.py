@@ -22,7 +22,7 @@ def determinant(matrix):
         else:
             return(1)
     elif not all([len(a) is len(matrix) for a in matrix]):
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
     elif len(matrix) is 2:
         return(matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0])
     else:
@@ -44,7 +44,7 @@ def minor(matrix):
        not all([type(m) == list for m in matrix])):
         raise TypeError("matrix must be a list of lists")
     elif not all([len(a) is len(matrix) for a in matrix]):
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
     if (len(matrix) is 1):
         return [[1]]
     if (len(matrix) == 2):
@@ -67,7 +67,7 @@ def cofactor(matrix):
        not all([type(m) == list for m in matrix])):
         raise TypeError("matrix must be a list of lists")
     elif not all([len(a) is len(matrix) for a in matrix]):
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
     A = minor(matrix)
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
@@ -82,7 +82,7 @@ def adjugate(matrix):
             not all([type(m) == list for m in matrix])):
         raise TypeError("matrix must be a list of lists")
     elif not all([len(a) is len(matrix) for a in matrix]):
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
     A = cofactor(matrix)
     return (transpose(A))
 
