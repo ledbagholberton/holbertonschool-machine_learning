@@ -41,7 +41,7 @@ def minor(matrix):
        not all([type(m) == list for m in matrix])):
         raise TypeError("matrix must be a list of lists")
     elif not all([len(a) is len(matrix) for a in matrix]):
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
     if (len(matrix) is 1):
         return [[1]]
     if (len(matrix) == 2):
