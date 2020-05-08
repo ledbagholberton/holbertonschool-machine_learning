@@ -22,6 +22,8 @@ def definiteness(matrix):
         raise TypeError("matrix must be a numpy.ndarray")
     if len(matrix.shape) is not 2 or (matrix.shape[0] is not matrix.shape[1]):
         return None
+    if not np.array_equal(matrix.T, matrix):
+        return None
     w, v = np.linalg.eig(matrix)
     if all([m > 0 for m in w]):
         return "Positive definite"
