@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Write a function  that calculates the mean and
 covariance of a data set:
 
@@ -12,7 +13,6 @@ Returns: mean, cov:
 mean is a numpy.ndarray of shape (1, d) containing the mean of the data set
 cov is a numpy.ndarray of shape (d, d) containing the covariance matrix of
 the data set
-You are not allowed to use the function numpy.cov
 """
 import numpy as np
 

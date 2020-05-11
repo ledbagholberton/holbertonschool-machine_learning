@@ -1,6 +1,5 @@
+#!/usr/bin/env python3
 """
-Write a function that calculates a correlation matrix:
-
 C is a numpy.ndarray of shape (d, d) containing a covariance matrix
 d is the number of dimensions
 If C is not a numpy.ndarray, raise a TypeError with the message C must
