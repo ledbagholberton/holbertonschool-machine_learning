@@ -56,7 +56,7 @@ class MultiNormal:
             cov = self.cov
             inv_cov = np.linalg.inv(cov)
             mean = self.mean
-            D = cov.shape[0]
+            D = x.shape[0]
             det_cov = np.linalg.det(cov)
             den = np.sqrt(np.power((2 * np.pi), D) * det_cov)
             y = np.matmul((x - mean).T, inv_cov)
