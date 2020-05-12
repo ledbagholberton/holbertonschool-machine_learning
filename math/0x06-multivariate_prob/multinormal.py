@@ -49,14 +49,15 @@ class MultiNormal:
         Returns the value of the PDF"""
         if not(isinstance(x, np.ndarray)):
             raise TypeError("x must be a numpy.ndarray")
-        elif (x.shape is not 2 and x.shape[1] is not 1):
+        cov = self.cov
+        if (x.shape is not 2 and x.shape[1] is not 1):
             raise TypeError("x mush have the shape ({d}, 1)".
-                            format(x.shape[0]))
+                            format(cov.shape[0]))
         else:
             cov = self.cov
             inv_cov = np.linalg.inv(cov)
             mean = self.mean
-            D = x.shape[0]
+            D = cov.shape[0]
             det_cov = np.linalg.det(cov)
             den = np.sqrt(np.power((2 * np.pi), D) * det_cov)
             y = np.matmul((x - mean).T, inv_cov)
