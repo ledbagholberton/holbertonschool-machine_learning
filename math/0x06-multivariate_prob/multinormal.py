@@ -53,7 +53,7 @@ class MultiNormal:
         if (len(x.shape) is not 2 and x.shape[1] is not 1
                 or x.shape[0] is not cov.shape[0]):
             raise ValueError("x must have the shape ({}, 1)".
-                            format(cov.shape[0]))
+                             format(cov.shape[0]))
         else:
             cov = self.cov
             inv_cov = np.linalg.inv(cov)
