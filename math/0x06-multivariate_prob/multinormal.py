@@ -50,7 +50,7 @@ class MultiNormal:
         if not(isinstance(x, np.ndarray)):
             raise TypeError("x must be a numpy.ndarray")
         cov = self.cov
-        if (x.shape is not 2 and x.shape[1] is not 1
+        if (len(x.shape) is not 2 and x.shape[1] is not 1
                 and x.shape[0] is not cov.shape[0]):
             raise TypeError("x mush have the shape ({d}, 1)".
                             format(cov.shape[0]))
