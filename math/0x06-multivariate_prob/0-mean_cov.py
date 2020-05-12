@@ -33,4 +33,4 @@ def mean_cov(X):
         b = a.T
         c = np.matmul(b, a)
         cov = c/(X.shape[0] - 1)
-        return(mean.reshape((d, 1)), cov)
+        return(mean.reshape((1, d)), cov)
