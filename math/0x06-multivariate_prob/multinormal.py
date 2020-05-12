@@ -25,22 +25,37 @@ class MultiNormal:
             raise TypeError("data must be a 2D numpy.ndarray")
         elif data.shape[1] < 2:
             raise ValueError("data must contain multiple data points")
-        media, self.cov = self.mean_cov(data)
-        self.mean = media.T
-
-    def mean_cov(self, X):
-        """FUnction calculate mean and covariance"""
-        mean = np.sum(X, axis=1)/X.shape[1]
-        a = X.T - mean
-        b = a.T
-        c = np.matmul(b, a)
-        cov = c/(X.shape[1] - 1)
-        return(mean, cov)
-
-    def correlation(self, C):
-        """Function correlation"""
-        v = np.sqrt(np.diag(C))
-        outer_v = np.outer(v, v)
-        correlation = C / outer_v
-        correlation[C == 0] = 0
-        return correlation
+        else:
+            X = data.T
+            d = data.shape[0]
+            mean = np.sum(X, axis=0)/X.shape[0]
+            self.mean = np.mean(data, axis=1).reshape(d,1)
+            a = X - mean
+            b = a.T
+            c = np.matmul(b, a)
+            self.cov = c/(X.shape[0] - 1)
+        
+    def pdf(self, x):
+        """Function calculate PDF
+        Probability Density Function
+        x is a numpy.ndarray of shape (d, 1) containing the data point whose
+        PDF should be calculated
+        d is the number of dimensions of the Multinomial instance
+        If x is not a numpy.ndarray, raise a TypeError with the message
+        x must by a numpy.ndarray
+        If x is not of shape (d, 1), raise a ValueError with the message
+        x mush have the shape ({d}, 1)
+        Returns the value of the PDF"""
+        if not(isinstance(x, np.ndarray)):
+            raise TypeError("x must be a numpy.ndarray")
+        elif (x.shape is not 2 and x.shape[1] is not 1):
+            raise TypeError("x mush have the shape ({d}, 1)".format(x.shape[0]))
+        else:
+            cov = self.cov
+            inv_cov = np.linalg.inv(cov)
+            mean = self.mean
+            D = cov.shape[0]
+            det_cov = np.linalg.det(cov)
+            den = np.sqrt(np.power((2* np.pi), D) * det_cov)
+            pdf  = (1 / den) * np.exp(-1 * np.matmul(np.matmul((x - mean).T, inv_cov), (x - mean)) / 2)
+            return pdf.reshape(-1)[0]
