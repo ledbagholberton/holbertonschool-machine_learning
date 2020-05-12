@@ -20,8 +20,9 @@ class MultiNormal:
 
     def __init__(self, data):
         "Constructor"
-        a = len(data.shape)
-        if len(data.shape) is not 2:
+        if not isinstance(data, np.ndarray):
+            raise TypeError("data must be a 2D numpy.ndarray")
+        elif len(data.shape) is not 2:
             raise TypeError("data must be a 2D numpy.ndarray")
         elif data.shape[1] < 2:
             raise ValueError("data must contain multiple data points")
