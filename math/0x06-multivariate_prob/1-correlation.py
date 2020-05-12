@@ -15,7 +15,7 @@ def correlation(C):
     """Function correlation"""
     if not isinstance(C, np.ndarray):
         raise TypeError("C must be a numpy.ndarray")
-    elif not (len(C.shape) is 2) and (C.shape[0] is C.shape[1]):
+    elif not ((len(C.shape) is 2) and (C.shape[0] is C.shape[1])):
         raise ValueError("C must be a 2D square matrix")
     else:
         v = np.sqrt(np.diag(C))

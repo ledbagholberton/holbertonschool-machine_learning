@@ -29,12 +29,12 @@ class MultiNormal:
             X = data.T
             d = data.shape[0]
             mean = np.sum(X, axis=0)/X.shape[0]
-            self.mean = np.mean(data, axis=1).reshape(d,1)
+            self.mean = np.mean(data, axis=1).reshape(d, 1)
             a = X - mean
             b = a.T
             c = np.matmul(b, a)
             self.cov = c/(X.shape[0] - 1)
-        
+
     def pdf(self, x):
         """Function calculate PDF
         Probability Density Function
@@ -49,13 +49,15 @@ class MultiNormal:
         if not(isinstance(x, np.ndarray)):
             raise TypeError("x must be a numpy.ndarray")
         elif (x.shape is not 2 and x.shape[1] is not 1):
-            raise TypeError("x mush have the shape ({d}, 1)".format(x.shape[0]))
+            raise TypeError("x mush have the shape ({d}, 1)".
+                            format(x.shape[0]))
         else:
             cov = self.cov
             inv_cov = np.linalg.inv(cov)
             mean = self.mean
             D = cov.shape[0]
             det_cov = np.linalg.det(cov)
-            den = np.sqrt(np.power((2* np.pi), D) * det_cov)
-            pdf  = (1 / den) * np.exp(-1 * np.matmul(np.matmul((x - mean).T, inv_cov), (x - mean)) / 2)
+            den = np.sqrt(np.power((2 * np.pi), D) * det_cov)
+            y = np.matmul((x - mean).T, inv_cov)
+            pdf = (1 / den) * np.exp(-1 * np.matmul(y, (x - mean)) / 2)
             return pdf.reshape(-1)[0]
