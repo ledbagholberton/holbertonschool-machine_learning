@@ -29,4 +29,4 @@ def pca(X, var=0.95):
         if sum > var:
             break
     new_Vh = Vh.T[:, :count]
-    return (-1 * new_Vh)
+    return (new_Vh)

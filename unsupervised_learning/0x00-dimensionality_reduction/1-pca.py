@@ -19,4 +19,4 @@ def pca(X, ndim):
     U, Sigma, Vh = np.linalg.svd(X, full_matrices=True)
     new_Vh = Vh.T[:, :ndim]
     T = np.matmul(X, new_Vh)
-    return (-1 * T)
+    return (T)
