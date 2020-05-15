@@ -8,7 +8,6 @@ P is a numpy.ndarray of shape (n, n) containing the P affinities of X
 Returns: (dY, Q)
 dY is a numpy.ndarray of shape (n, n) containing the gradients of Y
 Q is a numpy.ndarray of shape (n, n) containing the Q affinities of Y
-You may use Q_affinities = __import__('5-Q_affinities').Q_affinities
 """
 import numpy as np
 Q_affinities = __import__('5-Q_affinities').Q_affinities

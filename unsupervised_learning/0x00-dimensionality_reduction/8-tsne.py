@@ -13,11 +13,6 @@ iterations is the number of iterations
 lr is the learning rate
 Returns: Y, a numpy.ndarray of shape (n, ndim) containing the optimized
 low dimensional transformation of X
-You should use:
-pca = __import__('1-pca').pca
-P_affinities = __import__('4-P_affinities').P_affinities
-grads = __import__('6-grads').grads
-cost = __import__('7-cost').cost
 For the first 100 iterations, perform early exaggeration with
 an exaggeration of 4
 a(t) = 0.5 for the first 20 iterations and 0.8 thereafter
