@@ -8,9 +8,11 @@ n is the number of points
 ndim is the new dimensional representation of X
 Returns: Q, num
 Q is a numpy.ndarray of shape (n, n) containing the Q affinities
-num is a numpy.ndarray of shape (n, n) containing the numerator of the Q affinities
+num is a numpy.ndarray of shape (n, n) containing the numerator
+of the Q affinities
 """
 import numpy as np
+
 
 def Q_affinities(Y):
     """FUnction Q_Affinities"""

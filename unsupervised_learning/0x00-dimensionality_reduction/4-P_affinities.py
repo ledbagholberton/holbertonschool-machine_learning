@@ -2,7 +2,7 @@
 """
 calculates the symmetric P affinities of a data set
 
-X is a numpy.ndarray of shape (n, d) 
+X is a numpy.ndarray of shape (n, d)
 containing the dataset to be transformed by t-SNE
 n is the number of data points
 d is the number of dimensions in each point
@@ -17,20 +17,20 @@ import numpy as np
 P_init = __import__('2-P_init').P_init
 HP = __import__('3-entropy').HP
 
+
 def P_affinities(X, tol=1e-5, perplexity=30.0):
     """P_affinities"""
     n, d = X.shape
     D, P, betas, H = P_init(X, perplexity)
     # with the function entropy (HP) we obtain the
-    # P-affinities at specific point and the Shannon Entropy at 
+    # P-affinities at specific point and the Shannon Entropy at
     # this point. Now we need to search
 
     for iter in range(n):
-        print(iter)
-        beta_min, beta_max = None , None
+        beta_min, beta_max = None, None
         D_iter = np.delete(D[iter], iter, axis=0)
         H_iter, P_iter = HP(D_iter, betas[iter, 0])
-        # lo que toca encontrar es cual beta cumple para que la 
+        # lo que toca encontrar es cual beta cumple para que la
         # perplejidad dada y la encontrada tengan una diferencia max de tol
         dif_H = H_iter - H
         hit_upper_limit = False

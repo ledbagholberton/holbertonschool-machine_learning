@@ -11,7 +11,8 @@ Returns: (Hi, Pi)
 Hi: the Shannon entropy of the points
 Pi: a numpy.ndarray of shape (n - 1,) containing the P affinities of the points
 """
-import numpy as np 
+import numpy as np
+
 
 def HP(Di, beta):
     """FUnction Entropy Shannon"""

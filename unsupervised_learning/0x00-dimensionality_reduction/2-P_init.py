@@ -14,7 +14,6 @@ P: a numpy.ndarray of shape (n, n) initialized to all 0‘s that
 will contain the P affinities
 betas: a numpy.ndarray of shape (n, 1) initialized to all 1’s
 that will contain all of the beta values
-\beta_{i} = \frac{1}{2{\sigma_{i}}^{2} }
 H is the Shannon entropy for perplexity perplexity"""
 import numpy as np
 
