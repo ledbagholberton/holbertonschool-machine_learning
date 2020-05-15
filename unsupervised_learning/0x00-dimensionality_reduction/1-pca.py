@@ -17,5 +17,6 @@ def pca(X, ndim):
     m, n = X.shape
     X = np.mean(X, axis=0) - X
     U, Sigma, Vh = np.linalg.svd(X, full_matrices=True)
-    X_svd = np.dot(U[:,:n], np.diag(Sigma)[:,:ndim])
-    return X_svd
+    new_Vh = Vh.T[:, :ndim]
+    T = np.matmul(X, new_Vh)
+    return (-1 * T)

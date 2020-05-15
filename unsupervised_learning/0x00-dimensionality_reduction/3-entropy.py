@@ -17,5 +17,5 @@ def HP(Di, beta):
     """FUnction Entropy Shannon"""
     Pi = np.exp(-Di * beta)
     Pi = Pi / np.sum(Pi)
-    Hi = -1 * np.nansum(Pi * np.log2(Pi))
+    Hi = np.sum(-Pi * np.log2(Pi))
     return(Hi, Pi)

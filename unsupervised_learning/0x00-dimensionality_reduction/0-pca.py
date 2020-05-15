@@ -15,19 +15,12 @@ dimensionality of the transformed X
 import numpy as np
 
 
-def pca(X, var=0.953):
+def pca(X, var=0.95):
     """Function PCA"""
     n, m = X.shape
-    # Compute covariance matrix
-    C = np.dot(X.T, X) / (n-1)
-    # Eigen decomposition
-    eigen_vals, eigen_vecs = np.linalg.eig(C)
-    # Sort eigen vals & eigen vectors in ascendent order
-    key = np.argsort(eigen_vals)[::-1]
-    eigen_vals, eigen_vecs = eigen_vals[key], eigen_vecs[:, key]
-    # Sum of variances
-    sum_vals = np.sum(eigen_vals)
-    var_ret = eigen_vals/sum_vals
+    U, S, Vh = np.linalg.svd(X)
+    sum_vars = np.sum(S)
+    var_ret = S/sum_vars
     sum = 0
     count = 0
     for i in var_ret:
@@ -35,8 +28,5 @@ def pca(X, var=0.953):
         count += 1
         if sum > var:
             break
-    new_eigen_vecs = eigen_vecs[:, :count]
-
-
-    # Project X onto PC space
-    return -1 * new_eigen_vecs
+    new_Vh = Vh.T[:, :count]
+    return (-1 * new_Vh)
