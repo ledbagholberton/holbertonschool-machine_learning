@@ -33,7 +33,7 @@ def P_affinities(X, tol=1e-5, perplexity=30.0):
         # lo que toca encontrar es cual beta cumple para que la
         # perplejidad dada y la encontrada tengan una diferencia max de tol
         dif_H = H_iter - H
-        while abs(dif_H) > tol:
+        while np.abs(dif_H) > tol:
             if dif_H > 0:
                 beta_min = betas[iter][0]
                 if beta_max is None:
