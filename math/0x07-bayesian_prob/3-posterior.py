@@ -39,26 +39,27 @@ def factorial(n):
 
 def posterior(x, n, P, Pr):
     """Function posterior"""
-    if type(n) is not int or n < 0:
+    if type(n) is not int or n <= 0:
         raise ValueError("n must be a positive integer")
     if type(x) is not int or x < 0:
         msg1 = "x must be an integer that is greater than or equal to 0"
         raise ValueError(msg1)
     if x > n:
         raise ValueError("x cannot be greater than n")
-    if not isinstance(P, np.ndarray) and len(P.shape) is not 1:
+    if not isinstance(P, np.ndarray):
         raise TypeError("P must be a 1D numpy.ndarray")
-    if np.amax(P) > 1 or np.amin(P) < 0:
-        raise ValueError("All values in P must be in the range [0, 1]")
+    if len(P.shape) is not 1:
+        raise TypeError("P must be a 1D numpy.ndarray")
     if not isinstance(Pr, np.ndarray):
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
     if P.shape != Pr.shape:
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
     if np.amax(P) > 1 or np.amin(P) < 0:
         raise ValueError("All values in P must be in the range [0, 1]")
+    if np.amax(Pr) > 1 or np.amin(Pr) < 0:
+        raise ValueError("All values in Pr must be in the range [0, 1]")
     sum_p = np.sum(Pr)
-    a = np.isclose([sum_p], [1], atol=0)
-    if np.all(a) is False:
+    if np.allclose([sum_p], [1], atol=0) is False:
         raise ValueError("Pr must sum to 1")
     comb = factorial(n)/(factorial(x)*factorial(n-x))
     likelihood = comb * np.power(P, x) * np.power((1-P), n-x)
