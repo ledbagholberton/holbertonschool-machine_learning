@@ -49,16 +49,14 @@ def intersection(x, n, P, Pr):
         raise TypeError("P must be a 1D numpy.ndarray")
     if len(P.shape) is not 1:
         raise TypeError("P must be a 1D numpy.ndarray")
-    if np.amax(P) > 1 or np.amin(P) < 0:
-        raise ValueError("All values in P must be in the range [0, 1]")
-    if np.amax(Pr) > 1 or np.amin(Pr) < 0:
-        raise ValueError("All values in Pr must be in the range [0, 1]")
     if not isinstance(Pr, np.ndarray):
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
     if P.shape != Pr.shape:
         raise TypeError("Pr must be a numpy.ndarray with the same shape as P")
     if np.amax(P) > 1 or np.amin(P) < 0:
         raise ValueError("All values in P must be in the range [0, 1]")
+    if np.amax(Pr) > 1 or np.amin(Pr) < 0:
+        raise ValueError("All values in Pr must be in the range [0, 1]")
     sum_p = np.sum(Pr)
     a = np.isclose([sum_p], [1], atol=0)
     if np.all(a) is False:
