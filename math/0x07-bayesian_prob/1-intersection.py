@@ -58,8 +58,7 @@ def intersection(x, n, P, Pr):
     if np.amax(Pr) > 1 or np.amin(Pr) < 0:
         raise ValueError("All values in Pr must be in the range [0, 1]")
     sum_p = np.sum(Pr)
-    a = np.isclose([sum_p], [1], atol=0)
-    if np.all(a) is False:
+    if np.allclose([sum_p], [1], atol=0) is False:
         raise ValueError("Pr must sum to 1")
     comb = factorial(n)/(factorial(x)*factorial(n-x))
     likelihood = comb * np.power(P, x) * np.power((1-P), n-x)
