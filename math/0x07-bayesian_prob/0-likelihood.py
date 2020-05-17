@@ -32,9 +32,9 @@ def factorial(n):
 
 def likelihood(x, n, P):
     """Function likelihood"""
-    if type(n) is not int or n < 0:
+    if type(n) is not int or n <= 0:
         raise ValueError("n must be a positive integer")
-    if type(x) is not int or x <= 0:
+    if type(x) is not int or x < 0:
         msg1 = "x must be an integer that is greater than or equal to 0"
         raise ValueError(msg1)
     if x > n:
