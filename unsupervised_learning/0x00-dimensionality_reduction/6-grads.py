@@ -20,7 +20,8 @@ def grads(Y, P):
     Q, num = Q_affinities(Y)
     n, ndim = Y.shape
     dY = np.zeros((n, ndim))
-    Q, num = Q_affinities(Y)
+    # Q, num = Q_affinities(Y)
+    PQ = P-Q
     for i in range(n):
         dY[i, :] = (np.sum(np.tile(PQ[:, i] * num[:, i],
                     (ndim, 1)).T * (Y[i, :] - Y), 0))

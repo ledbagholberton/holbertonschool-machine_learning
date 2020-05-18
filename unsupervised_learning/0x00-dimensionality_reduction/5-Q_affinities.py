@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Write a function  that calculates the Q affinities:
-
 Y is a numpy.ndarray of shape (n, ndim) containing the low dimensional
 transformation of X
 n is the number of points
