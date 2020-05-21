@@ -1,4 +1,4 @@
-    #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 import numpy as np
 initialize = __import__('4-initialize').initialize
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     X = np.concatenate((a, b, c, d), axis=0)
     np.random.shuffle(X)
     pi, m, S = initialize(X, 4)
-    g, l = expectation(X, pi, m, S)
+    g, ll = expectation(X, pi, m, S)
     print(g)
     print(np.sum(g, axis=0))
-        print(l)
+    print(ll)

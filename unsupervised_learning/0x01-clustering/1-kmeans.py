@@ -26,28 +26,37 @@ import numpy as np
 
 def kmeans(X, k, iterations=1000):
     """performs K-means on a dataset"""
+    if not verify(X, k, iterations):
+        return None, None
     n, d = X.shape
     low = np.amin(X, axis=0)
     high = np.amax(X, axis=0)
-    try:
-        centroids = np.random.uniform(low=low, high=high, size=(k, d))
-        old_centroids = np.zeros((k, d))
-        for iter in range(iterations):
-            distances = np.sqrt(((X - centroids[:, np.newaxis])**2)
-                                .sum(axis=-1))
-            closest = np.argmin(distances, axis=0)
-            lista = []
-            for i in range(k):
-                a = X[closest == i]
-                if len(a) == 0:
-                    media = np.random.uniform(low=low, high=high, size=(d))
-                else:
-                    media = np.mean(a, axis=0)
-                lista.append(media)
-            centroids = np.array(lista)
-            if np.array_equal(old_centroids, centroids):
-                break
-            old_centroids = centroids
-        return(centroids, closest)
-    except Exception:
-        return(None, None)
+    centroids = np.random.uniform(low=low, high=high, size=(k, d))
+    old_centroids = np.zeros((k, d))
+    for iter in range(iterations):
+        distances = np.sqrt(((X - centroids[:, np.newaxis])**2)
+                            .sum(axis=-1))
+        closest = np.argmin(distances, axis=0)
+        lista = []
+        for i in range(k):
+            a = X[closest == i]
+            if len(a) == 0:
+                media = np.random.uniform(low=low, high=high, size=(d))
+            else:
+                media = np.mean(a, axis=0)
+            lista.append(media)
+        centroids = np.array(lista)
+        if np.array_equal(old_centroids, centroids):
+            break
+        old_centroids = centroids
+    return(centroids, closest)
+
+
+def verify(X, k, iterations):
+    """verifiy conditions"""
+    if not isinstance(X, np.ndarray):
+        return False
+    if (type(k) is not int or k < 1
+            or type(iterations) is not int or iterations <= 1):
+        return False
+    return True

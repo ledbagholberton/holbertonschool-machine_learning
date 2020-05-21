@@ -21,16 +21,30 @@ variance = __import__('2-variance').variance
 
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     """Optimize k-meas by variance intracluster"""
-    try:
-        results = []
-        d_vars = []
-        c, _ = kmeans(X, kmin, iterations)
-        high_var = variance(X, c)
-        for iter in range(kmin, kmax+1, 1):
-            results.append(kmeans(X, iter, iterations))
-            centroids, _ = kmeans(X, iter, iterations)
-            var = variance(X, centroids)
-            d_vars.append(high_var - var)
-        return(results, d_vars)
-    except Exception:
-        return(None, None)
+    if not verify(X, kmin, kmax, iterations):
+        return None, None, None
+    results = []
+    d_vars = []
+    c, _ = kmeans(X, kmin, iterations)
+    high_var = variance(X, c)
+    for iter in range(kmin, kmax+1, 1):
+        results.append(kmeans(X, iter, iterations))
+        centroids, _ = kmeans(X, iter, iterations)
+        var = variance(X, centroids)
+        d_vars.append(high_var - var)
+    return(results, d_vars)
+
+
+def verify(X, kmin, kmax, iterations):
+    """verifiy conditions"""
+    if not isinstance(X, np.ndarray):
+        return False
+    if type(kmin) is not int or kmin < 0:
+        return False
+    if type(kmax) is not int or kmax < 0:
+        return False
+    if kmax < kmin:
+        return False
+    if type(iterations) is not int or iterations <= 1:
+        return False
+    return True

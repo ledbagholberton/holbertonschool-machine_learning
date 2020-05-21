@@ -19,13 +19,21 @@ kmeans = __import__('1-kmeans').kmeans
 
 def initialize(X, k):
     """Initializes variables for a Gaussian Mixture Model"""
-    try:
-        n, d = X.shape
-        m, _ = kmeans(X, k)
-        pi = np.random.uniform(1/k, 1/k, size=(k, ))
-        iD = np.identity(d)
-        S = np.broadcast_to(iD, (k, d, d))
-        # S = np.expand_dims(iD, axis=0)
-        return(pi, m, S)
-    except Exception:
-        return (None, None, None)
+    if not verify(X, k):
+        return None, None, None
+    n, d = X.shape
+    m, _ = kmeans(X, k)
+    pi = np.random.uniform(1/k, 1/k, size=(k, ))
+    iD = np.identity(d)
+    S = np.broadcast_to(iD, (k, d, d))
+    # S = np.expand_dims(iD, axis=0)
+    return(pi, m, S)
+
+
+def verify(X, k):
+    """verifiy conditions"""
+    if not isinstance(X, np.ndarray):
+        return False
+    if type(k) is not int or k < 0:
+        return False
+    return True

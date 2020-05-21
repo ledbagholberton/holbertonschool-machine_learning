@@ -20,6 +20,8 @@ import numpy as np
 
 def initialize(X, k):
     """initializes cluster centroids for K-means"""
+    if not verify(X, k):
+        return None, None
     n, d = X.shape
     low = np.amin(X, axis=0)
     high = np.amax(X, axis=0)
@@ -28,3 +30,12 @@ def initialize(X, k):
     except ValueError:
         return None
     return(arr_init)
+
+
+def verify(X, k):
+    """verifiy conditions"""
+    if not isinstance(X, np.ndarray):
+        return False
+    if type(k) is not int or k < 1:
+        return False
+    return True
