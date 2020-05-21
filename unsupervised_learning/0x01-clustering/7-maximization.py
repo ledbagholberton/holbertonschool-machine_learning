@@ -24,7 +24,7 @@ def maximization(X, g):
     n, d = X.shape
     k, _ = g.shape
     m = np.zeros((k, d))
-    S = np.zeros((k, d, d))
+    S = np.empty((k, d, d))
     pi = np.zeros((k, ))
     for i in range(k):
         Nk = np.sum(g[i])
@@ -32,13 +32,7 @@ def maximization(X, g):
         gi = g[i].reshape(1, n)
         m[i] = np.sum(np.matmul(gi, X), axis=0) / Nk
         Df = X - m[i]
-        S_num = np.einsum('ab, cd, ef->adf', gi, Df, Df)
-        # path = np.einsum_path('ab, cd, ef->adf', gi, Df, Df)
-        # print(path[1])
-        """S_num1 = np.matmul(X-m[i], (X-m[i]).T)
-        S_num2 = np.matmul(g[i].reshape(1, n), S_num1)
-        S_num3 = np.sum(S_num2, axis=-1)"""
-        S[i] = np.sum(S_num, axis=0) / Nk
+        S[i] = np.dot(gi * Df.T, Df) / Nk
     return(pi, m, S)
 
 
