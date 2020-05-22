@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 X is a numpy.ndarray of shape (n, d) containing the data set
 kmin is a positive integer containing
