@@ -22,7 +22,7 @@ variance = __import__('2-variance').variance
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     """Optimize k-meas by variance intracluster"""
     if not verify(X, kmin, kmax, iterations):
-        return None, None, None
+        return None, None
     results = []
     varsi = []
     c, _ = kmeans(X, kmin, iterations)
