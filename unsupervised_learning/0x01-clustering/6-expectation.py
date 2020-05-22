@@ -48,7 +48,7 @@ def verify(X, pi, m, S):
         return False
     if len(pi.shape) is not 1:
         return False
-    if np.sum(p, axis=0) != 1:
+    if not np.isclose([np.sum(pi)], [1])[0]:
         return False
     if not isinstance(m, np.ndarray):
         return False
