@@ -51,4 +51,6 @@ def verify(X, g):
         return False
     if X.shape[0] != g.shape[1]:
         return False
+    if not np.isclose([np.sum(g)], [1])[0]:
+        return False
     return True
