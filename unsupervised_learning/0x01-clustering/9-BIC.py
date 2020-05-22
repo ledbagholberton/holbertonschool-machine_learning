@@ -59,13 +59,13 @@ def verify(X, kmin, kmax, iterations, tol, verbose):
         return False
     if len(X.shape) is not 2:
         return False
-    if type(kmin) is not int or kmin < 0:
+    if type(kmin) is not int or kmin <= 0 or X.shape[0] <= kmin:
         return False
-    if type(kmax) is not int or kmax < 0:
+    if type(kmax) is not int or kmax <= 0 or X.shape[0] <= kmax:
         return False
-    if kmax < kmin:
+    if kmax <= kmin:
         return False
-    if type(iterations) is not int or iterations <= 1:
+    if type(iterations) is not int or iterations <= 0:
         return False
     if type(tol) is not float or tol < 0:
         return False
