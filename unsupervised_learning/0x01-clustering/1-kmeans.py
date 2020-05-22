@@ -58,7 +58,8 @@ def verify(X, k, iterations):
         return False
     if len(X.shape) is not 2:
         return False
-    if (type(k) is not int or k < 1
-            or type(iterations) is not int or iterations <= 1):
+    if type(k) is not int or k <= 0 or k >= X.shape[0]:
+        return False
+    if type(iterations) is not int or iterations <= 0:
         return False
     return True
