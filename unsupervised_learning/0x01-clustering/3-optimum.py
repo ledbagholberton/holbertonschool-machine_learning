@@ -24,15 +24,15 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     if not verify(X, kmin, kmax, iterations):
         return None, None, None
     results = []
-    vars = []
+    varsi = []
     c, _ = kmeans(X, kmin, iterations)
     high_var = variance(X, c)
     for iter in range(kmin, kmax+1, 1):
         centroids, clss = kmeans(X, iter, iterations)
         results.append((centroids, clss))
         var = variance(X, centroids)
-        vars.append(var)
-    d_vars = [vars[0] - var for var in vars]
+        varsi.append(var)
+    d_vars = [varsi[0] - var for var in varsi]
     return(results, d_vars)
 
 

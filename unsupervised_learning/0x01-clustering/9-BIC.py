@@ -26,8 +26,8 @@ Use: BIC = p * ln(n) - 2 * l
 p is the number of parameters required for the model
 n is the number of data points used to create the model
 l is the log likelihood of the model"""
-expectation_maximization = __import__('8-EM').expectation_maximization
 import numpy as np
+expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
