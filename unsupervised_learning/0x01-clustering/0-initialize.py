@@ -21,7 +21,7 @@ import numpy as np
 def initialize(X, k):
     """initializes cluster centroids for K-means"""
     if not verify(X, k):
-        return None, None
+        return None
     n, d = X.shape
     low = np.amin(X, axis=0)
     high = np.amax(X, axis=0)
