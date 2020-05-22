@@ -41,7 +41,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     logs = np.zeros((kmax - kmin + 1)).astype(float)
     for k in range(kmin, kmax + 1, 1):
         pi, m, S, g, ll = expectation_maximization(X, k, iterations, tol,
-                                                   verbose=verbose)
+                                                   verbose)
         p = (k * d * (d+1) / 2) + (d * k) + k - 1
         BIC = p * np.log(n) - 2 * ll
         b[k-kmin] = BIC

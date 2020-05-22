@@ -57,9 +57,9 @@ def verify(X, k, iterations, tol, verbose):
         return False
     if len(X.shape) is not 2:
         return False
-    if type(k) is not int or k < 1:
+    if type(k) is not int or k <= 0 or X.shape[0] <= k:
         return False
-    if type(iterations) is not int or iterations <= 1:
+    if type(iterations) is not int or iterations <= 0:
         return False
     if type(tol) is not float or tol < 0:
         return False
