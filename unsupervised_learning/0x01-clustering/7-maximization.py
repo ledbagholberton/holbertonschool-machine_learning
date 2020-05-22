@@ -51,7 +51,6 @@ def verify(X, g):
         return False
     if X.shape[0] != g.shape[1]:
         return False
-    ref = np.ones_like(g)
-    if not np.isclose(np.any[np.sum(g, axis=0)], g)[0]:
+    if not np.isclose(np.sum(g, axis=0), np.ones_like(g))[0]:
         return False
     return True
