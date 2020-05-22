@@ -38,6 +38,6 @@ def verify(X, k):
         return False
     if len(X.shape) is not 2:
         return False
-    if type(k) is not int or k < 1:
+    if type(k) is not int or k <= 0 or k >= X.shape[0]:
         return False
     return True
