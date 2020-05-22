@@ -25,10 +25,7 @@ def initialize(X, k):
     n, d = X.shape
     low = np.amin(X, axis=0)
     high = np.amax(X, axis=0)
-    try:
-        arr_init = np.random.uniform(low=low, high=high, size=(k, d))
-    except ValueError:
-        return None
+    arr_init = np.random.uniform(low=low, high=high, size=(k, d))
     return(arr_init)
 
 
