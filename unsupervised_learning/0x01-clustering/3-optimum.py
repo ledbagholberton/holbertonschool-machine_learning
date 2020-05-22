@@ -39,6 +39,8 @@ def verify(X, kmin, kmax, iterations):
     """verifiy conditions"""
     if not isinstance(X, np.ndarray):
         return False
+    if len(X.shape) is not 2:
+        return False
     if type(kmin) is not int or kmin < 0:
         return False
     if type(kmax) is not int or kmax < 0:

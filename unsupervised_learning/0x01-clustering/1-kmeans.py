@@ -56,6 +56,8 @@ def verify(X, k, iterations):
     """verifiy conditions"""
     if not isinstance(X, np.ndarray):
         return False
+    if len(X.shape) is not 2:
+        return False
     if (type(k) is not int or k < 1
             or type(iterations) is not int or iterations <= 1):
         return False

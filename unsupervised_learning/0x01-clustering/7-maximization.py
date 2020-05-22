@@ -40,7 +40,11 @@ def verify(X, g):
     """verifiy conditions"""
     if not isinstance(X, np.ndarray):
         return False
+    if len(X.shape) is not 2:
+        return False
     if not isinstance(g, np.ndarray):
+        return False
+    if len(g.shape) is not 2:
         return False
     if X.shape[0] != g.shape[1]:
         return False

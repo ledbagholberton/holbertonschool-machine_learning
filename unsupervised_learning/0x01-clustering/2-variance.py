@@ -27,6 +27,10 @@ def verify(X, C):
         return False
     if not isinstance(C, np.ndarray):
         return False
+    if len(X.shape) is not 2:
+        return False
+    if len(C.shape) is not 2:
+        return False
     if C.shape[1] is not X.shape[1]:
         return False
     return True

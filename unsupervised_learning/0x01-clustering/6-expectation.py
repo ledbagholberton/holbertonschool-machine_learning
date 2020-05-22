@@ -39,11 +39,19 @@ def expectation(X, pi, m, S):
 def verify(X, pi, m, S):
     if not isinstance(X, np.ndarray):
         return False
+    if len(X.shape) is not 2:
+        return False
     if not isinstance(pi, np.ndarray):
+        return False
+    if len(pi.shape) is not 1:
         return False
     if not isinstance(m, np.ndarray):
         return False
+    if len(m.shape) is not 2:
+        return False
     if not isinstance(S, np.ndarray):
+        return False
+    if len(S.shape) is not 3:
         return False
     if pi.shape[0] is not m.shape[0]:
         return False
