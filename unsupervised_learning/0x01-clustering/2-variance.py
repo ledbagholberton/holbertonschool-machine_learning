@@ -13,12 +13,15 @@ import numpy as np
 
 def variance(X, C):
     """Intracluster variance"""
-    if not verify(X, C):
+    try:
+        if not verify(X, C):
+            return None
+        distances = np.sqrt(((X - C[:, np.newaxis])**2).sum(axis=-1))
+        closest = np.min(distances, axis=0)
+        sum = np.sum(np.power(closest, 2))
+        return sum
+    except BaseException:
         return None
-    distances = np.sqrt(((X - C[:, np.newaxis])**2).sum(axis=-1))
-    closest = np.min(distances, axis=0)
-    sum = np.sum(np.power(closest, 2))
-    return sum
 
 
 def verify(X, C):
