@@ -40,7 +40,7 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     for i in range(iterations):
         g, ll = expectation(X, pi, m, S)
         pi, m, S = maximization(X, g)
-        if abs(old_ll - ll) < tol:
+        if abs(old_ll - ll) < tol and verbose:
             print("Log Likelihood after {} iterations: {}"
                   .format(i, ll))
             break
