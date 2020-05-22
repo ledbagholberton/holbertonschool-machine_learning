@@ -33,6 +33,6 @@ def verify(X, C):
         return False
     if C.shape[1] is not X.shape[1]:
         return False
-    if C.shape[0] > X.shape[0]:
+    if C.shape[0] >= X.shape[0]:
         return False
     return True
