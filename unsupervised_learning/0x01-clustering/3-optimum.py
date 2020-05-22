@@ -24,14 +24,15 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     if not verify(X, kmin, kmax, iterations):
         return None, None, None
     results = []
-    d_vars = []
+    vars = []
     c, _ = kmeans(X, kmin, iterations)
     high_var = variance(X, c)
     for iter in range(kmin, kmax+1, 1):
         centroids, clss = kmeans(X, iter, iterations)
         results.append((centroids, clss))
         var = variance(X, centroids)
-        d_vars.append(high_var - var)
+        vars.append(var)
+    d_vars = [vars[0] - var for var in vars]
     return(results, d_vars)
 
 
@@ -43,7 +44,11 @@ def verify(X, kmin, kmax, iterations):
         return False
     if type(kmin) is not int or kmin <= 0:
         return False
+    if X.shape[0] <= kmin:
+        return False
     if type(kmax) is not int or kmax <= 0:
+        return False
+    if X.shape[0] <= kmax:
         return False
     if kmin >= kmax:
         return False
