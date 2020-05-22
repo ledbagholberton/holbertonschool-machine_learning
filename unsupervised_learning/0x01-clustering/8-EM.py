@@ -32,23 +32,26 @@ maximization = __import__('7-maximization').maximization
 
 def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     """"performs the expectation maximization for a GMM"""
-    if not verify(X, k, iterations, tol, verbose):
+    try:
+        if not verify(X, k, iterations, tol, verbose):
+            return None, None, None, None, None
+        n, d = X.shape
+        pi, m, S = initialize(X, k)
+        old_ll = 0
+        for i in range(iterations):
+            g, ll = expectation(X, pi, m, S)
+            pi, m, S = maximization(X, g)
+            if abs(old_ll - ll) < tol and verbose:
+                print("Log Likelihood after {} iterations: {}"
+                    .format(i, ll))
+                break
+            if ((i % 10 is 0) or (i is iterations - 1)) and verbose:
+                print("Log Likelihood after {} iterations: {}"
+                    .format(i, ll))
+            old_ll = ll
+        return(pi, m, S, g, ll)
+    except Exception:
         return None, None, None, None, None
-    n, d = X.shape
-    pi, m, S = initialize(X, k)
-    old_ll = 0
-    for i in range(iterations):
-        g, ll = expectation(X, pi, m, S)
-        pi, m, S = maximization(X, g)
-        if abs(old_ll - ll) < tol and verbose:
-            print("Log Likelihood after {} iterations: {}"
-                  .format(i, ll))
-            break
-        if ((i % 10 is 0) or (i is iterations - 1)) and verbose:
-            print("Log Likelihood after {} iterations: {}"
-                  .format(i, ll))
-        old_ll = ll
-    return(pi, m, S, g, ll)
 
 
 def verify(X, k, iterations, tol, verbose):
