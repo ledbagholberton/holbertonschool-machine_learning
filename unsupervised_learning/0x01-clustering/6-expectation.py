@@ -21,19 +21,22 @@ pdf = __import__('5-pdf').pdf
 
 def expectation(X, pi, m, S):
     """calculates the expectation step in the EM algorithm for a GMM"""
-    if not verify(X, pi, m, S):
+    try:
+        if not verify(X, pi, m, S):
+            return None, None
+        n, d = X.shape
+        k = pi.shape[0]
+        g = np.zeros((k, n))
+        for i in range(k):
+            P = pdf(X, m[i], S[i])
+            num = P * pi[i]
+            g[i] = num
+        den = np.sum(g, axis=0)
+        g = g / den
+        lg = np.sum(np.log(den))
+        return g, lg
+    except Exception:
         return None, None
-    n, d = X.shape
-    k = pi.shape[0]
-    g = np.zeros((k, n))
-    for i in range(k):
-        P = pdf(X, m[i], S[i])
-        num = P * pi[i]
-        g[i] = num
-    den = np.sum(g, axis=0)
-    g = g / den
-    lg = np.sum(np.log(den))
-    return g, lg
 
 
 def verify(X, pi, m, S):
@@ -56,6 +59,8 @@ def verify(X, pi, m, S):
     if pi.shape[0] is not m.shape[0]:
         return False
     if m.shape[1] is not X.shape[1]:
+        return False
+    if S.shape[0] is not pi.shape[0]:
         return False
     if S.shape[1] is not X.shape[1]:
         return False
