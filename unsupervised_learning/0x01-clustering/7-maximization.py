@@ -19,21 +19,24 @@ import numpy as np
 
 def maximization(X, g):
     """"calculates the maximization step in the EM algorithm for a GMM"""
-    if not verify(X, g):
+    try:
+        if not verify(X, g):
+            return None, None, None
+        n, d = X.shape
+        k, _ = g.shape
+        m = np.zeros((k, d))
+        S = np.empty((k, d, d))
+        pi = np.zeros((k, ))
+        for i in range(k):
+            Nk = np.sum(g[i])
+            pi[i] = Nk / n
+            gi = g[i].reshape(1, n)
+            m[i] = np.sum(np.matmul(gi, X), axis=0) / Nk
+            Df = X - m[i]
+            S[i] = np.dot(gi * Df.T, Df) / Nk
+        return(pi, m, S)
+    except BaseException:
         return None, None, None
-    n, d = X.shape
-    k, _ = g.shape
-    m = np.zeros((k, d))
-    S = np.empty((k, d, d))
-    pi = np.zeros((k, ))
-    for i in range(k):
-        Nk = np.sum(g[i])
-        pi[i] = Nk / n
-        gi = g[i].reshape(1, n)
-        m[i] = np.sum(np.matmul(gi, X), axis=0) / Nk
-        Df = X - m[i]
-        S[i] = np.dot(gi * Df.T, Df) / Nk
-    return(pi, m, S)
 
 
 def verify(X, g):
