@@ -26,6 +26,8 @@ def expectation(X, pi, m, S):
             return None, None
         n, d = X.shape
         k = pi.shape[0]
+        if np.sum(pi) is not 1:
+            return None, None
         g = np.zeros((k, n))
         for i in range(k):
             P = pdf(X, m[i], S[i])
