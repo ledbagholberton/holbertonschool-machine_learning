@@ -21,6 +21,5 @@ def agglomerative(X, dist):
                                     linkage='ward')
     model = model.fit(X)
     dendrogram = sch.dendrogram(sch.linkage(X, method='ward'))
-    plt.xlabel("Number of points in node (or index of point if no parenthesis).")
     plt.show()
     return model.labels_

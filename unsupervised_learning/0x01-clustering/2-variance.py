@@ -20,7 +20,7 @@ def variance(X, C):
         closest = np.min(distances, axis=0)
         sum = np.sum(np.power(closest, 2))
         return sum
-    except Exception:
+    except BaseException:
         return None
 
 
