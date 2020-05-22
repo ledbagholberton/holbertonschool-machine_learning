@@ -40,6 +40,7 @@ def expectation(X, pi, m, S):
 
 
 def verify(X, pi, m, S):
+    """verify conditions"""
     if not isinstance(X, np.ndarray):
         return False
     if len(X.shape) is not 2:
