@@ -19,24 +19,21 @@ import numpy as np
 
 def maximization(X, g):
     """"calculates the maximization step in the EM algorithm for a GMM"""
-    try:
-        if not verify(X, g):
-            return None, None, None
-        n, d = X.shape
-        k, _ = g.shape
-        m = np.zeros((k, d))
-        S = np.empty((k, d, d))
-        pi = np.zeros((k, ))
-        for i in range(k):
-            Nk = np.sum(g[i])
-            pi[i] = Nk / n
-            gi = g[i].reshape(1, n)
-            m[i] = np.sum(np.matmul(gi, X), axis=0) / Nk
-            Df = X - m[i]
-            S[i] = np.dot(gi * Df.T, Df) / Nk
-        return(pi, m, S)
-    except BaseException:
+    if not verify(X, g):
         return None, None, None
+    n, d = X.shape
+    k, _ = g.shape
+    m = np.zeros((k, d))
+    S = np.empty((k, d, d))
+    pi = np.zeros((k, ))
+    for i in range(k):
+        Nk = np.sum(g[i])
+        pi[i] = Nk / n
+        gi = g[i].reshape(1, n)
+        m[i] = np.sum(np.matmul(gi, X), axis=0) / Nk
+        Df = X - m[i]
+        S[i] = np.dot(gi * Df.T, Df) / Nk
+    return(pi, m, S)
 
 
 def verify(X, g):
@@ -51,6 +48,7 @@ def verify(X, g):
         return False
     if X.shape[0] != g.shape[1]:
         return False
-    if not np.isclose(np.sum(g, axis=0), np.ones_like(g))[0]:
+    sum_g = np.sum(g, axis=0)
+    if not np.allclose(sum_g, np.ones_like(g)):
         return False
     return True
