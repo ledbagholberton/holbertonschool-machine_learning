@@ -10,15 +10,16 @@ sample points, evenly spaced between min and max
 xsi: the exploration-exploitation factor
 minimize: a bool for minimization versus maximization
 """
+
+
 class BayesianOptimization:
     """performs Bayesian optimization on a noiseless 1D Gaussian process"""
-    
+
     def __init__(self, f, X_init, Y_init, bounds, ac_samples, l=1, sigma_f=1,
                  xsi=0.01, minimize=True):
         import numpy as np
         GP = __import__('2-gp').GaussianProcess
-         
-         
+
         """Class constructor
         f is the black-box function to be optimized
         X_init is a numpy.ndarray of shape (t, 1) representing

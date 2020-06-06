@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Class constructor 
+Class constructor
 
 Sets the following public instance attributes:
 f: the black-box function
@@ -15,13 +15,12 @@ import numpy as np
 
 class BayesianOptimization:
     """performs Bayesian optimization on a noiseless 1D Gaussian process"""
-    
+
     def __init__(self, f, X_init, Y_init, bounds, ac_samples, l=1, sigma_f=1,
                  xsi=0.01, minimize=True):
         import numpy as np
         GP = __import__('2-gp').GaussianProcess
-         
-         
+
         """Class constructor
         f is the black-box function to be optimized
         X_init is a numpy.ndarray of shape (t, 1) representing
@@ -48,11 +47,10 @@ class BayesianOptimization:
         self.X_s = X_s
         self.xsi = xsi
         self.minimize = minimize
-       
+
     def acquisition(self):
         from scipy.stats import norm
-        
-        
+
         """calculates the next best sample location
         Uses the Expected Improvement acquisition function
         Returns: X_next, EI
@@ -61,26 +59,23 @@ class BayesianOptimization:
         """
         mu, sigma = self.gp.predict(self.X_s)
         if self.minimize:
-            mu_sample_opt = np.min(self.gp.Y)
-            imp = mu -mu_sample_opt -self.xsi
+            mu_sample_opt = np.amin(self.gp.Y)
+            imp = mu_sample_opt - mu - self.xsi
         else:
-            mu_sample_opt = np.max(self.gp.Y)
-            imp = mu_sample_opt -mu -self.xsi
-        # Needed for noise-based model,
-        # otherwise use np.max(Y_sample).
-        # See also section 2.4 in [...]
-        with np.errstate(divide='warn'):
+            mu_sample_opt = np.amax(self.gp.Y)
+            imp = mu - mu_sample_opt - self.xsi
+        with np.errstate(divide='ignore'):
             Z = imp / sigma
             ei = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
             ei[sigma == 0.0] = 0.0
+
         idx = np.argmax(ei)
-        X_next = ei[idx]
+        X_next = self.X_s[idx]
         return X_next, ei
 
     def optimize(self, iterations=100):
         import numpy as np
-        
-        
+
         """optimizes the black-box function
         iterations is the maximum number of iterations to perform
         If the next proposed point is one that has already been sampled,
@@ -99,7 +94,7 @@ class BayesianOptimization:
                     self.gp.update(X_next, Y_next)
                     if self.minimize:
                         if Y_next < Y_opt:
-                            Y_opt = Y_next    
+                            Y_opt = Y_next
                             X_opt = X_next
                     else:
                         if Y_next > Y_opt:
