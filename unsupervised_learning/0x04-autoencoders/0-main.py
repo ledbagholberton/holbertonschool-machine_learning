@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from tensorflow.keras.datasets import mnist
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import tensorflow as tf
 
 autoencoder = __import__('0-vanilla').autoencoder
@@ -14,17 +14,17 @@ x_test = x_test.reshape((-1, 784))
 np.random.seed(0)
 tf.set_random_seed(0)
 encoder, decoder, auto = autoencoder(784, [128, 64], 32)
-auto.fit(x_train, x_train, epochs=50,batch_size=256, shuffle=True,
-                validation_data=(x_test, x_test))
+auto.fit(x_train, x_train, epochs=50, batch_size=256, shuffle=True,
+         validation_data=(x_test, x_test))
 encoded = encoder.predict(x_test[:10])
 print(np.mean(encoded))
 reconstructed = decoder.predict(encoded)
 
 for i in range(10):
     ax = plt.subplot(2, 10, i + 1)
-    ax.axes('off')
+    ax.axis('off')
     plt.imshow(x_test[i].reshape((28, 28)))
     ax = plt.subplot(2, 10, i + 11)
-    ax.axes('off')
+    ax.axis('off')
     plt.imshow(reconstructed[i].reshape((28, 28)))
 plt.show()
