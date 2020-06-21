@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Example of VAE on MNIST dataset using MLP
 The VAE has a modular design. The encoder, decoder and VAE
 are 3 models that share weights. After training the VAE model,
