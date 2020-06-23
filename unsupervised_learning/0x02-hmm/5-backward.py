@@ -23,19 +23,23 @@ probability of generating the future observations from hidden state i at time j
 import numpy as np
 
 
-def backward(Observation, Emission, Transition, Initial):
+def backward(Observations, Emission, Transition, Initial):
     """performs the backward algorithm for a hidden markov model"""
+    try:
+        T = Observations.shape[0]
+        N = Transition.shape[0]
+        beta = np.zeros((N, T))
+        # setting beta(T) = 1
+        beta[:, T-1] = np.ones((N))
 
-    beta = np.zeros((Observation.shape[0], Transition.shape[0]))
-
-    # setting beta(T) = 1
-    beta[Observation.shape[0] - 1] = np.ones((Transition.shape[0]))
-
-    # Loop in backward way from T-1 to
-    # Due to python indexing the actual loop will be T-2 to 0
-    for t in range(Observation.shape[0] - 2, -1, -1):
-        for j in range(Transition.shape[0]):
-            beta[t, j] = ((beta[t + 1] * Emission[  :, Observation[t + 1]])
-                          .dot(Transition[j, :]))
-    P = 1
-    return P, beta
+        # Loop in backward way from T-1 to
+        # Due to python indexing the actual loop will be T-2 to 0
+        for t in range(T - 2, -1, -1):
+            for n in range(N):
+                beta[n, t] = np.sum((Transition[n, :]*beta[:, t+1]) *
+                                    Emission[:, Observations[t+1]])
+        P = np.sum(beta[:, 0] * Emission[:, Observations[0]] * Initial[:, 0])
+        # P = np.sum(beta[:, 0])
+        return P, beta
+    except Exception:
+        return None, None

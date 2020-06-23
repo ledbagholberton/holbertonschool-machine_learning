@@ -17,26 +17,30 @@ baum_welch = __import__('6-baum_welch').baum_welch
 
 
 if __name__ == '__main__':
-    states = np.array(['ruana', 'saco',
-                             'blusa', 'camisa', 'corto', 'neglige'])
-    hidden_state = np.array(['helado', 'medio-helado', 'normal', 'medio-hot',
-                       'hot'])
-    S = states.shape[1]
-    N = hidden_state.shape[1]
-    Initial = np.array((1, N)) / N
-    Transition = np.array([[0.6, 0.39, 0.01, 0, 0],
-                          [0.2, 0.5, 0.3, 0, 0],
-                          [0.01, 0.24, 0.5, 0.24, 0.01],
-                          [0, 0, 0.15, 0.7, 0.15],
-                          [0, 0, 0.01, 0.39, 0.6]])
-    Emission = np.array([[0.9, 0.1, 0, 0, 0, 0],
-                         [0.4, 0.5, 0.1, 0, 0, 0],
-                         [0, 0.25, 0.5, 0.25, 0, 0],
-                         [0, 0, 0.05, 0.7, 0.15, 0.1],
-                         [0, 0, 0, 0.2, 0.5, 0.3]])
+    np.random.seed(1)
+    Emission = np.array([[0.90, 0.10, 0.00, 0.00, 0.00, 0.00],
+                         [0.40, 0.50, 0.10, 0.00, 0.00, 0.00],
+                         [0.00, 0.25, 0.50, 0.25, 0.00, 0.00],
+                         [0.00, 0.00, 0.05, 0.70, 0.15, 0.10],
+                         [0.00, 0.00, 0.00, 0.20, 0.50, 0.30]])
+    Transition = np.array([[0.60, 0.39, 0.01, 0.00, 0.00],
+                           [0.20, 0.50, 0.30, 0.00, 0.00],
+                           [0.01, 0.24, 0.50, 0.24, 0.01],
+                           [0.00, 0.00, 0.15, 0.70, 0.15],
+                           [0.00, 0.00, 0.01, 0.39, 0.60]])
+    Initial = np.array([0.05, 0.20, 0.50, 0.20, 0.05])
+    Hidden = [np.random.choice(5, p=Initial)]
+    for _ in range(364):
+        Hidden.append(np.random.choice(5, p=Transition[Hidden[-1]]))
+    Hidden = np.array(Hidden)
+    Observations = []
+    for s in Hidden:
+        Observations.append(np.random.choice(6, p=Emission[s]))
+    Observations = np.array(Observations)
+    N = Transition.shape[0]
     M = Emission.shape[1]
-    np.random.seed(0)
-    Observation = np.random.randint(0, N, 100)
-    Trans_conv, Emm_conv = baum_welch(Observation, N, M,
-                                      Transition, Emission, Initial)
-    print(Trans_conv, Emm_conv)
+    # Trans_conv, Emm_conv = baum_welch(Observations, N, M, Transition,
+    #                                  Emission, Initial.reshape((-1, 1)))
+    Trans_conv, Emm_conv = baum_welch(Observations, N, M)
+    print(Trans_conv)
+    print(Emm_conv)

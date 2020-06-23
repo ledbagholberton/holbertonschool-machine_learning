@@ -23,7 +23,7 @@ previous observations
 import numpy as np
 
 
-def forward(Observation, Emission, Transition, Initial):
+def forward(Observations, Emission, Transition, Initial):
     """performs the forward algorithm for a hidden markov model
     tabla transicion probability matrix:
                   helado medio-helado normal medio-hot  hot
@@ -41,15 +41,19 @@ def forward(Observation, Emission, Transition, Initial):
     corto                                       0.15     0.5
     neglige                                     0.1      0.3
     """
-    T = Observation.shape[0]
-    M = Transition.shape[0]
-    alpha = np.zeros((T, M))
-    test = Emission[:, Observation[0]]
-    alpha[0, :] = Initial.T * test
-
-    for t in range(1, T):
-        for j in range(M):
-            alpha[t, j] = (alpha[t - 1].dot(Transition[:, j]) *
-                           Emission[j, Observation[t]])
-    P = np.sum(alpha)
-    return P, alpha
+    try:
+        T = Observations.shape[0]
+        N = Transition.shape[0]
+        alpha = np.zeros((N, T))
+        test = Emission[:, Observations[0]]
+        alpha[:, 0] = Initial.T * Emission[:, Observations[0]]
+        for t in range(1, T):
+            for n in range(N):
+                a1 = alpha[:, t-1] * Transition[:, n]
+                alpha[n, t] = np.sum(Transition[:, n] *
+                                     alpha[:, t-1] *
+                                     Emission[n, Observations[t]])
+        P = np.sum(alpha[:, -1:])
+        return P, alpha
+    except Exception:
+        return None, None
