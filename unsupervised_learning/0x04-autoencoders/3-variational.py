@@ -23,8 +23,6 @@ import tensorflow as tf
 import tensorflow.keras as K
 import numpy as np
 import matplotlib.pyplot as plt
-z_mean = tf.Variable(0.)
-z_log_var = tf.Variable(0.)
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
@@ -56,22 +54,22 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     outputs = decoder(encoder(inputs)[2])
     auto = K.models.Model(inputs, outputs, name='auto')
     auto.summary()
-    print("******", inputs.shape, outputs.shape)
-    a = 5
-    b = 4
-    auto.compile(optimizer='Adam', loss=loss_autoencoder)
+
+    def custom_loss(z_mean, z_log_var):
+        """Custom loss usingclosure technique"""
+        def loss(inputs, outputs):
+            """return function to lossin compile method"""
+            reconstruction_loss = K.backend.sum(K.backend.binary_crossentropy(inputs, outputs, from_logits=False), axis=1)
+            kl_loss = 1 + z_log_var - K.backend.square(z_mean) - K.backend.exp(z_log_var)
+            kl_loss = K.backend.sum(kl_loss, axis=-1)
+            kl_loss = kl_loss * (-0.5)
+            kl_loss = K.backend.mean(kl_loss)
+            total_loss = reconstruction_loss + kl_loss
+            return total_loss
+        return loss
+    auto.compile(optimizer='Adam', loss=custom_loss(z_mean, z_log_var))
     return(encoder, decoder, auto)
 
-def loss_autoencoder(a, b):
-    # print("***///***", inputs.shape, outputs.shape)
-    reconstruction_loss = K.backend.binary_crossentropy(a, b)
-    # reconstruction_loss = K.backend.binary_crossentropy(z_mean, z_log_var)
-    kl_loss = 1 + z_log_var - K.backend.square(z_mean) - K.backend.exp(z_log_var)
-    kl_loss = K.backend.sum(kl_loss, axis=-1)
-    kl_loss *= kl_loss * (-0.5)
-    total_loss = K.backend.mean(reconstruction_loss + kl_loss)
-    return total_loss
-    
 
 def sampling(args):
     """Sampling of normal distribution with z_mean & z_log_var"""
