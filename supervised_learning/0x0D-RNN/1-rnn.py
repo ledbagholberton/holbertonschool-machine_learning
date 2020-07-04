@@ -5,7 +5,7 @@ Function Forward propagation
 """
 import numpy as np
 
-    
+
 def rnn(rnn_cell, X, h_0):
     """performs forward propagation for a simple RNN
     rnn_cell is an instance of RNNCell that will be used for the
@@ -24,7 +24,7 @@ def rnn(rnn_cell, X, h_0):
     _, h = h_0.shape
     H = h_0
     H = np.reshape(H, (1, m, h))
-   
+
     for iter in range(t):
         h_next, y = rnn_cell.forward(h_0, X[iter, :, :])
         h_next_r = np.reshape(h_next, (1, m, h))

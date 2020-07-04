@@ -30,7 +30,7 @@ class RNNCell:
         self.Wy = np.random.randn(h, o)
         self.bh = np.zeros((1, h))
         self.by = np.zeros((1, o))
- 
+
     def forward(self, h_prev, x_t):
         """ Method Forward
         performs forward propagation for one time step
@@ -50,7 +50,7 @@ class RNNCell:
         y_n = np.matmul(h_next, self.Wy) + self.by
         y = self.softmax(y_n)
         return (h_next, y)
-        
+
     def softmax(self, X):
         expo = np.exp(X)
         expo_sum = np.sum(np.exp(X), axis=-1, keepdims=True)

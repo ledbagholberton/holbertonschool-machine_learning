@@ -5,7 +5,7 @@ Function Forward propagation
 """
 import numpy as np
 
-    
+
 def deep_rnn(rnn_cells, X, h_0):
     """performs forward propagation for a Deep RNN
     rnn_cells is a list of RNNCell instances of length l
@@ -29,9 +29,11 @@ def deep_rnn(rnn_cells, X, h_0):
         h_prev = h_0
         for layers in range(l):
             if layers == 0:
-                h_next, y = rnn_cells[layers].forward(H[iter-1, layers], X[iter-1])
+                h_next, y = rnn_cells[layers].forward(H[iter-1,
+                                                        layers], X[iter-1])
             else:
-                h_next, y = rnn_cells[layers].forward(H[iter-1, layers], h_prev)
+                h_next, y = rnn_cells[layers].forward(H[iter-1,
+                                                        layers], h_prev)
             h_prev = h_next
             H[iter, layers] = h_next
         if iter-1 == 0:

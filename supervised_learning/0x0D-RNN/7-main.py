@@ -3,7 +3,7 @@
 import numpy as np
 BidirectionalCell = __import__('7-bi_output'). BidirectionalCell
 
-np.random.seed()
+np.random.seed(7)
 bi_cell =  BidirectionalCell(10, 15, 5)
 bi_cell.by = np.random.randn(1, 5)
 H = np.random.randn(6, 8, 30)

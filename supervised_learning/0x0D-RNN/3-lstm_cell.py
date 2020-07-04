@@ -17,56 +17,58 @@ import numpy as np
 
 
 class LSTMCell:
-	"""Class RNNCell"""
-	def __init__(self, i, h, o):
-		""" Constructor
-		i is the dimensionality of the data
-		h is the dimensionality of the hidden state
-		o is the dimensionality of the outputs
-		"""
-		self.Wf = np.random.randn(h + i, h)
-		self.Wu = np.random.randn(h + i, h)
-		self.Wc = np.random.randn(h + i, h)
-		self.Wo = np.random.randn(h + i, h)
-		self.Wy = np.random.randn(h, o)
-		self.bf = np.zeros((1, h))
-		self.bu = np.zeros((1, h))
-		self.bc = np.zeros((1, h))
-		self.bo = np.zeros((1, h))
-		self.by = np.zeros((1, o))
+    """Class RNNCell"""
+    def __init__(self, i, h, o):
+        """ Constructor
+        i is the dimensionality of the data
+        h is the dimensionality of the hidden state
+        o is the dimensionality of the outputs
+        """
+        self.Wf = np.random.randn(h + i, h)
+        self.Wu = np.random.randn(h + i, h)
+        self.Wc = np.random.randn(h + i, h)
+        self.Wo = np.random.randn(h + i, h)
+        self.Wy = np.random.randn(h, o)
+        self.bf = np.zeros((1, h))
+        self.bu = np.zeros((1, h))
+        self.bc = np.zeros((1, h))
+        self.bo = np.zeros((1, h))
+        self.by = np.zeros((1, o))
 
-	def forward(self, h_prev, c_prev, x_t):
-		""" Method Forward		
+    def forward(self, h_prev, c_prev, x_t):
+        """ Method Forward
         performs forward propagation for one time step
         x_t is a numpy.ndarray of shape (m, i) that contains:
-		the data input for the cell
+        the data input for the cell
         m is the batche size for the data
         h_prev is a numpy.ndarray of shape (m, h) containing:
-		the previous hidden state
+        the previous hidden state
         c_prev is a numpy.ndarray of shape (m, h) containing:
-		the previous cell state
+        the previous cell state
         Returns: h_next, c_next, y
         h_next is the next hidden state
         c_next is the next cell state
         y is the output of the cell
-		"""
-		m, i = x_t.shape
-		_, h = h_prev.shape
-		st_ct_1 = np.hstack((h_prev, x_t))
-		g_u = self.sigmoid(np.matmul(st_ct_1, self.Wu) + self.bu)
-		g_f = self.sigmoid(np.matmul(st_ct_1, self.Wf) + self.bf)
-		g_o = self.sigmoid(np.matmul(st_ct_1, self.Wo) + self.bo)
-		c_tilde = np.tanh(np.matmul(st_ct_1, self.Wc) + self.bc)
-		c_next = (g_u * c_tilde) + (g_f * c_prev)
-		h_next = g_o * np.tanh(c_next)
-		y_n = np.matmul(h_next, self.Wy) + self.by
-		y = self.softmax(y_n)
-		return (h_next, c_next, y)
-        
-	def softmax(self, X):
-		expo = np.exp(X)
-		expo_sum = np.sum(np.exp(X), axis=-1, keepdims=True)
-		return expo/expo_sum
-	
-	def sigmoid(self, X):
-		return 1/(1 + np.exp(-X))
+        """
+        m, i = x_t.shape
+        _, h = h_prev.shape
+        st_ct_1 = np.hstack((h_prev, x_t))
+        g_u = self.sigmoid(np.matmul(st_ct_1, self.Wu) + self.bu)
+        g_f = self.sigmoid(np.matmul(st_ct_1, self.Wf) + self.bf)
+        g_o = self.sigmoid(np.matmul(st_ct_1, self.Wo) + self.bo)
+        c_tilde = np.tanh(np.matmul(st_ct_1, self.Wc) + self.bc)
+        c_next = (g_u * c_tilde) + (g_f * c_prev)
+        h_next = g_o * np.tanh(c_next)
+        y_n = np.matmul(h_next, self.Wy) + self.by
+        y = self.softmax(y_n)
+        return (h_next, c_next, y)
+
+    def softmax(self, X):
+        """fucntion softmax"""
+        expo = np.exp(X)
+        expo_sum = np.sum(np.exp(X), axis=-1, keepdims=True)
+        return expo/expo_sum
+
+    def sigmoid(self, X):
+        """function sigmoid"""
+        return 1/(1 + np.exp(-X))
