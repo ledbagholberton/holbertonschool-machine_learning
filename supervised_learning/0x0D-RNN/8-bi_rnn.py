@@ -31,7 +31,8 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     H[t-1, :, h:2*h] = h_t
     for iter in range(t):
         H[iter, :, 0:h] = bi_cell.forward(H[iter-1, :, 0:h], X[iter])
-        H[t-iter-2, :, h:2*h] = bi_cell.backward(H[t-1-iter, :, h:2*h], X[t-1-iter])
+        H[t-iter-2, :, h:2*h] = bi_cell.backward(H[t-1-iter, :, h:2*h],
+                                                 X[t-1-iter])
     H[t-1, :, h:2*h] = 0
     Y = bi_cell.output(H)
     return(H, Y)
