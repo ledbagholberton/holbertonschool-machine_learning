@@ -5,7 +5,7 @@ Visually to predict data we can cut data from 2017
 """
 import pandas as pd
 import tensorflow as tf
-multivariate_data = __import__('1-multivariate').multivariate_data
+multivariate_data = __import__('forecast_btc').multivariate_data
 plot_train_history = __import__('2-plots').plot_train_history
 show_plot = __import__('2-plots').show_plot
 
