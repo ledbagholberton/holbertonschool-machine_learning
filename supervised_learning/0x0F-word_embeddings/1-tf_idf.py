@@ -17,7 +17,6 @@ sentences = ["Holberton school is Awesome!",
              "No one said that the cake was not very good",
              "Life is beautiful"]
 """
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 

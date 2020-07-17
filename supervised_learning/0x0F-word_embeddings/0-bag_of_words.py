@@ -17,14 +17,13 @@ sentences = ["Holberton school is Awesome!",
              "No one said that the cake was not very good",
              "Life is beautiful"]
 """
-import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 
 
 def bag_of_words(sentences, vocab=None):
     """ Create a Bag of words embedding matrix
     """
-    vectorizer = CountVectorizer()
+    vectorizer = CountVectorizer(vocabulary=vocab)
     X = vectorizer.fit_transform(sentences)
     embeddings = vectorizer.get_feature_names()
     vocab = X.toarray()
