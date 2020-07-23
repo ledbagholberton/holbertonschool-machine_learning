@@ -27,8 +27,8 @@ def cumulative_bleu(references, sentence, n):
             for j in range(n_iter):
                 ngram = ngram + ' ' + sentence[i + j]
             list_gram[n_iter].append(ngram)
-    print("LIST_GRAM")
-    print(list_gram)
+    # print("LIST_GRAM")
+    # print(list_gram)
     # creates the n-grams in the references and stores it in new_list
     new_list = [[[] for i in range(n+1)] for j in range(row_ref)]
     for n_iter in range(1, n+1):
@@ -42,38 +42,36 @@ def cumulative_bleu(references, sentence, n):
                 for k in range(n_iter):
                     new_word += ' ' + references[i][j + k]
                 new_list[i][n_iter].append(new_word)
-    print("NEW LIST")
-    print(new_list)
+    # print("NEW LIST")
+    # print(new_list)
     # generate a dictionary with all the n-grams from sentences
     new_dict = {}
-    for n_iter in range(n+1):
-        list_gram_size = len(list_gram[n_iter])
-        for n_gram in range(list_gram_size):
-            new_dict[list_gram[n_iter][n_gram]] = [[0] * (row_ref + 1)] * (n+1)
+    for n_iter in range(1, n + 1):
+        new_dict[n_iter] = {word: [0]*(row_ref+1)
+                            for word in list_gram[n_iter]}
     # print("NEW DICT ALONE")
     # print(new_dict)
 
     # compare n-grams in new_dict with n_grams from references
-    for key in new_dict:
-        for ref in range(row_ref):
-            for iter_n in range(1, n+1):
-                size_new_list = len(new_list[ref][iter_n])
-                for iter_ngram in range(size_new_list):
-                    if key == new_list[ref][iter_n][iter_ngram]:
-                        # print("n_gram:{} \t\tref:{} \t\titer_n: {}"
-                        #       .format(key, ref, iter_n))
-                        new_dict[key][iter_n][ref] += 1
-    print("NEW DICT with COINCIDENCES IN REFERENCES")
-    print(new_dict)
+    for n_key in new_dict:
+        for word_key in new_dict[n_key]:
+            for ref in range(row_ref):
+                size_list = len(new_list[ref][n_key])
+                for n_gram in range(size_list):
+                    if word_key == new_list[ref][n_key][n_gram]:
+                        new_dict[n_key][word_key][ref] += 1
+    # print("NEW DICT with COINCIDENCES IN REFERENCES")
+    # print(new_dict)
 
     # Count n-grams in sentence (due to repeat n-grams)
-    for key in new_dict:
-        for iter_n in range(1, n+1):
-            for n_gram in list_gram[iter_n]:
-                if key == n_gram:
-                    new_dict[key][iter_n][row_ref] += 1
-    print("NEW DICT with COINCIDENCES IN SENTENCES")
-    print(new_dict)
+    for n_key in new_dict:
+        for word_key in new_dict[n_key]:
+            size_list = len(list_gram[n_key])
+            for n_gram in range(size_list):
+                if word_key == list_gram[n_key][n_gram]:
+                    new_dict[n_key][word_key][row_ref] += 1
+    # print("NEW DICT with COINCIDENCES IN SENTENCES")
+    # print(new_dict)
 
     sen_dict = {word: [0]*(row_ref+1) for word in sentence}
     for key in sen_dict:
@@ -86,11 +84,11 @@ def cumulative_bleu(references, sentence, n):
     else:
         BP = 1
 
-    values = np.array(tuple(new_dict.values()))
-    print("VALUES")
-    print(values)
-    num = np.sum(np.max(values[:, 0:2], axis=1))
-    den = np.sum(values[:, -1])
-    pn = num / den
-    bleu = BP * np.exp(np.log(pn))
+    pn = 0
+    for n_key in new_dict:
+        values = np.array(tuple(new_dict[n_key].values()))
+        num = np.sum(np.max(values[:, 0:2], axis=1))
+        den = np.sum(values[:, -1])
+        pn = pn + (np.log(num/den)*(1/n))
+    bleu = BP * np.exp(pn)
     return bleu
