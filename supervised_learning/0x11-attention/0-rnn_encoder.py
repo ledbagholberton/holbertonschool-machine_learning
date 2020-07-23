@@ -2,10 +2,6 @@
 """
 Create a class RNNEncoder that inherits from tensorflow.keras.layers.Layer to
 encode for machine translation:
-
- 
-
-
 Public instance method def call(self, x, initial):
 x is a tensor of shape (batch, input_seq_len) containing the input to the
 encoder layer as word indices within the vocabulary
@@ -19,7 +15,7 @@ of the encoder
 import tensorflow as tf
 
 
-Class RNNEncoder(tensorflow.keras.layers.Layer):
+class RNNEncoder(tf.keras.layers.Layer):
     """Class RNNEncoder"""
     def __init__(self, vocab, embedding, units, batch):
         """Constructor for Class RNNEncoder
@@ -44,16 +40,21 @@ Class RNNEncoder(tensorflow.keras.layers.Layer):
         """
         self.batch = batch
         self.units = units
-        self.embedding = embedding
-        self.gru = 
-        
+        self.embedding = tf.keras.layers.Embedding(input_dim=vocab,
+                                                   output_dim= embedding)
+        self.gru = tf.keras.layers.GRU(units = self.units,
+                                       kernel_initializer='glorot_uniform')
+                
     def initialize_hidden_state(self):
         """
-        Public instance method def initialize_hidden_state(self):
         Initializes the hidden states for the RNN cell to a tensor of zeros
         Returns: a tensor of shape (batch, units)containing the initialized
         hidden states
         """
+        shape = (self.batch, self.units)
+        tensor_1 = tf.zeros(shape, dtype=tf.dtypes.float32, name=None)
+        return(tensor_1)
+    
     def call(self, x, initial):
         """
         x is a tensor of shape (batch, input_seq_len) containing the input to 
@@ -66,6 +67,11 @@ Class RNNEncoder(tensorflow.keras.layers.Layer):
         hidden is a tensor of shape (batch, units) containing the last hidden
         state Of the encoder
         """
+        batch, input_seq_len = tf.shape(x)
+        _, units = tf.shape(initial)
+        shape = (batch, input_seq_len, units)
         
-    
-    
+
+        outputs = tf.zeros(shape, dtype=tf.dtypes.float32, name=None)
+        hidden = 1
+        return (outputs, hidden)
