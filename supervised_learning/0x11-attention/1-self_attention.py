@@ -2,18 +2,11 @@
 """
 Create a class SelfAttention that inherits from tensorflow.keras.layers.Layer
 to calculate the attention for machine translation based on this paper:
-
-Class constructor 
-
-Public instance method 
-
-Returns: 
-
 """
 import tensorflow as tf
 
 
-Class SelfAttention(tensorflow.keras.layers.Layer):
+class SelfAttention(tf.keras.layers.Layer):
     """Class RNNEncoder"""
     def __init__(self, units):
         """ Constructor
@@ -27,13 +20,11 @@ Class SelfAttention(tensorflow.keras.layers.Layer):
         V - a Dense layer with 1 units, to be applied to the tanh of the sum
         of the outputs of W and U
         """
-        self.W = tf.keras.layers.Dense(units=units,
-                                       kernel_initializer='glorot_uniform')
-        self.U = tf.keras.layers.Dense(units=units,
-                                       kernel_initializer='glorot_uniform')
-        self.V = tf.keras.layers.Dense(units=1,
-                                       kernel_initializer='glorot_uniform')
-    
+        super(SelfAttention, self).__init__()
+        self.W = tf.keras.layers.Dense(units=units)
+        self.U = tf.keras.layers.Dense(units=units)
+        self.V = tf.keras.layers.Dense(units=1)
+
     def call(self, s_prev, hidden_states):
         """
         Parameters
@@ -50,4 +41,10 @@ Class SelfAttention(tensorflow.keras.layers.Layer):
         weights is a tensor of shape (batch, input_seq_len, 1) that contains
         the attention weights
         """
-        
+        mul1 = self.W(s_prev)
+        mul1 = tf.expand_dims(mul1, 1)
+        mul2 = self.U(hidden_states)
+        weights = self.V(tf.tanh(tf.math.add(mul1, mul2)))
+        outputs = tf.matmul(mul2, tf.nn.softmax(weights), transpose_a=True)
+        outputs = tf.math.reduce_sum(outputs, axis=2)
+        return(outputs, weights)

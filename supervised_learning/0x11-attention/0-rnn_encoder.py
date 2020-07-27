@@ -38,13 +38,16 @@ class RNNEncoder(tf.keras.layers.Layer):
         hidden state
         Recurrent weights should be initialized with glorot_uniform
         """
+        super(RNNEncoder, self).__init__()
         self.batch = batch
         self.units = units
         self.embedding = tf.keras.layers.Embedding(input_dim=vocab,
-                                                   output_dim= embedding)
-        self.gru = tf.keras.layers.GRU(units = self.units,
-                                       kernel_initializer='glorot_uniform')
-                
+                                                   output_dim=embedding)
+        self.gru = tf.keras.layers.GRU(units=self.units,
+                                       recurrent_initializer='glorot_uniform',
+                                       return_sequences=True,
+                                       return_state=True)
+
     def initialize_hidden_state(self):
         """
         Initializes the hidden states for the RNN cell to a tensor of zeros
@@ -54,10 +57,10 @@ class RNNEncoder(tf.keras.layers.Layer):
         shape = (self.batch, self.units)
         tensor_1 = tf.zeros(shape, dtype=tf.dtypes.float32, name=None)
         return(tensor_1)
-    
+
     def call(self, x, initial):
         """
-        x is a tensor of shape (batch, input_seq_len) containing the input to 
+        x is a tensor of shape (batch, input_seq_len) containing the input to
         the encoder layer as word indices within the vocabulary
         initial is a tensor of shape (batch, units) containing the initial
         hidden state
@@ -67,11 +70,7 @@ class RNNEncoder(tf.keras.layers.Layer):
         hidden is a tensor of shape (batch, units) containing the last hidden
         state Of the encoder
         """
-        batch, input_seq_len = tf.shape(x)
-        _, units = tf.shape(initial)
-        shape = (batch, input_seq_len, units)
-        
-
-        outputs = tf.zeros(shape, dtype=tf.dtypes.float32, name=None)
-        hidden = 1
-        return (outputs, hidden)
+        encoder_embedded = self.embedding(x)
+        outputs, state_h = self.gru(inputs=encoder_embedded,
+                                    initial_state=initial)
+        return (outputs, state_h)
