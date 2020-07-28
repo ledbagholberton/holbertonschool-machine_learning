@@ -16,4 +16,9 @@ def positional_encoding(max_seq_len, dm):
     Returns: a numpy.ndarray of shape (max_seq_len, dm) containing the
     positional encoding vectors
     """
- 
+    position_enc = np.array([
+        [pos / np.power(10000, 2 * (j // 2) / dm) for j in range(dm)]
+        if pos != 0 else np.zeros(dm) for pos in range(max_seq_len)])
+    position_enc[1:, 0::2] = np.sin(position_enc[1:, 0::2])
+    position_enc[1:, 1::2] = np.cos(position_enc[1:, 1::2])
+    return position_enc
