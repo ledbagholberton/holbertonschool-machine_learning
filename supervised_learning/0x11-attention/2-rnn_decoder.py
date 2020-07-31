@@ -67,8 +67,6 @@ class RNNDecoder(tf.keras.layers.Layer):
         new_input = tf.expand_dims(new_input, 1)
         # print(new_input.shape)
         outputs, s = self.gru(inputs=new_input)
-        print(outputs.shape, s.shape)
         outputs = tf.reshape(outputs, (-1, outputs.shape[2]))
         outputs = self.F(outputs)
-        print(outputs.shape, s.shape)
         return (outputs, s)

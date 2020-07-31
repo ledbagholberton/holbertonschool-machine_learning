@@ -2,7 +2,7 @@
 
 import numpy as np
 import tensorflow as tf
-MultiHeadAttention = __import__('6-multihead_attention').MultiHeadAttention
+MultiHeadAttention = __import__('6-multi_head_attention').MultiHeadAttention
 
 mha = MultiHeadAttention(512, 8)
 print(mha.dm)
