@@ -41,7 +41,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         super(MultiHeadAttention, self).__init__()
         self.h = h
         self.dm = dm
-        self.depth = dm / h
+        self.depth = int(dm / h)
         self.Wq = tf.keras.layers.Dense(units=dm)
         self.Wk = tf.keras.layers.Dense(units=dm)
         self.Wv = tf.keras.layers.Dense(units=dm)
@@ -63,7 +63,6 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         (..., seq_len_q, seq_len_k) containing the attention weights
         """
         batch, seq_len_q, dk = Q.shape
-        seq_len_k = K.shape[1]
         _, seq_len_v, dv = V.shape
         # paso los vectores por las capas definidas en el constructor
         tQ = self.Wq(Q)
@@ -75,19 +74,17 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         tV_len = self.linear(tV)
         # cambio el shape e intercambio las posiciones 1 y 2 para
         # acomodarlo a las dimensiones requeridas por SDP
-        new_shape_Q = (self.h, -1, seq_len_q, dk//self.h)
-        tQ_1 = tf.reshape(tQ_len, new_shape_Q)
+        # dimensiones son (batch, -1, self.h, self.depth)
+        tQ_1 = tf.reshape(tQ_len, (batch, -1, self.h, self.depth))
         tQ_2 = tf.transpose(tQ_1, perm=[0, 2, 1, 3])
-        new_shape_K = (self.h, -1, seq_len_k, dk//self.h)
-        tK_1 = tf.reshape(tK_len, new_shape_K)
+        tK_1 = tf.reshape(tK_len, (batch, -1, self.h, self.depth))
         tK_2 = tf.transpose(tK_1, perm=[0, 2, 1, 3])
-        new_shape_V = (self.h, -1, seq_len_v, dv//self.h)
-        tV_1 = tf.reshape(tV_len, new_shape_V)
+        tV_1 = tf.reshape(tV_len, (batch, -1, self.h, self.depth))
         tV_2 = tf.transpose(tV_1, perm=[0, 2, 1, 3])
         # (tQ_2.shape, tK_2.shape, tV_2.shape)
         # (8, 15, 100, 32) (8, 15, 100, 32) (8, 15, 100, 32)
         # lo paso por el SDP + head
-        output, weights = sdp_attention(tQ_2, tK_2, tV_2)
+        output, weights = sdp_attention(tQ_2, tK_2, tV_2, mask)
         # (output.shape, weights.shape)
         # (8, 15, 100, 32) (8, 15, 100, 100)
         # vuelvo a arreglar el output - concatenando los head.
