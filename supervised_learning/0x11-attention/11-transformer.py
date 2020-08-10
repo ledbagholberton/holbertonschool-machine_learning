@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-
-
+class transformer
 """
 import tensorflow as tf
 Encoder = __import__('9-transformer_encoder').Encoder
 Decoder = __import__('10-transformer_decoder').Decoder
 
 
-class Transformer(tf.keras.layers.Layer):
+class Transformer(tf.keras.Model):
     """
     class Transformer
     """
@@ -24,6 +23,7 @@ class Transformer(tf.keras.layers.Layer):
         -------
         None.
         """
+        super(Transformer, self).__init__()
         self.encoder = Encoder(N, dm, h, hidden, input_vocab, max_seq_input,
                                drop_rate)
         self.decoder = Decoder(N, dm, h, hidden, target_vocab, max_seq_target,
@@ -44,11 +44,9 @@ class Transformer(tf.keras.layers.Layer):
         Returns: a tensor of shape (batch, target_seq_len, target_vocab)
         containing the transformer output
         """
-        encoder_output = self.encoder(inputs,
-                                      training=training,
-                                      mask=encoder_mask)
-        decoder_output = self.decoder(target, encoder_output,
-                                      training=training,
-                                      look_ahead_mask, decoder_mask)
+        encoder_output = self.encoder(inputs, training, encoder_mask)
+        decoder_output = self.decoder(target, encoder_output, training,
+                                      look_ahead_mask,
+                                      decoder_mask)
         output = self.linear(decoder_output)
         return output
