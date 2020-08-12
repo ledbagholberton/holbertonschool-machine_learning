@@ -28,6 +28,6 @@ def play(env, Q, max_steps=100):
         if done is True:
             if reward == 1:
                 print(reward)
-            break
+                break
         state = new_state
     env.close()

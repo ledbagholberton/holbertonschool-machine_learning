@@ -36,11 +36,12 @@ def train(env, Q, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99,
                                 (reward + gamma*np.max(Q[new_state, :]))*alpha)
             state = new_state
             if done is True:
-                if reward == 1:
-                    break
-                else:
+                if reward != 1:
                     rewards = -1
-            rewards += reward
+                rewards += reward
+                break
+            else:
+                rewards += reward
         total_rewards.append(rewards)
         epsilon = min_epsilon + (1 - min_epsilon) * np.exp(-epsilon_decay*epi)
     return Q, total_rewards
