@@ -39,7 +39,7 @@ def train(env, Q, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99,
                 if reward == 1:
                     break
                 else:
-                    reward = -1
+                    rewards = -1
             rewards += reward
         total_rewards.append(rewards)
         epsilon = min_epsilon + (1 - min_epsilon) * np.exp(-epsilon_decay*epi)
