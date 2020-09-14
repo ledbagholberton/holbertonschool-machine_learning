@@ -2,13 +2,16 @@
 """
 Temporal Difference Lambtha Function
 """
+import numpy as np
+
 
 def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100,
                alpha=0.1, gamma=0.99):
     """td-lambtha
     env is the openAI environment instance
     V is a numpy.ndarray of shape (s,) containing the value estimate
-    policy is a function that takes in a state and returns the next action to take
+    policy is a function that takes in a state and returns the next
+    action to take
     lambtha is the eligibility trace factor
     episodes is the total number of episodes to train over
     max_steps is the maximum number of steps per episode
@@ -16,5 +19,17 @@ def td_lambtha(env, V, policy, lambtha, episodes=5000, max_steps=100,
     gamma is the discount rate
     Returns: V, the updated value estimate
     """
-        
+    for episode in range(episodes):
+        s = env.reset()
+        states = [s]
+        R = []
+        for step in range(max_steps):
+            action = policy(s)
+            new_s, reward, done, _ = env.step(action)
+            if done:
+                R.append(100)
+                break
+            R.append(reward)
+            states.append(s)
+            V[s] = V[s] * (1-alpha) + alpha * (reward + gamma * V[new_s])
     return V
