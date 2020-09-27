@@ -19,10 +19,13 @@ df = from_file('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv', ',')
 df = df.drop(["Weighted_Price"], axis=1)
 df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit='s')
 df = df.rename(columns={'Timestamp': 'Date'})
-df[['High', 'Low', 'Open', 'Close']] = df[['High', 'Low', 'Open', 'Close']].fillna(method='ffill')
-df[['Volume_(BTC)', 'Volume_(Currency)']] = df[['Volume_(BTC)', 'Volume_(Currency)']].fillna(value = 0)
-df=df.set_index('Date')
-df1=df[(df.index>'2017-01-01')]
-df1=df1.resample('D').mean()
+df[['High', 'Low', 'Open', 'Close']] = (df[['High', 'Low', 'Open',
+                                        'Close']].fillna(method='ffill'))
+df[['Volume_(BTC)', 'Volume_(Currency)']] = (df[['Volume_(BTC)',
+                                             'Volume_(Currency)']]
+                                             .fillna(value=0))
+df = df.set_index('Date')
+df1 = df[(df.index > '2017-01-01')]
+df1 = df1.resample('D').mean()
 df1.plot()
 plt.show()
