@@ -14,5 +14,8 @@ def from_numpy(array):
     """
     Creates Dataframe from an np array
     """
-    df = pd.DataFrame(data=array)
+    list_alpha = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    len_arr = array.shape[1]
+    labels = list_alpha[0: len_arr]
+    df = pd.DataFrame(data=array, columns=labels)
     return df
