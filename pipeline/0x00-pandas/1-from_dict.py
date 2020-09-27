@@ -9,12 +9,8 @@ import pandas as pd
 import numpy as np
 
 
-def from_dict(array):
-    """
-    Creates Dataframe from a dict
-    """
-    data = {'First': [0.0, 0.5, 1.0,  1.5],
-            'Second': ['one', 'two', 'three', 'four']}
-    df = pd.DataFrame.from_dict(data, orient='index',
-                                columns=['A', 'B', 'C', 'D'])
-    return df
+data = {'First': [0.0, 0.5, 1.0,  1.5],
+        'Second': ['one', 'two', 'three', 'four']}
+df = pd.DataFrame.from_dict(data, orient='index',
+                        columns=['A', 'B', 'C', 'D'])
+df = df.T
