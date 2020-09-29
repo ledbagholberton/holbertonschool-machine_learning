@@ -28,7 +28,7 @@ if __name__ == '__main__':
         rk = requests.get(url_r + '/' + id_rocket).json()["name"]
         if rk in list_r:
                 rockets[rk] += 1
-    sort_orders = sorted(rockets.items(), key=lambda x: x[1], reverse=True)
+    sort_orders = sorted(rockets.items(), key=lambda x: (x[1], x[0]), reverse=True)
     for i in sort_orders:
         if i[1] > 0:
             print(i[0], ':', i[1])
