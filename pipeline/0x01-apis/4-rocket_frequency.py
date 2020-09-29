@@ -14,19 +14,21 @@ import requests
 if __name__ == '__main__':
     rockets = {}
     list_r = []
-    url = "https://api.spacexdata.com/v4/rockets"
-    r = requests.get(url)
+    url_r = "https://api.spacexdata.com/v4/rockets"
+    r = requests.get(url_r)
     all_rockets = r.json()
     for iter in all_rockets:
         rockets[iter["name"]] = 0
         list_r.append(iter["name"])
-    url = "https://api.spacexdata.com/v4/launches"
-    r = requests.get(url)
-    all_launches = r.json()
+    url_l = "https://api.spacexdata.com/v4/launches"
+    lx = requests.get(url_l)
+    all_launches = lx.json()
     for iter in all_launches:
-        if iter["success"] is "true":
-            if iter["name"] in list_r:
-                rockets[iter["name"]] += 1
-        else:
-            pass
-    print(rockets)
+        id_rocket = iter["rocket"]
+        rk = requests.get(url_r + '/' + id_rocket).json()["name"]
+        if rk in list_r:
+                rockets[rk] += 1
+    sort_orders = sorted(rockets.items(), key=lambda x: x[1], reverse=True)
+    for i in sort_orders:
+        if i[1] > 0:
+            print(i[0], ':', i[1])
