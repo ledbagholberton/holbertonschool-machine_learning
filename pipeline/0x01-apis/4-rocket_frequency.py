@@ -19,13 +19,13 @@ if __name__ == '__main__':
     all_rockets = r.json()
     for iter in all_rockets:
         rockets[iter["name"]] = 0
-        list_r.append(ier["name"])
+        list_r.append(iter["name"])
     url = "https://api.spacexdata.com/v4/launches"
     r = requests.get(url)
     all_launches = r.json()
     for iter in all_launches:
         if iter["success"] is "true":
-            if iter["name"] is in list_r:
+            if iter["name"] in list_r:
                 rockets[iter["name"]] += 1
         else:
             pass
