@@ -31,4 +31,4 @@ if __name__ == '__main__':
     sort_orders = sorted(rockets.items(), key=lambda x: (x[1], x[0]), reverse=True)
     for i in sort_orders:
         if i[1] > 0:
-            print(i[0], ':', i[1])
+            print(*i, sep=': ')
