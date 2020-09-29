@@ -9,7 +9,7 @@ import requests
 
 
 def availableShips(passengerCount):
-    """ 
+    """
     Function availableShips
     """
     url = "https://swapi-api.hbtn.io/api/starships/"
