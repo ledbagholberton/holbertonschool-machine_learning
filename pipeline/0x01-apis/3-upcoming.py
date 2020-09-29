@@ -10,8 +10,6 @@ Format:
 <launch name> (<date>) <rocket name> - <launchpad name> (<launchpad locality>)
 """
 import requests
-import sys
-import time
 
 
 if __name__ == '__main__':
