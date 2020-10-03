@@ -1,4 +1,4 @@
+// insert attribute
 db.school.insert({
 	name: "Holberton school",
 	});
-

@@ -1,2 +1,3 @@
+//count documents in attributes
 let my = db.getCollection("school");
 my.count();
