@@ -1,1 +1,2 @@
+//Show all documents with this filter
 db.school.find({name: "Holberton school"})
