@@ -1,0 +1,2 @@
+let my = db.getCollection("school");
+my.count();
