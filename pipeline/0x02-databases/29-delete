@@ -1,2 +1,3 @@
 //delete documents
+//delete all the documents match the filter
 db.school.deleteMany({name: 'Holberton school'});

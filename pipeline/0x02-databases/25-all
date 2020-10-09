@@ -1,2 +1,3 @@
 //show documents
+//Show all documents
 db.school.find()
